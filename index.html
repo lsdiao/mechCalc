@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机械设计计算工具箱 - MechCalc</title>
+<meta name="description" content="常用机械设计在线计算工具：螺栓校核、键连接、弹簧设计、直线轴承选型、滚珠丝杆、V带、齿轮、液压气缸、公差查询、硬度换算等">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="#/">
+      <span class="logo-mark">M</span>
+      <span class="logo-text">MechCalc<i>机械设计计算工具箱</i></span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="globalSearch" placeholder="搜索工具，如：螺栓 / 公差 / 轴承…" autocomplete="off">
+      <div class="search-drops" id="searchDrops"></div>
+    </div>
+    <nav class="header-nav">
+      <a href="#/">首页</a>
+      <a href="#/cat/connect">连接校核</a>
+      <a href="#/cat/linear">直线运动</a>
+      <a href="#/cat/trans">机械传动</a>
+      <a href="#/cat/fluid">液压气动</a>
+      <a href="#/cat/common">工程常用</a>
+    </nav>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="main" id="main"></main>
+</div>
+
+<footer class="site-footer">
+  <p>MechCalc 机械设计计算工具箱 · 计算结果仅供参考，正式设计请以相关国家标准与厂商样本为准</p>
+</footer>
+
+<script src="js/app.js?v=2"></script>
+<script src="js/tools/connection.js?v=2"></script>
+<script src="js/tools/linear.js?v=2"></script>
+<script src="js/tools/transmission.js?v=2"></script>
+<script src="js/tools/fluid.js?v=2"></script>
+<script src="js/tools/selection.js?v=2"></script>
+<script src="js/tools/common.js?v=2"></script>
+<script>App.boot();</script>
+</body>
+</html>
