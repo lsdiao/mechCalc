@@ -142,7 +142,7 @@
       var revs = 60 * n * Lh;                       // 总转数
       var Ca = fw * F * Math.pow(revs / 1e6, 1 / 3) / fH; // 额定动载荷需求
       var T = F * Ph / (2 * Math.PI * eta);         // 驱动转矩 N·mm
-      var PkW = T * n / 955000;                     // kW（N·mm·rpm）
+      var PkW = T * n / 9550000;                    // kW（T 为 N·mm：P=T·n/9.55×10⁶）
       var vel = Ph * n / 60;                        // 线速度 mm/s
       var DmN = Dm * n;                             // DmN 值
       var DmNAllow = 70000;                         // 常规允许值（精密研磨级）
@@ -181,7 +181,7 @@
     },
     formulas: [
       'Ca = fw·Fm·(60·n·Lh/10⁶)^(1/3)/fH',
-      'T = F·Ph/(2π·η)，P(kW) = T·n/955000（T:N·mm）',
+      'T = F·Ph/(2π·η)，P(kW) = T·n/9.55×10⁶（T:N·mm）',
       'DmN = Dm·n ≤ [DmN]'
     ],
     reference: 'GB/T 17587《滚珠丝杠副》；THK/NSK/银泰（PMI）滚珠丝杠技术手册寿命计算章节。'

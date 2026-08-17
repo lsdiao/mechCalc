@@ -43,6 +43,7 @@
   };
   // 孔基本偏差（μm）：F~H 为下偏差 EI（正值），K~S 为上偏差 ES（特殊规则计算）
   var HOLE = {
+    E: [14, 20, 25, 32, 40, 50, 60, 72, 85, 100, 110, 125, 135],
     F: [6, 10, 13, 16, 20, 25, 30, 36, 43, 50, 56, 62, 68],
     G: [2, 4, 5, 6, 7, 9, 10, 12, 14, 15, 17, 18, 20],
     H: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -112,6 +113,9 @@
     doc: '输入基本尺寸并选择配合代号，按 GB/T 1800.1-2009 计算孔、轴的<b>上下偏差与极限尺寸</b>，并判定配合性质（间隙/过渡/过盈）及最大、最小间隙（过盈）。含基孔制（H7 系列）与基轴制（h6 系列）常用配合。',
     inputs: [
       { key: 'D', label: '基本尺寸 D', group: '查询条件', type: 'number', unit: 'mm', default: 40, step: 'any', hint: '范围 ≤500mm（常用尺寸段）' },
+      { key: 'basis', label: '基准制', group: '查询条件', type: 'segment', options: [
+        { v: 'hb', t: '基孔制（H7 孔）' }, { v: 'hs', t: '基轴制（h6 轴）' }
+      ] },
       { key: 'fit', label: '配合代号（基孔制 H7 系列）', group: '查询条件', type: 'select', options: FITS.hb, default: 'H7/k6' },
       { key: 'fit2', label: '配合代号（基轴制 h6 系列）', group: '查询条件', type: 'select', options: FITS.hs, default: 'H7/h6' }
     ],
@@ -120,12 +124,8 @@
       if (!(D > 0 && D <= 500)) return { error: '基本尺寸应在 1~500mm 范围内（本工具数据段）' };
       var idx = segIdx(D);
       var segName = SEG_NAMES[idx];
-      // 解析配合代号（基轴制选择项优先：用户改过 fit2 时使用），默认基孔制
-      var fitStr = (v.fit2 && v.fit2 !== 'H7/h6') ? v.fit2 : (v.fit || 'H7/k6');
-      if (v.fit2 && v.fit2 !== 'H7/h6' && v.fit && v.fit !== 'H7/k6') {
-        // 两者都改过时，以基孔制为准
-        fitStr = v.fit;
-      }
+      // 按基准制显式选择配合代号
+      var fitStr = v.basis === 'hs' ? (v.fit2 || 'H7/h6') : (v.fit || 'H7/k6');
       var fit = fitStr.split('/');
       var holePart = fit[0], shaftPart = fit[1];
       var holeLetter = holePart[0], holeGrade = +holePart.slice(1);

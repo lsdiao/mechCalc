@@ -104,7 +104,7 @@
       if (Pca <= 0) return { error: '单根带许用功率计算异常，请检查带型选择' };
       var z = Pd / Pca;
       var zR = Math.ceil(z);
-      var F0 = 500 * Pd / (zR * vms) * (2.5 / Kalpha - 1) + 0.1 * 0.1 * vms * vms; // 单根初拉力近似（q=0.1kg/m近似）
+      var F0 = 500 * Pd / (zR * vms) * (2.5 / Kalpha - 1) + 0.1 * vms * vms; // 单根初拉力近似（q≈0.1kg/m）
       var Fp = 1000 * Pd / vms;                         // 有效拉力 N
       var Q = 2 * F0 * zR * Math.sin(alpha1 / 2 * Math.PI / 180); // 压轴力
       return {
@@ -225,11 +225,10 @@
       var k1 = Math.round(z1 / 9 + 0.5), k2 = Math.round(z2 / 9 + 0.5);
       var W1, W2;
       if (has) {
-        var z1e = z1 * Math.pow(Math.tan(alphaN) / Math.tan(alphaT), 1) * (Math.tan(alphaT) / Math.tan(alphaN)); // 化简为下面公式
         var zv1 = z1 / Math.pow(Math.cos(beta), 3), zv2 = z2 / Math.pow(Math.cos(beta), 3);
         k1 = Math.round(zv1 / 9 + 0.5); k2 = Math.round(zv2 / 9 + 0.5);
-        W1 = m * Math.cos(alphaN) * (Math.PI * (k1 - 0.5) + zv1 * invX) + 2 * x1 * m * Math.sin(alphaN);
-        W2 = m * Math.cos(alphaN) * (Math.PI * (k2 - 0.5) + zv2 * invX) + 2 * x2 * m * Math.sin(alphaN);
+        W1 = m * Math.cos(alphaN) * (Math.PI * (k1 - 0.5) + z1 * invX) + 2 * x1 * m * Math.sin(alphaN);
+        W2 = m * Math.cos(alphaN) * (Math.PI * (k2 - 0.5) + z2 * invX) + 2 * x2 * m * Math.sin(alphaN);
       } else {
         W1 = m * Math.cos(alphaN) * (Math.PI * (k1 - 0.5) + z1 * inv(alphaN)) + 2 * x1 * m * Math.sin(alphaN);
         W2 = m * Math.cos(alphaN) * (Math.PI * (k2 - 0.5) + z2 * inv(alphaN)) + 2 * x2 * m * Math.sin(alphaN);
