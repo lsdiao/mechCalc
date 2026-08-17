@@ -42,8 +42,8 @@
       var A2 = Math.PI * (D * D - d * d) / 4;     // 有杆腔面积
       var F1 = (p1 * A1 - p2 * A2) * etaM;        // 推力 N (MPa·mm²=N)
       var F2 = (p1 * A2 - p2 * A1) * etaM;        // 拉力 N
-      var v1 = Q * 1000 / 60 / A1 * etaV;         // 伸出速度 mm/s
-      var v2 = Q * 1000 / 60 / A2 * etaV;         // 缩回速度 mm/s
+      var v1 = Q * 1e6 / 60 / A1 * etaV;          // 伸出速度 mm/s（Q:L/min=1e6·mm³/min）
+      var v2 = Q * 1e6 / 60 / A2 * etaV;          // 缩回速度 mm/s
       var phi = A1 / A2;                          // 速比
       var t1 = stroke / v1, t2 = stroke / v2;     // 动作时间 s
       var PkW = p1 * Q / 60 / etaM;               // 液压功率 kW (MPa·L/min /60 = kW)
@@ -91,7 +91,7 @@
     formulas: [
       'A₁ = πD²/4；A₂ = π(D²-d²)/4',
       'F₁ = (p₁A₁-p₂A₂)ηm；F₂ = (p₁A₂-p₂A₁)ηm',
-      'v = Q/(A)（Q:L/min → mm/s：Q×1000/60/A）',
+      'v = Q/(A)（Q:L/min → mm/s：v = Q×10⁶/(60·A)，A:mm²）',
       'P(kW) = p(MPa)×Q(L/min)/60'
     ],
     reference: 'GB/T 2348《流体传动系统及元件 缸径及活塞杆直径》；《液压工程设计手册》。'

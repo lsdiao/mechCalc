@@ -133,7 +133,16 @@
         { v: '1.3', t: '1.2~1.5 轻微冲击（一般机械）' },
         { v: '1.7', t: '1.5~2.0 冲击振动（高速、往复冲击）' }
       ], default: '1.3' },
-      { key: 'fH', label: '硬度系数 fH', group: '系数', type: 'number', default: 1.0, step: 'any', hint: 'HRC58 以上取 1.0' }
+      { key: 'fH', label: '硬度系数 fH', group: '系数', type: 'number', default: 1.0, step: 'any', hint: 'HRC58 以上取 1.0' },
+      { key: 'dk', label: '丝杠底径 dk', group: '临界转速与压杆校核', type: 'number', unit: 'mm', default: 21.9, step: 'any', hint: '≈公称直径−(0.2~0.25)Ph，按样本取值' },
+      { key: 'support', label: '支承方式', group: '临界转速与压杆校核', type: 'select', options: [
+        { v: 'ff', t: '固定-固定（λ₂=21.9，η₁=4.0）' },
+        { v: 'fs', t: '固定-支承（λ₂=15.1，η₁=2.0）' },
+        { v: 'ss', t: '支承-支承（λ₂=9.7，η₁=1.0）' },
+        { v: 'fk', t: '固定-自由（λ₂=3.4，η₁=0.25）' }
+      ], default: 'fs', hint: '固定=角接触轴承对/固定端单元；支承=深沟球轴承' },
+      { key: 'Lb', label: '临界转速计算间距 Lb', group: '临界转速与压杆校核', type: 'number', unit: 'mm', default: 500, step: 'any', hint: '两支承（或螺母）间最大跨距' },
+      { key: 'La', label: '最大受压长度 La', group: '临界转速与压杆校核', type: 'number', unit: 'mm', default: 500, step: 'any', hint: '受轴向压力时螺母至支承的间距' }
     ],
     compute: function (v) {
       var F = +v.F, n = +v.n, Lh = +v.Lh, Ph = +v.Ph, Dm = +v.Dm, eta = +v.eta;
@@ -146,6 +155,21 @@
       var vel = Ph * n / 60;                        // 线速度 mm/s
       var DmN = Dm * n;                             // DmN 值
       var DmNAllow = 70000;                         // 常规允许值（精密研磨级）
+
+      /* 临界转速 nc = λ₂·dk/Lb²×10⁷（r/min）与压杆临界载荷 Pk = 0.5·η₁·π²·E·I/La² */
+      var LAM2 = { ff: 21.9, fs: 15.1, ss: 9.7, fk: 3.4 };
+      var ETA1 = { ff: 4.0, fs: 2.0, ss: 1.0, fk: 0.25 };
+      var dk = +v.dk, Lb = +v.Lb, La = +v.La, sup = v.support;
+      var lam2 = LAM2[sup], eta1 = ETA1[sup];
+      var nc = lam2 * dk / (Lb * Lb) * 1e7;         // 临界转速
+      var ncAllow = 0.8 * nc;                       // 安全转速（0.8 倍）
+      var Ix = Math.PI * Math.pow(dk, 4) / 64;      // 底径截面惯性矩 mm⁴
+      var Pk = 0.5 * eta1 * Math.PI * Math.PI * 2.06e5 * Ix / (La * La); // 压杆临界载荷 N
+      var PkAllow = Pk / 3;                         // 安全压缩载荷（安全系数 3）
+      var warns = [];
+      if (DmN > DmNAllow) warns.push('DmN=' + fmt(DmN) + ' 超过常规允许值 ' + fmt(DmNAllow));
+      if (n > ncAllow) warns.push('工作转速 ' + fmt(n) + ' 超过安全临界转速 ' + fmt(ncAllow) + ' r/min（0.8nc）');
+      if (F > PkAllow) warns.push('轴向载荷 ' + fmt(F) + ' N 超过安全压缩载荷 ' + fmt(PkAllow) + ' N（Pk/3），需加大底径/缩短受压长度/改善支承');
       return {
         sections: [
           { title: '寿命与动载荷', rows: [
@@ -160,31 +184,42 @@
             { label: '驱动转矩 T', value: T / 1000, unit: 'N·m', d: 3 },
             { label: '所需驱动功率 P', value: PkW, unit: 'kW', d: 3, hl: true }
           ] },
-          { title: '极限校核', rows: [
-            { label: 'DmN 值', value: DmN, unit: 'mm·r/min', d: 0, hl: true },
+          { title: '临界转速校核', rows: [
+            { label: '支承系数 λ₂', value: lam2, d: 1, unit: '' },
+            { label: '临界转速 nc=λ₂·dk/Lb²×10⁷', value: nc, unit: 'r/min', d: 0, hl: true },
+            { label: '安全转速 0.8nc', value: ncAllow, unit: 'r/min', d: 0, hl: true },
+            { label: 'DmN 值', value: DmN, unit: 'mm·r/min', d: 0 },
             { label: 'DmN 允许值（常规）', value: DmNAllow, unit: 'mm·r/min', d: 0 }
+          ] },
+          { title: '压杆稳定性校核', rows: [
+            { label: '支承系数 η₁', value: eta1, d: 2, unit: '' },
+            { label: '底径截面惯性矩 I', value: Ix, unit: 'mm⁴', d: 0 },
+            { label: '压杆临界载荷 Pk=0.5η₁π²EI/La²', value: Pk, unit: 'N', d: 0, hl: true },
+            { label: '安全压缩载荷 Pk/3', value: PkAllow, unit: 'N', d: 0, hl: true }
           ] }
         ],
         verdict: {
-          level: DmN <= DmNAllow ? 'ok' : 'warn',
-          text: DmN <= DmNAllow
-            ? '选型依据：样本 Ca ≥ ' + fmt(Ca) + ' N；DmN=' + fmt(DmN) + ' 在常规允许范围内'
-            : 'DmN=' + fmt(DmN) + ' 超过常规允许值 70000，需提高精度等级或降低转速',
-          note: '高速工况还应校核临界转速（与丝杠支承方式、长径比有关）及压杆稳定性。'
+          level: warns.length ? 'warn' : 'ok',
+          text: warns.length ? warns.join('；') + '，请调整参数或支承方式'
+            : '选型依据：样本 Ca ≥ ' + fmt(Ca) + ' N；nc=' + fmt(nc) + ' r/min、Pk=' + fmt(Pk) + ' N，转速与受压载荷均在安全范围内',
+          note: '高速工况还需按厂商样本复核 dn 值与温升；受压工况优先选用固定-固定或固定-支承方式。'
         },
         notes: [
           '额定寿命：L10 = (Ca·fH/(fw·Fm))³ × 10⁶ 转，反推 Ca = fw·Fm·(L10/10⁶)^(1/3)/fH。',
           '驱动转矩未计入预紧力矩与摩擦副（导轨、轴承）附加摩擦，电机选型建议再加 20%~30% 裕度。',
-          'DmN 允许值：冷轧级约 50000，精密研磨级可达 70000~150000，以厂商样本为准。'
+          'DmN 允许值：冷轧级约 50000，精密研磨级可达 70000~150000，以厂商样本为准。',
+          '临界转速 nc = λ₂·dk/Lb²×10⁷：固定-固定 21.9、固定-支承 15.1、支承-支承 9.7、固定-自由 3.4；工作转速应 ≤0.8nc。',
+          '压杆临界载荷 Pk = 0.5·η₁·π²·E·I/La²（E=2.06×10⁵MPa，I=πdk⁴/64）：η₁ 固定-固定 4.0、固定-支承 2.0、支承-支承 1.0、固定-自由 0.25；轴向载荷应 ≤Pk/3。'
         ]
       };
     },
     formulas: [
       'Ca = fw·Fm·(60·n·Lh/10⁶)^(1/3)/fH',
       'T = F·Ph/(2π·η)，P(kW) = T·n/9.55×10⁶（T:N·mm）',
-      'DmN = Dm·n ≤ [DmN]'
+      'DmN = Dm·n ≤ [DmN]',
+      'nc = λ₂·dk/Lb²×10⁷ ≤ n/0.8；Pk = 0.5·η₁·π²·E·I/La² ≥ 3F'
     ],
-    reference: 'GB/T 17587《滚珠丝杠副》；THK/NSK/银泰（PMI）滚珠丝杠技术手册寿命计算章节。'
+    reference: 'GB/T 17587《滚珠丝杠副》；THK/NSK/银泰（PMI）滚珠丝杠技术手册（寿命、临界转速、压杆稳定章节）。'
   });
 
   /* ============ 3. 拖链长度计算 ============ */

@@ -94,8 +94,11 @@
     { max: 17, b: 5, h: 5 }, { max: 22, b: 6, h: 6 }, { max: 30, b: 8, h: 7 },
     { max: 38, b: 10, h: 8 }, { max: 44, b: 12, h: 8 }, { max: 50, b: 14, h: 9 },
     { max: 58, b: 16, h: 10 }, { max: 65, b: 18, h: 11 }, { max: 75, b: 20, h: 12 },
-    { max: 85, b: 22, h: 14 }, { max: 95, b: 24, h: 14 }, { max: 110, b: 28, h: 16 },
-    { max: 130, b: 32, h: 18 }, { max: 150, b: 36, h: 20 }, { max: 170, b: 40, h: 22 }, { max: 500, b: 45, h: 25 }
+    { max: 85, b: 22, h: 14 }, { max: 95, b: 24, h: 14 }, { max: 110, b: 25, h: 14 },
+    { max: 130, b: 28, h: 16 }, { max: 150, b: 32, h: 18 }, { max: 170, b: 36, h: 20 },
+    { max: 200, b: 40, h: 22 }, { max: 230, b: 45, h: 25 }, { max: 260, b: 50, h: 28 },
+    { max: 290, b: 56, h: 32 }, { max: 330, b: 63, h: 32 }, { max: 380, b: 70, h: 36 },
+    { max: 440, b: 80, h: 40 }, { max: 500, b: 90, h: 45 }
   ];
   function pickKey(d) {
     for (var i = 0; i < KEY_DIMS.length; i++) if (d <= KEY_DIMS[i].max) return KEY_DIMS[i];
@@ -183,13 +186,26 @@
   });
 
   /* ============ 3. 压缩弹簧设计 ============ */
+  /* 碳素弹簧钢丝抗拉强度 σb（GB/T 4357-2009，MPa）：随钢丝直径增大而降低 */
+  var SB_B = [[1, 1660], [1.2, 1620], [1.6, 1580], [2, 1520], [2.5, 1460], [3, 1410], [3.5, 1370], [4, 1320], [4.5, 1290], [5, 1270], [5.5, 1250], [6, 1220], [7, 1180], [8, 1160], [9, 1130], [10, 1110], [11, 1090], [12, 1070], [13, 1050], [14, 1030], [16, 990], [18, 960], [20, 930], [22, 900], [25, 870]];
+  var SB_C = [[1, 1960], [1.2, 1910], [1.6, 1850], [2, 1810], [2.5, 1760], [3, 1710], [3.5, 1660], [4, 1620], [4.5, 1590], [5, 1560], [5.5, 1520], [6, 1480], [7, 1430], [8, 1400], [9, 1380], [10, 1350], [11, 1320], [12, 1300], [13, 1280]];
+  function sbLookup(tab, d) {
+    if (d <= tab[0][0]) return tab[0][1];
+    for (var i = 0; i < tab.length - 1; i++) {
+      var a = tab[i], b = tab[i + 1];
+      if (d >= a[0] && d <= b[0]) return a[1] + (d - a[0]) / (b[0] - a[0]) * (b[1] - a[1]);
+    }
+    return tab[tab.length - 1][1];
+  }
   var SPRING_MAT = {
-    carbon: { name: '碳素弹簧钢丝（B级）', G: 79000, tau2: 570 },
-    music: { name: '重要用途碳素钢丝（65Mn）', G: 79000, tau2: 610 },
-    si: { name: '60Si2Mn 硅锰弹簧钢', G: 79000, tau2: 640 },
-    crv: { name: '50CrVA 铬钒弹簧钢', G: 79000, tau2: 610 },
+    carbon: { name: '碳素弹簧钢丝 B级（GB/T 4357）', G: 79000, sb: SB_B },
+    music: { name: '碳素弹簧钢丝 C级·高强度（GB/T 4357）', G: 79000, sb: SB_C },
+    si: { name: '60Si2Mn 硅锰弹簧钢（油淬火）', G: 79000, tau2: 640 },
+    crv: { name: '50CrVA 铬钒弹簧钢（油淬火）', G: 79000, tau2: 610 },
     sus: { name: '不锈钢 304', G: 71000, tau2: 440 }
   };
+  /* 碳素钢丝许用切应力按载荷类别取 σb 的比例（III/II/I 类） */
+  var CARBON_CLASS = { c3: 0.5, c2: 0.4, c1: 0.3 };
   var SPRING_CLASS = { c3: 1.25, c2: 1.0, c1: 0.72 }; // III类(静/计数少) II类 I类(无限寿命)
   // 钢丝直径优先系列（第1系列）
   var WIRE_SERIES = [1, 1.2, 1.6, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 8, 10, 12, 16, 20, 25, 30, 40];
@@ -223,12 +239,31 @@
       if (!(F2 > 0) || !(lam2 > 0)) return { error: '请输入最大工作载荷 F₂ 与最大变形量 λ₂' };
       if (!(C >= 4 && C <= 16)) return { error: '旋绕比 C 建议取 4~16' };
       var mat = SPRING_MAT[v.mat];
-      var tauAllow = mat.tau2 * SPRING_CLASS[v.cls];
-      var K = (4 * C - 1) / (4 * C - 3) + 0.615 / C;   // 曲度系数
-      var dCalc = 1.6 * Math.sqrt(K * C * F2 / tauAllow); // 试算直径
-      var d = null;
-      for (var i = 0; i < WIRE_SERIES.length; i++) if (WIRE_SERIES[i] >= dCalc) { d = WIRE_SERIES[i]; break; }
-      if (d === null) { d = Math.ceil(dCalc); }
+      var K = (4 * C - 1) / (4 * C - 4) + 0.615 / C;   // 曲度系数（Wahl）
+      var d, dCalc, tauAllow, tauCheck;
+      if (mat.sb) {
+        /* 碳素钢丝：σb 随直径降低 → [τ]=比例·σb(d) 随选径迭代 */
+        var frac = CARBON_CLASS[v.cls];
+        d = null; dCalc = 0;
+        for (var i = 0; i < WIRE_SERIES.length; i++) {
+          var di = WIRE_SERIES[i];
+          var tauI = frac * sbLookup(mat.sb, di);
+          var need = 1.6 * Math.sqrt(K * C * F2 / tauI); // 该档 [τ] 对应的试算直径
+          if (di >= need) { d = di; tauAllow = tauI; dCalc = need; break; }
+        }
+        if (d === null) {
+          d = WIRE_SERIES[WIRE_SERIES.length - 1];
+          tauAllow = frac * sbLookup(mat.sb, d);
+          dCalc = 1.6 * Math.sqrt(K * C * F2 / tauAllow);
+        }
+      } else {
+        tauAllow = mat.tau2 * SPRING_CLASS[v.cls];
+        dCalc = 1.6 * Math.sqrt(K * C * F2 / tauAllow); // 试算直径
+        d = null;
+        for (var j = 0; j < WIRE_SERIES.length; j++) if (WIRE_SERIES[j] >= dCalc) { d = WIRE_SERIES[j]; break; }
+        if (d === null) { d = Math.ceil(dCalc); }
+      }
+      tauCheck = 8 * K * F2 * (C * d) / (Math.PI * Math.pow(d, 3)); // 校核切应力
       var D2 = C * d;                                   // 中径
       var D1 = D2 - d, Dd = D2 + d;                     // 内径/外径
       var k = F2 / lam2;                                // 刚度 N/mm
@@ -237,21 +272,23 @@
       var nTotal = nR + (v.endType === '2' ? 2 : v.endType === '2.5' ? 2.5 : 2);
       var kReal = mat.G * Math.pow(d, 4) / (8 * Math.pow(D2, 3) * nR); // 实际刚度
       var delta = 0.1 * d;                              // 余隙
-      var t = d + (k * lam2 / k) / nR + delta;          // 节距 t = d + λ2/n + δ
+      var t = d + lam2 / nR + delta;                    // 节距 t = d + λ2/n + δ
       var H0 = nR * t + (v.endType === '2x' ? 3 : 1.5) * d; // 自由高（磨平1.5d）
       var b = H0 / D2;                                  // 稳定性细长比
       var alpha = Math.atan(t / (Math.PI * D2)) * 180 / Math.PI; // 螺旋角
       var lam1 = F1 / kReal;
       var Fmin = kReal * lam2;
       var stable = b <= 5.3;
+      var sbShow = mat.sb ? sbLookup(mat.sb, d) : null;
       return {
         sections: [
           { title: '材料与强度', rows: [
-            { label: '材料许用切应力 [τ]', value: tauAllow, unit: 'MPa', d: 0 },
+            { label: '钢丝抗拉强度 σb（GB/T 4357）', value: sbShow, unit: 'MPa', d: 0 },
+            { label: '材料许用切应力 [τ]', value: tauAllow, unit: 'MPa', d: 0, hl: true },
             { label: '曲度系数 K', value: K, d: 3 },
             { label: '试算簧丝直径', value: dCalc, unit: 'mm', d: 3 },
             { label: '选用簧丝直径 d', value: d, unit: 'mm', hl: true },
-            { label: '校核切应力 τ=8K·F₂·D₂/(π·d³)', value: 8 * K * F2 * D2 / (Math.PI * Math.pow(d, 3)), unit: 'MPa', hl: true }
+            { label: '校核切应力 τ=8K·F₂·D₂/(π·d³)', value: tauCheck, unit: 'MPa', hl: true }
           ] },
           { title: '几何参数', rows: [
             { label: '弹簧中径 D₂=C·d', value: D2, unit: 'mm', hl: true },
@@ -272,25 +309,25 @@
           ] }
         ],
         verdict: {
-          level: stable ? 'ok' : 'warn',
-          text: stable ? '设计可行，稳定性 b=' + fmt(b, 2) + ' ≤ 5.3（两端固定支承允许值）'
-                       : '稳定性不足：b=' + fmt(b, 2) + ' > 5.3，弹簧可能失稳',
+          level: (stable && tauCheck <= tauAllow) ? 'ok' : 'warn',
+          text: (tauCheck <= tauAllow ? '强度满足（τ=' + fmt(tauCheck, 1) + '≤[τ]）' : '强度不足（τ=' + fmt(tauCheck, 1) + '＞[τ]=' + fmt(tauAllow) + '）') +
+                (stable ? '，稳定性 b=' + fmt(b, 2) + ' ≤ 5.3' : '；稳定性不足：b=' + fmt(b, 2) + ' > 5.3，弹簧可能失稳'),
           note: '细长比许用值：两端固定 5.3、一端固定一端回转 3.7、两端回转 2.6；超限时应加导杆或导套。'
         },
         notes: [
           '簧丝直径按 GB/T 1358 第一系列圆整；圈数尾数取 0.5 圈。',
           '节距 t 的估算采用 t = d + λ₂/n + δ（δ≈0.1d 余隙），并保证在最大压缩时仍有少量间隙。',
-          '碳素钢丝许用应力随钢丝直径增大而降低，精确值请查 GB/T 23935 附录按 σb 计算。'
+          '碳素弹簧钢丝（B/C级）σb 随直径增大而降低（GB/T 4357），许用切应力按 [τ]=0.5σb（III类）/0.4σb（II类）/0.3σb（I类）随选径自动取值；合金钢（60Si2Mn、50CrVA）油淬火后 [τ] 按类别系数取定值。'
         ]
       };
     },
     formulas: [
-      'K = (4C-1)/(4C-3) + 0.615/C（曲度系数）',
-      'd ≥ 1.6√(K·C·F₂/[τ])',
+      'K = (4C-1)/(4C-4) + 0.615/C（曲度系数，Wahl）',
+      'd ≥ 1.6√(K·C·F₂/[τ])；碳素钢丝 [τ]=0.5σb(III)/0.4σb(II)/0.3σb(I)，σb 查 GB/T 4357',
       'n = G·d⁴/(8·D₂³·k)，k = F₂/λ₂',
       'H₀ ≈ n·t + 1.5d（两端磨平），t = d + λ₂/n + 0.1d',
       '稳定条件：b = H₀/D₂ ≤ 5.3（两端固定）'
     ],
-    reference: 'GB/T 23935-2022《圆柱螺旋弹簧设计计算》、GB/T 1358《圆柱螺旋弹簧尺寸系列》；《机械设计》第十六章。'
+    reference: 'GB/T 23935-2022《圆柱螺旋弹簧设计计算》、GB/T 1358《圆柱螺旋弹簧尺寸系列》、GB/T 4357-2009《冷拉碳素弹簧钢丝》；《机械设计》第九版 第十六章。'
   });
 })();
