@@ -210,6 +210,12 @@ sub, sup { font-size: .68em; }
   transition: background .15s;
 }
 .result-bar .btn-calc:hover { background: var(--orange-dark); }
+.result-bar .btn-calc:active { transform: translateY(1px); }
+#resultBox.flash { animation: resultFlash .45s ease; }
+@keyframes resultFlash {
+  0% { opacity: .2; transform: translateY(5px); }
+  100% { opacity: 1; transform: none; }
+}
 .result-section { margin-bottom: 16px; }
 .result-section-title {
   font-size: 13.5px; font-weight: 700; color: var(--navy-700);

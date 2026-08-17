@@ -54,7 +54,8 @@ window.App = (function () {
     if (f.type === 'select') {
       html += '<select data-key="' + esc(f.key) + '">';
       (f.options || []).forEach(function (o) {
-        html += '<option value="' + esc(o.v) + '">' + esc(o.t) + '</option>';
+        var sel = (f.default !== undefined && String(o.v) === String(f.default)) ? ' selected' : '';
+        html += '<option value="' + esc(o.v) + '"' + sel + '>' + esc(o.t) + '</option>';
       });
       html += '</select>';
     } else if (f.type === 'segment') {
@@ -111,8 +112,9 @@ window.App = (function () {
     (result.sections || []).forEach(function (sec) {
       html += '<div class="result-section"><div class="result-section-title">' + sec.title + '</div><div class="result-grid">';
       (sec.rows || []).forEach(function (r) {
+        var val = r.html || (typeof r.value === 'string' ? esc(r.value) : esc(fmt(r.value, r.d)));
         html += '<div class="result-item' + (r.hl ? ' hl' : '') + '"><span class="r-label">' + r.label +
-          '</span><span><span class="r-value">' + (r.html || esc(fmt(r.value, r.d))) + '</span><span class="r-unit">' + esc(r.unit || '') + '</span></span></div>';
+          '</span><span><span class="r-value">' + val + '</span><span class="r-unit">' + esc(r.unit || '') + '</span></span></div>';
       });
       html += '</div></div>';
     });
@@ -163,7 +165,14 @@ window.App = (function () {
     main.addEventListener('input', runCalc);
     main.addEventListener('change', runCalc);
     bindSegments(main);
-    document.getElementById('btnCalc').addEventListener('click', runCalc);
+    document.getElementById('btnCalc').addEventListener('click', function () {
+      runCalc();
+      var box = document.getElementById('resultBox');
+      if (!box) return;
+      box.classList.remove('flash');
+      void box.offsetWidth; /* 重启动画 */
+      box.classList.add('flash');
+    });
     runCalc();
   }
 
