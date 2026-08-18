@@ -184,12 +184,20 @@
       { key: 'St', label: '抗剪安全系数 S<sub>τ</sub>', group: '载荷与材料', type: 'number', default: 2.5, step: 'any' },
       { key: 'h', label: '受挤压高度 h', group: '连接参数', type: 'number', unit: 'mm', default: 20, step: 'any', hint: '取 h₁ 与 h₂ 中的较小值' },
       { key: 'm', label: '受剪面数 m', group: '连接参数', type: 'number', default: 1, step: '1', hint: '单剪=1，双剪=2' },
-      { key: 'dynFactor', label: '动载荷系数', group: '连接参数', type: 'number', default: 1, step: 'any', hint: '静载=1，动载=1.2~1.5' },
+      { key: 'dyn', label: '动载荷', group: '连接参数', type: 'segment', options: [
+        { v: 'no', t: '静载荷' }, { v: 'yes', t: '动载荷' }
+      ] },
+      { key: 'dynFactor', label: '动载荷系数', group: '连接参数', type: 'number', default: 1.2, step: 'any',
+        visible: function (v) { return v.dyn === 'yes'; }, hint: '动载常取 1.2~1.5' },
       { key: 'd', label: '螺栓公称直径', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '12',
-        visible: function (v) { return v.mode !== 'design'; } }
+        visible: function (v) { return v.mode !== 'design'; } },
+      { key: 'd0', label: '受剪直径 d₀', group: '螺栓尺寸', type: 'number', unit: 'mm', step: 'any',
+        default: '10.106',
+        hint: '铰制孔螺栓受剪段（光杆）直径，默认取 M12 螺纹小径 10.106mm，按所选螺栓修改' }
     ],
     compute: function (v) {
-      var F = +v.F * 1000 * (+v.dynFactor || 1), Sp = +v.Sp, St = +v.St, h = +v.h, m = +v.m;
+      var dynF = v.dyn === 'yes' ? (+v.dynFactor || 1.2) : 1;
+      var F = +v.F * 1000 * dynF, Sp = +v.Sp, St = +v.St, h = +v.h, m = +v.m;
       if (!(F > 0)) return { error: '请输入横向载荷 F（kN）' };
       if (!(Sp > 0) || !(St > 0)) return { error: '请输入挤压/抗剪安全系数' };
       if (!(h > 0)) return { error: '请输入受挤压高度 h（mm）' };
@@ -197,10 +205,10 @@
 
       var ss = v.matType === 'ss' ? SS_GRADE.ss : GRADE_SS[v.grade];
       var sb = v.matType === 'ss' ? SS_GRADE.sb : GRADE_SB[v.grade];
-      // 许用挤压应力 [σp]：钢=σs/Sp，铸铁≈σb/Sp（此处按钢计算）
+      // 许用挤压应力 [σp] = σs / Sp（参考 mechtool.cn）
       var sigmaPAllow = ss / Sp;
-      // 许用剪切应力 [τ]：钢=σs/St（按第四强度理论，[τ]≈0.6σs/St）
-      var tauAllow = 0.6 * ss / St;
+      // 许用剪切应力 [τ] = σs / St（参考 mechtool.cn，不乘 0.6 系数）
+      var tauAllow = ss / St;
 
       if (v.mode === 'design') {
         // 设计计算：由挤压强度求 d_min，由抗剪强度求 d_min，取较大者
@@ -220,17 +228,17 @@
               { label: '所需最小 d₁', value: dMin, unit: 'mm', d: 3, hl: true },
               { label: '推荐公称直径', html: recD ? 'M' + recD + '（d₁=' + THREAD_D1[recD] + 'mm）' : '超出数据范围' },
               { label: '许用挤压应力 [σp]=σs/Sp', value: sigmaPAllow, unit: 'MPa' },
-              { label: '许用剪应力 [τ]=0.6σs/St', value: tauAllow, unit: 'MPa' }
+              { label: '许用剪应力 [τ]=σs/St', value: tauAllow, unit: 'MPa' }
             ] }
           ],
           verdict: { level: 'ok', text: '所需 d₁ ≥ ' + fmt(dMin, 3) + ' mm，推荐选用 M' + (recD || '--') },
-          notes: ['铰制孔螺栓受剪直径取螺纹小径 d₁（近似），实际工程中按螺栓杆直径 d₀ 计算。']
+          notes: ['设计计算中 d₀ 按受剪直径要求确定，由 d₀ 反推所需螺纹小径 d₁，再推荐公称直径。']
         };
       }
 
       var d1 = THREAD_D1[v.d];
       if (!d1) return { error: '未找到所选螺栓的小径数据' };
-      var d0 = d1; // 受剪直径取小径（近似）
+      var d0 = +v.d0 || d1;          // 受剪直径，优先取用户输入，默认取螺纹小径
       var A = Math.PI * d0 * d0 / 4;
       var sigmaP = F / (d0 * h);     // 挤压应力
       var tau = F / (m * A);         // 剪切应力
@@ -243,13 +251,13 @@
           { title: '挤压强度校核', rows: [
             { label: '挤压应力 σp=F/(d₀·h)', value: sigmaP, unit: 'MPa', hl: true },
             { label: '许用挤压应力 [σp]=σs/Sp', value: sigmaPAllow, unit: 'MPa', hl: true },
-            { label: '受剪直径 d₀（≈d₁）', value: d0, unit: 'mm' },
+            { label: '受剪直径 d₀', value: d0, unit: 'mm' },
             { label: '受挤压高度 h', value: h, unit: 'mm' },
             { label: '挤压裕度', value: sigmaPAllow / sigmaP, d: 2, unit: '' }
           ] },
           { title: '抗剪强度校核', rows: [
             { label: '剪切应力 τ=F/(m·A)', value: tau, unit: 'MPa', hl: true },
-            { label: '许用剪应力 [τ]=0.6σs/St', value: tauAllow, unit: 'MPa', hl: true },
+            { label: '许用剪应力 [τ]=σs/St', value: tauAllow, unit: 'MPa', hl: true },
             { label: '受剪面数 m', value: m, unit: '' },
             { label: '受剪截面积 A', value: A, unit: 'mm²', d: 2 },
             { label: '剪切裕度', value: tauAllow / tau, d: 2, unit: '' }
@@ -262,14 +270,14 @@
           note: ok ? '' : '若不满足：① 增大螺栓直径 ② 提高性能等级 ③ 增加受剪面数 ④ 增大挤压高度'
         },
         notes: [
-          '铰制孔螺栓的受剪直径取螺杆直径（约等于螺纹小径 d₁），实际计算应以螺栓杆名义直径 d₀ 为准。',
-          '动载荷作用下应将载荷乘以动载系数（1.2~1.5）后再校核。'
+          '铰制孔螺栓的受剪直径 d₀ 为螺栓杆（光杆）直径，由用户输入；默认取所选螺栓的螺纹小径 d₁。',
+          '动载荷时需勾选"动载荷"并输入动载系数（1.2~1.5），载荷乘以该系数后校核。'
         ]
       };
     },
     formulas: [
       '挤压强度：σp = F/(d₀·h) ≤ [σp] = σs/Sp',
-      '抗剪强度：τ = 4F/(m·π·d₀²) ≤ [τ] = 0.6σs/St',
+      '抗剪强度：τ = 4F/(m·π·d₀²) ≤ [τ] = σs/St',
       '设计：d₀ ≥ max( F/(h·[σp]), √(4F/(m·π·[τ])) )'
     ],
     reference: 'GB/T 196《普通螺纹 基本尺寸》、GB/T 3098.1《紧固件机械性能》；《机械设计》第九版 第五章。'
