@@ -110,13 +110,83 @@ console.log('== 2b) 动载荷紧螺栓（与 mechtool.cn boltconnection4 API 实
   ok('E: σa = 0.3×20000/(2A) ≈ 8.86', near(val(rE, '计算应力幅'), 0.3 * 20000 / (2 * A24), 1e-4), String(val(rE, '计算应力幅')));
 })();
 
-console.log('== 3) 平键（d=40 → 12×8；d=100 → 25×14 修正档） ==');
+console.log('== 3) 键连接系列（与 mechtool.cn 1:1：公式/许用应力/推荐表均实测对齐） ==');
+// 3a 平键：默认 T=840 d=60 18×11 A型 L=90 单键 钢/静载荷 → l=72, k=0.4h=4.4, σp=2T/(dkl)
 (function () {
-  var r = runTool('key-check', { d: 100, T: 500, L: 100, autoBh: 'auto' });
-  var row = (r.sections[0].rows[0].html || '');
-  ok('d=100 推荐 25×14', row.indexOf('25×14') === 0, row);
-  var r2 = runTool('key-check', { d: 40, T: 500, L: 63, autoBh: 'auto' });
-  ok('d=40 推荐 12×8', (r2.sections[0].rows[0].html || '').indexOf('12×8') === 0, r2.sections[0].rows[0].html);
+  var r = runTool('key-check', {});
+  var exp = 2 * 840000 / (60 * 0.4 * 11 * (90 - 18));   // = 88.386
+  ok('平键 有效长度 l = L−b = 72', near(val(r, '键的有效长度'), 72, 1e-9), String(val(r, '键的有效长度')));
+  ok('平键 接触高度 k = 0.4h = 4.4', near(val(r, '接触高度'), 4.4, 1e-9), String(val(r, '接触高度')));
+  ok('平键 [σp] 钢/静载荷 = 135', val(r, '许用应力 [') === 135, String(val(r, '许用应力 [')));
+  ok('平键 默认 σp ≈ 88.386', near(val(r, '计算应力'), exp, 1e-4), String(val(r, '计算应力')));
+  ok('平键 默认校核通过', r.verdict.level === 'ok', r.verdict.text);
+  var rd = runTool('key-check', { connType: 'dynamic' });
+  ok('平键 动连接 [p] = 50（静载荷）', val(rd, '许用应力 [') === 50, String(val(rd, '许用应力 [')));
+  var rc = runTool('key-check', { material: '铸铁', loadType: '冲击载荷' });
+  ok('平键 [σp] 铸铁/冲击 = 38', val(rc, '许用应力 [') === 38, String(val(rc, '许用应力 [')));
+  var rk = runTool('key-check', { keyNumber: '双键' });
+  ok('平键 双键 σp 减半（÷1.5）', near(val(rk, '计算应力'), exp / 1.5, 1e-4), String(val(rk, '计算应力')));
+  var rB = runTool('key-check', { keyType: 'B型' });
+  ok('平键 B型 l = L = 90', near(val(rB, '键的有效长度'), 90, 1e-9), String(val(rB, '键的有效长度')));
+  var rec = runTool('key-check', { d: 100, keySize: '28x16' });
+  ok('平键 d=100 推荐 28×16/L=80', String(val(rec, '按轴径推荐')).indexOf('28x16') >= 0 && String(val(rec, '按轴径推荐')).indexOf('L=80') >= 0, String(val(rec, '按轴径推荐')));
+})();
+
+// 3b 半圆键：默认 T=50 d=20 5x7.5x19x18.6x2.32 单键 钢/静载荷 → σp=2T/(dkL)，k/L 取自规格
+(function () {
+  var r = runTool('key-half', {});
+  var exp = 2 * 50000 / (20 * 2.32 * 18.6);             // = 115.875
+  ok('半圆键 k=2.32、L=18.6（规格表）', near(val(r, '接触高度'), 2.32, 1e-9) && near(val(r, '键的长度'), 18.6, 1e-9), val(r, '接触高度') + '/' + val(r, '键的长度'));
+  ok('半圆键 [σp] 钢/静 = 135', val(r, '许用应力 [') === 135, String(val(r, '许用应力 [')));
+  ok('半圆键 默认 σp ≈ 115.875', near(val(r, '计算应力'), exp, 1e-4), String(val(r, '计算应力')));
+  var rm = runTool('key-half', { material: '钢', loadType: '轻微冲击载荷' });
+  ok('半圆键 钢/轻微冲击 = 110（半圆键专用档）', val(rm, '许用应力 [') === 110, String(val(rm, '许用应力 [')));
+  var ri = runTool('key-half', { material: '铸铁', loadType: '冲击载荷' });
+  ok('半圆键 铸铁/冲击 = 37（半圆键专用档）', val(ri, '许用应力 [') === 37, String(val(ri, '许用应力 [')));
+  var rrec = runTool('key-half', { d: 20 });
+  ok('半圆键 d=20 传递载荷用推荐 5x7.5x19x18.6x2.32', String(val(rrec, '按轴径推荐')).indexOf('5x7.5x19x18.6x2.32') >= 0, String(val(rrec, '按轴径推荐')));
+})();
+
+// 3c 楔键：默认 μ=0.14 → σp=12T/(b·l·(b+6μd))，l=L−b=72
+(function () {
+  var r = runTool('key-wedge', {});
+  var exp = 12 * 840000 / (18 * (90 - 18) * (18 + 6 * 0.14 * 60));   // = 113.710
+  ok('楔键 默认 σp ≈ 113.71', near(val(r, '计算应力'), exp, 1e-4), String(val(r, '计算应力')));
+  ok('楔键 默认校核通过（≤135）', r.verdict.level === 'ok', r.verdict.text);
+  var rmu = runTool('key-wedge', { miu: 0.2 });
+  ok('楔键 μ=0.2 应力更低', val(rmu, '计算应力') < val(r, '计算应力'), val(rmu, '计算应力') + ' < ' + val(r, '计算应力'));
+})();
+
+// 3d 切向键：默认 t=7 c=0.7 l=90 μ=0.14 → σp=2T/(d(t−c)l(0.9+μ))
+(function () {
+  var r = runTool('key-tangent', {});
+  var exp = 2 * 840000 / (60 * (7 - 0.7) * 90 * (0.9 + 0.14));       // = 47.483
+  ok('切向键 默认 σp ≈ 47.48', near(val(r, '计算应力'), exp, 1e-4), String(val(r, '计算应力')));
+  var rec = runTool('key-tangent', { d: 100 });
+  ok('切向键 d=100 推荐 t=9/c=0.7/l=150', String(val(rec, '按轴径推荐')).indexOf('t=9') >= 0 && String(val(rec, '按轴径推荐')).indexOf('150') >= 0, String(val(rec, '按轴径推荐')));
+})();
+
+// 3e 矩形花键：默认 6×23×26×6 L=30 c=0.2 φ=0.75 → dm=24.5, h=1.1, [p]=120（100~140 中值）
+(function () {
+  var r = runTool('key-spline-rect', {});
+  var dm = (26 + 23) / 2, h = (26 - 23) / 2 - 2 * 0.2;
+  var exp = 2 * 85000 / (0.75 * 6 * h * dm * 30);       // = 46.726
+  ok('矩形花键 dm=24.5、h=1.1', near(val(r, '平均直径'), 24.5, 1e-9) && near(val(r, '键齿工作高度'), 1.1, 1e-9), val(r, '平均直径') + '/' + val(r, '键齿工作高度'));
+  ok('矩形花键 [p] 静/热/中等 = 120（100~140 中值）', val(r, '许用应力 [') === 120, String(val(r, '许用应力 [')));
+  ok('矩形花键 默认 p ≈ 46.73', near(val(r, '计算应力'), exp, 1e-4), String(val(r, '计算应力')));
+  var rl = runTool('key-spline-rect', { connType: 'dynamic', workingWay: '载荷作用下移动' });
+  ok('矩形花键 动·载荷下移动/中等 [p]=10（5~15 中值）', val(rl, '许用应力 [') === 10, String(val(rl, '许用应力 [')));
+  var rn = runTool('key-spline-rect', { heatTreatment: 'no' });
+  ok('矩形花键 静/未热处理/中等 [p]=80（60~100 中值）', val(rn, '许用应力 [') === 80, String(val(rn, '许用应力 [')));
+})();
+
+// 3f 渐开线花键：默认 m=2 30° z=20 d=40 h=2 L=30 φ=0.75 → p=2T/(φzhdL)
+(function () {
+  var r = runTool('key-spline-inv', {});
+  var exp = 2 * 840000 / (0.75 * 20 * 2 * 40 * 30);     // = 46.667
+  ok('渐开线花键 默认 [p] = 120（静/热/中等）', val(r, '许用应力 [') === 120, String(val(r, '许用应力 [')));
+  ok('渐开线花键 默认 p ≈ 46.67', near(val(r, '计算应力'), exp, 1e-4), String(val(r, '计算应力')));
+  ok('渐开线花键 默认校核通过', r.verdict.level === 'ok', r.verdict.text);
 })();
 
 console.log('== 4) 压缩弹簧（C=6 曲度系数 Wahl） ==');

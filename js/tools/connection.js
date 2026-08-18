@@ -722,85 +722,572 @@
     for (var i = 0; i < KEY_DIMS.length; i++) if (d <= KEY_DIMS[i].max) return KEY_DIMS[i];
     return KEY_DIMS[KEY_DIMS.length - 1];
   }
-  var SP_ALLOW = { // 许用挤压应力 MPa：静、轻微冲击、冲击
-    steel: { s: 125, m: 100, i: 50 }, cast: { s: 70, m: 50, i: 30 }
+  /* =====================================================
+   * 键连接系列 —— 1:1 复刻 mechtool.cn（calculation_keyconnection 等 6 页）
+   * ===================================================== */
+  // 平键/楔键 键截面系列（b×h）
+  var KEY_BH = ['2x2','3x3','4x4','5x5','6x6','8x7','10x8','12x8','14x9','16x10','18x11','20x12','22x14','25x14','28x16','32x18','36x20','40x22','45x25','50x28','56x32','63x32','70x36','80x40','90x45','100x50'];
+  var KEY_LEN_SERIES = [6,8,10,12,14,16,18,20,22,25,28,32,36,40,45,50,56,63,70,80,90,100,110,125,140,160,180,200,220,250,280,320,360,400,450,500];
+  // 按轴径推荐 平键/楔键 截面与长度（mechtool.cn calculation_keysize 实测）
+  var FLAT_REC = [
+    { max: 8, bh: '2x2', L: 6 }, { max: 10, bh: '3x3', L: 6 }, { max: 12, bh: '4x4', L: 8 },
+    { max: 16, bh: '5x5', L: 10 }, { max: 22, bh: '6x6', L: 14 }, { max: 28, bh: '8x7', L: 18 },
+    { max: 36, bh: '10x8', L: 22 }, { max: 40, bh: '12x8', L: 28 }, { max: 50, bh: '14x9', L: 36 },
+    { max: 56, bh: '16x10', L: 45 }, { max: 63, bh: '18x11', L: 50 }, { max: 75, bh: '20x12', L: 56 },
+    { max: 85, bh: '22x14', L: 63 }, { max: 95, bh: '25x14', L: 70 }, { max: 110, bh: '28x16', L: 80 }, { max: 120, bh: '32x18', L: 90 }
+  ];
+  function flatRec(d) {
+    for (var i = 0; i < FLAT_REC.length; i++) if (d <= FLAT_REC[i].max) return FLAT_REC[i];
+    return FLAT_REC[FLAT_REC.length - 1];
+  }
+  // 平键/半圆键 许用挤压应力 [σp]（mechtool.cn 自动推荐，MPa；实测其 JS：钢 135/101/68、铸铁 75/56/38）
+  var SIGP_FLAT = {
+    '钢': { '静载荷': 135, '轻微冲击载荷': 101, '冲击载荷': 68 },
+    '铸铁': { '静载荷': 75, '轻微冲击载荷': 56, '冲击载荷': 38 }
   };
+  var P_DYN = { '静载荷': 50, '轻微冲击载荷': 40, '冲击载荷': 30 };   // 平键动连接 [p]（钢）
+  // 平键/楔键 有效长度：A型 L-b，B型 L，C型 L-b/2
+  function effLen(keyType, L, b) {
+    if (keyType === 'B型') return L;
+    if (keyType === 'C型') return L - b / 2;
+    return L - b;      // A型
+  }
+  // 双键承载系数：单键 1，双键 1.5
+  function nKeys(v) { return v === '双键' ? 1.5 : 1; }
 
+  /* ============ 6. 平键连接强度校核（静/动连接） ============ */
   App.registerTool({
     id: 'key-check',
     name: '平键连接强度校核',
     category: 'connect',
-    keywords: '平键 键连接 挤压应力 剪切 轴毂',
-    brief: '按 GB/T 1095 自动推荐键尺寸，校核普通平键连接的挤压强度并计算承载能力。',
-    doc: '普通平键（A 型圆头）连接强度校核：键的主要失效形式是较弱零件（通常轮毂）工作面<b>压溃</b>，故按挤压应力校核；仅重载时才需校核键的剪切。',
+    keywords: '平键 键连接 挤压应力 静连接 动连接 A型 B型 C型 单键 双键',
+    brief: '平键连接（静连接/动连接）强度校核，σp=2T/(dkl)，与 mechtool.cn 1:1 一致。',
+    doc: '平键连接强度校核：σ<sub>p</sub> = 2T/(d·k·l) ≤ [σ<sub>p</sub>]，接触高度 k≈0.4h；A 型有效长度 l=L−b、B 型 l=L、C 型 l=L−b/2；双键按 1.5 倍承载。静/动连接仅许用应力不同，与 mechtool.cn 完全一致。',
     inputs: [
-      { key: 'd', label: '轴径 d', group: '键连接参数', type: 'number', unit: 'mm', default: 40, step: 'any' },
-      { key: 'T', label: '传递转矩 T', group: '键连接参数', type: 'number', unit: 'N·m', default: 200, step: 'any' },
-      { key: 'L', label: '键公称长度 L', group: '键连接参数', type: 'number', unit: 'mm', default: 63, step: 'any', hint: '一般取 1.2d~1.5d 并圆整至标准长度系列' },
-      { key: 'autoBh', label: '键截面 b×h', group: '键连接参数', type: 'segment', options: [
-        { v: 'auto', t: '按 GB/T 1095 自动推荐' }, { v: 'man', t: '手动指定' }
+      { key: 'connType', label: '连接类型', group: '工况', type: 'segment', options: [
+        { v: 'static', t: '静连接' }, { v: 'dynamic', t: '动连接（导向平键/滑键）' }
       ] },
-      { key: 'b', label: '键宽 b', group: '键连接参数', type: 'number', unit: 'mm', default: 12, step: 'any' },
-      { key: 'h', label: '键高 h', group: '键连接参数', type: 'number', unit: 'mm', default: 8, step: 'any' },
-      { key: 'mat', label: '轮毂材料（取较弱者）', group: '工况', type: 'select', options: [
-        { v: 'steel', t: '钢（σb＞500MPa）' }, { v: 'cast', t: '铸铁' }
-      ], default: 'steel' },
-      { key: 'load', label: '载荷性质', group: '工况', type: 'select', options: [
-        { v: 's', t: '静载荷' }, { v: 'm', t: '轻微冲击' }, { v: 'i', t: '冲击载荷' }
-      ], default: 'm' }
+      { key: 'T', label: '传递转矩 T', group: '工况', type: 'number', unit: 'N·m', default: 840, step: 'any' },
+      { key: 'd', label: '轴的直径 d', group: '工况', type: 'number', unit: 'mm', default: 60, step: 'any', hint: '键截面与长度可按轴径在下方选择推荐值' },
+      { key: 'material', label: '最弱的材料', group: '工况', type: 'select', options: [
+        { v: '钢', t: '钢' }, { v: '铸铁', t: '铸铁' }
+      ], default: '钢', visible: function (v) { return v.connType !== 'dynamic'; } },
+      { key: 'loadType', label: '载荷类型', group: '工况', type: 'select', options: [
+        { v: '静载荷', t: '静载荷' }, { v: '轻微冲击载荷', t: '轻微冲击载荷' }, { v: '冲击载荷', t: '冲击载荷' }
+      ], default: '静载荷' },
+      { key: 'keySize', label: '键的截面尺寸 b×h', group: '键参数', type: 'select', default: '18x11',
+        options: KEY_BH.map(function (s) { return { v: s, t: s }; }) },
+      { key: 'keyType', label: '键的类型', group: '键参数', type: 'segment', options: [
+        { v: 'A型', t: 'A型（圆头）' }, { v: 'B型', t: 'B型（方头）' }, { v: 'C型', t: 'C型（单圆头）' }
+      ], default: 'A型' },
+      { key: 'keyLength', label: '键的长度 L', group: '键参数', type: 'select', default: '90',
+        options: KEY_LEN_SERIES.map(function (n) { return { v: String(n), t: String(n) }; }) },
+      { key: 'keyNumber', label: '键的个数', group: '键参数', type: 'segment', options: [
+        { v: '单键', t: '单键' }, { v: '双键', t: '双键' }
+      ] },
+      { key: 'allowableStress', label: '许用应力 [σ<sub>p</sub>]', group: '键参数', type: 'number', unit: 'MPa', step: 'any',
+        placeholder: '自动',
+        hint: '留空自动推荐：静连接 钢 135/101/68、铸铁 75/56/38；动连接 50/40/30（静/轻微冲击/冲击）' }
     ],
     compute: function (v) {
-      var d = +v.d, T = +v.T, L = +v.L;
-      if (!(d > 0) || !(T > 0) || !(L > 0)) return { error: '请完整输入轴径、转矩与键长' };
-      var rec = pickKey(d);
-      var b, h;
-      if (v.autoBh === 'auto') { b = rec.b; h = rec.h; } else { b = +v.b; h = +v.h; }
-      if (!(b > 0) || !(h > 0)) return { error: '请输入有效的键截面尺寸 b×h' };
-      var l = L - b;                      // A 型键有效工作长度
-      if (l <= 0) return { error: '键长 L 需大于键宽 b（A 型键工作长度 l = L - b）' };
-      var k = 0.4 * h;                    // 键与轮毂的接触高度 ≈ 0.4h
-      var Tmm = T * 1000;                 // N·mm
-      var sigmaP = 2 * Tmm / (d * k * l); // 挤压应力
-      var tau = 2 * Tmm / (d * b * l);    // 键剪切应力（参考）
-      var allow = SP_ALLOW[v.mat][v.load];
-      var Tmax = 0.5 * allow * d * k * l / 1000; // 允许最大转矩 N·m
+      var T = +v.T * 1000, d = +v.d;
+      if (!(T > 0)) return { error: '请输入传递转矩 T' };
+      if (!(d > 0)) return { error: '请输入轴的直径 d' };
+      var parts = String(v.keySize).split('x');
+      var b = +parts[0], h = +parts[1];
+      var L = +v.keyLength;
+      var l = effLen(v.keyType, L, b);
+      if (!(l > 0)) return { error: '有效长度 l≤0：请检查键长 L 与键宽 b（A 型 l=L−b）' };
+      var k = 0.4 * h;
+      var n = nKeys(v.keyNumber);
+      var allow = +v.allowableStress > 0 ? +v.allowableStress
+        : (v.connType === 'dynamic' ? P_DYN[v.loadType] : SIGP_FLAT[v.material][v.loadType]);
+      var sigmaP = 2 * T / (d * k * l * n);
       var ok = sigmaP <= allow;
+      var rec = flatRec(d);
       return {
         sections: [
-          { title: '键参数（GB/T 1095）', rows: [
-            { label: '推荐截面 b×h', html: (v.autoBh === 'auto' ? rec.b + '×' + rec.h + '（已采用）' : rec.b + '×' + rec.h + '（推荐）') },
-            { label: '采用截面 b×h', html: b + '×' + h },
-            { label: '有效工作长度 l=L-b', value: l, unit: 'mm' },
-            { label: '工作高度 k≈0.4h', value: k, unit: 'mm', d: 2 }
+          { title: '输入参数', rows: [
+            { label: '键的类型 sType', html: esc(v.keyType) },
+            { label: '键的截面尺寸 b×h', html: b + '×' + h },
+            { label: '键的长度 L', value: L, unit: 'mm' },
+            { label: '键的有效长度 l', value: l, unit: 'mm', d: 2, hl: true },
+            { label: '接触高度 k=0.4h', value: k, unit: 'mm', d: 2 },
+            { label: '键的个数', html: esc(v.keyNumber) + (n > 1 ? '（承载按 ' + n + ' 倍计）' : '') },
+            { label: '按轴径推荐', html: 'b×h=' + rec.bh + '，L=' + rec.L + '（当前 d=' + d + '）' }
           ] },
-          { title: '强度校核', rows: [
-            { label: '挤压应力 σp', value: sigmaP, unit: 'MPa', hl: true },
-            { label: '许用挤压应力 [σp]', value: allow, unit: 'MPa', hl: true },
-            { label: '键剪切应力 τ（参考）', value: tau, unit: 'MPa' },
-            { label: '许用切应力 [τ]（参考）', value: 120, unit: 'MPa' },
-            { label: '连接允许最大转矩', value: Tmax, unit: 'N·m', d: 1 },
-            { label: '转矩裕度', value: Tmax / T, d: 2 }
+          { title: '校核结果', rows: [
+            { label: '许用应力 [σ<sub>p</sub>]', value: allow, unit: 'MPa', hl: true },
+            { label: '计算应力 σ<sub>p</sub>=2T/(dkl)', value: sigmaP, unit: 'MPa', d: 3, hl: true },
+            { label: '连接允许最大转矩', value: allow * d * k * l * n / 2000, unit: 'N·m', d: 1 }
           ] }
         ],
         verdict: {
           level: ok ? 'ok' : 'bad',
-          text: ok ? '校核通过：σp = ' + fmt(sigmaP) + ' MPa ≤ [σp] = ' + allow + ' MPa'
-                   : '校核不通过：σp = ' + fmt(sigmaP) + ' MPa > [σp] = ' + allow + ' MPa',
-          note: '若不满足，可：① 增加键长 ② 采用双键（相隔180°，考虑1.5倍承载折减）③ 改用花键连接 ④ 提高轮毂材料'
+          text: ok ? '校核通过：σ<sub>p</sub> = ' + fmt(sigmaP, 2) + ' MPa ≤ [σ<sub>p</sub>] = ' + allow + ' MPa'
+                   : '校核不通过：σ<sub>p</sub> = ' + fmt(sigmaP, 2) + ' MPa > [σ<sub>p</sub>] = ' + allow + ' MPa',
+          note: '若不满足，可：① 增加键长 ② 改用双键（相隔180°，按1.5倍承载）③ 改用花键 ④ 提高轮毂材料'
         },
         notes: [
-          '采用 GB/T 1095-2003 普通平键和键槽尺寸，A 型（圆头）工作长度 l = L - b。',
-          '定键宽的轴段如未选中推荐值，请核对 GB/T 1095 表。',
-          '双平键布置（180°）时承载按单键 1.5 倍计，强度校核时工作长度乘 0.75 折减。'
+          '静连接按挤压应力校核，动连接（导向平键/滑键）按工作面压强 p 校核，公式相同、许用值不同。',
+          'A 型（圆头）l=L−b，B 型（方头）l=L，C 型（单圆头）l=L−b/2；接触高度 k≈0.4h。',
+          '与 mechtool.cn《平键连接校核计算》1:1 一致。'
         ]
       };
     },
     formulas: [
-      'σ<sub>p</sub> = 2T/(d·k·l) ≤ [σ<sub>p</sub>]，其中 k≈0.4h（键的接触高度）',
-      'τ = 2T/(d·b·l) ≤ [τ]（一般钢制键 [τ]=120 MPa）',
-      '[σp]：钢/静 125、轻微冲击 100、冲击 50；铸铁/70、50、30（MPa）'
+      'σ<sub>p</sub> = 2T/(d·k·l) ≤ [σ<sub>p</sub>]，k≈0.4h',
+      'l：A型 L−b、B型 L、C型 L−b/2；双键除以 1.5',
+      '[σ<sub>p</sub>] 静连接：钢 135/101/68、铸铁 75/56/38；[p] 动连接：50/40/30 MPa'
     ],
-    reference: 'GB/T 1095-2003《平键 键槽的剖面尺寸》、GB/T 1096-2003《普通型 平键》；《机械设计》第九版 第六章。'
+    reference: 'GB/T 1095-2003、GB/T 1096-2003；mechtool.cn 平键连接校核计算。'
+  });
+
+  /* ============ 6b. 半圆键连接强度校核 ============ */
+  // 半圆键规格 b×h×D×L×k（含接触高度 k，GB/T 1098/1099）
+  var HALF_KEYS = [
+    '1x1.4x4x3.9x0.4', '1.5x2.6x7x6.8x0.72', '2x2.6x7x6.8x0.97', '2x3.7x10x9.7x0.95',
+    '2.5x3.7x10x9.7x1.2', '3x5x13x12.7x1.43', '3x6.5x16x15.7x1.4', '4x6.5x16x15.7x1.8',
+    '4x7.5x19x18.6x1.75', '5x6.5x16x15.7x2.35', '5x7.5x19x18.6x2.32', '5x9x22x21.6x2.29',
+    '6x9x22x21.6x2.87', '6x10x25x24.5x2.83', '8x11x28x27.4x3.51', '10x13x32x31.4x3.67'
+  ];
+  // 按轴径推荐半圆键（mechtool.cn calculation_keysize 实测）
+  var HALF_REC_LOAD = [
+    { max: 6, s: '2x2.6x7x6.8x0.97' }, { max: 8, s: '2.5x3.7x10x9.7x1.2' }, { max: 10, s: '3x5x13x12.7x1.43' },
+    { max: 12, s: '3x6.5x16x15.7x1.4' }, { max: 14, s: '4x6.5x16x15.7x1.8' }, { max: 16, s: '4x7.5x19x18.6x1.75' },
+    { max: 18, s: '5x6.5x16x15.7x2.35' }, { max: 20, s: '5x7.5x19x18.6x2.32' }, { max: 22, s: '5x9x22x21.6x2.29' },
+    { max: 25, s: '6x9x22x21.6x2.87' }, { max: 28, s: '6x10x25x24.5x2.83' }, { max: 32, s: '8x11x28x27.4x3.51' }
+  ];
+  var HALF_REC_POS = [
+    { max: 6, s: '1.5x2.6x7x6.8x0.72' }, { max: 8, s: '2x2.6x7x6.8x0.97' }, { max: 10, s: '2x3.7x10x9.7x0.95' },
+    { max: 12, s: '2.5x3.7x10x9.7x1.2' }, { max: 14, s: '3x5x13x12.7x1.43' }, { max: 16, s: '3x6.5x16x15.7x1.4' },
+    { max: 18, s: '3x6.5x16x15.7x1.4' }, { max: 20, s: '4x6.5x16x15.7x1.8' }, { max: 22, s: '4x7.5x19x18.6x1.75' },
+    { max: 25, s: '5x6.5x16x15.7x2.35' }
+  ];
+  App.registerTool({
+    id: 'key-half',
+    name: '半圆键连接强度校核',
+    category: 'connect',
+    keywords: '半圆键 键连接 挤压强度 校核 定位 传递载荷',
+    brief: '半圆键连接强度校核：σp=2T/(dkl)，k、l 取自键规格表，与 mechtool.cn 1:1 一致。',
+    doc: '半圆键（GB/T 1098/1099）连接强度校核：σ<sub>p</sub> = 2T/(d·k·L) ≤ [σ<sub>p</sub>]。键规格 b×h×D×L×k 中已含接触高度 k 与长度 L；双键（同一直径上 180°）按 1.5 倍承载。与 mechtool.cn《半圆键连接校核计算》一致。',
+    inputs: [
+      { key: 'T', label: '传递转矩 T', group: '工况', type: 'number', unit: 'N·m', default: 50, step: 'any' },
+      { key: 'd', label: '轴的直径 d', group: '工况', type: 'number', unit: 'mm', default: 20, step: 'any' },
+      { key: 'material', label: '最弱的材料', group: '工况', type: 'select', options: [
+        { v: '钢', t: '钢' }, { v: '铸铁', t: '铸铁' }
+      ], default: '钢' },
+      { key: 'loadType', label: '载荷类型', group: '工况', type: 'select', options: [
+        { v: '静载荷', t: '静载荷' }, { v: '轻微冲击载荷', t: '轻微冲击载荷' }, { v: '冲击载荷', t: '冲击载荷' }
+      ], default: '静载荷' },
+      { key: 'forUse', label: '用途', group: '键参数', type: 'segment', options: [
+        { v: '传递载荷用', t: '传递载荷用' }, { v: '定位用', t: '定位用' }
+      ] },
+      { key: 'keySize', label: '键尺寸 b×h×D×L×k', group: '键参数', type: 'select', default: '5x7.5x19x18.6x2.32',
+        options: HALF_KEYS.map(function (s) { return { v: s, t: s }; }) },
+      { key: 'keyNumber', label: '键的个数', group: '键参数', type: 'segment', options: [
+        { v: '单键', t: '单键' }, { v: '双键', t: '双键' }
+      ] },
+      { key: 'allowableStress', label: '许用应力 [σ<sub>p</sub>]', group: '键参数', type: 'number', unit: 'MPa', step: 'any',
+        placeholder: '自动',
+        hint: '留空自动推荐：钢 135/110/75、铸铁 75/55/37（静/轻微冲击/冲击）' }
+    ],
+    compute: function (v) {
+      var T = +v.T * 1000, d = +v.d;
+      if (!(T > 0)) return { error: '请输入传递转矩 T' };
+      if (!(d > 0)) return { error: '请输入轴的直径 d' };
+      var p = String(v.keySize).split('x');
+      var b = +p[0], h = +p[1], D = +p[2], L = +p[3], k = +p[4];
+      var n = nKeys(v.keyNumber);
+      var allow = +v.allowableStress > 0 ? +v.allowableStress
+        : (v.material === '钢' ? { '静载荷': 135, '轻微冲击载荷': 110, '冲击载荷': 75 }[v.loadType]
+                               : { '静载荷': 75, '轻微冲击载荷': 55, '冲击载荷': 37 }[v.loadType]);
+      var sigmaP = 2 * T / (d * k * L * n);
+      var ok = sigmaP <= allow;
+      var recTab = v.forUse === '定位用' ? HALF_REC_POS : HALF_REC_LOAD;
+      var rec = null;
+      for (var i = 0; i < recTab.length; i++) if (d <= recTab[i].max) { rec = recTab[i]; break; }
+      return {
+        sections: [
+          { title: '输入参数', rows: [
+            { label: '键尺寸 b×h×D', html: b + '×' + h + '×' + D },
+            { label: '键的长度 L', value: L, unit: 'mm' },
+            { label: '接触高度 k', value: k, unit: 'mm', d: 2 },
+            { label: '键的个数', html: esc(v.keyNumber) + (n > 1 ? '（承载按 ' + n + ' 倍计）' : '') },
+            { label: '按轴径推荐（' + v.forUse + '）', html: rec ? rec.s : '超出推荐范围' }
+          ] },
+          { title: '校核结果', rows: [
+            { label: '许用应力 [σ<sub>p</sub>]', value: allow, unit: 'MPa', hl: true },
+            { label: '计算应力 σ<sub>p</sub>=2T/(dkL)', value: sigmaP, unit: 'MPa', d: 3, hl: true }
+          ] }
+        ],
+        verdict: {
+          level: ok ? 'ok' : 'bad',
+          text: ok ? '校核通过：σ<sub>p</sub> = ' + fmt(sigmaP, 2) + ' MPa ≤ [σ<sub>p</sub>] = ' + allow + ' MPa'
+                   : '校核不通过：σ<sub>p</sub> = ' + fmt(sigmaP, 2) + ' MPa > [σ<sub>p</sub>] = ' + allow + ' MPa',
+          note: '半圆键常用于锥形轴端与定位，承载较低；不满足时可加大轴径或改用平键/花键。'
+        },
+        notes: ['半圆键能在轴槽中摆动自位，装配方便；k、L 直接取自规格表，与 mechtool.cn 一致。']
+      };
+    },
+    formulas: [
+      'σ<sub>p</sub> = 2T/(d·k·L) ≤ [σ<sub>p</sub>]，k、L 取自键规格 b×h×D×L×k',
+      '[σ<sub>p</sub>]：钢 135/110/75、铸铁 75/55/37 MPa（静/轻微冲击/冲击）；双键除以 1.5'
+    ],
+    reference: 'GB/T 1098-2003、GB/T 1099.1-2003；mechtool.cn 半圆键连接校核计算。'
+  });
+
+  /* ============ 6c. 楔键连接强度校核 ============ */
+  App.registerTool({
+    id: 'key-wedge',
+    name: '楔键连接强度校核',
+    category: 'connect',
+    keywords: '楔键 键连接 挤压强度 摩擦 楔紧 1:100 斜度',
+    brief: '普通楔键连接强度校核：σp=12T/(bl(b+6μd))，与 mechtool.cn 1:1 一致。',
+    doc: '普通楔键（1:100 斜度）连接强度校核：σ<sub>p</sub> = 12T/(b·l·(b+6μd)) ≤ [σ<sub>p</sub>]，μ 为键毂摩擦系数（一般 0.14~0.2）。楔键靠上下面楔紧传扭，对中性差，只用于低速回转或传动精度要求不高的场合。与 mechtool.cn《普通楔键连接校核计算》一致。',
+    inputs: [
+      { key: 'T', label: '传递转矩 T', group: '工况', type: 'number', unit: 'N·m', default: 840, step: 'any' },
+      { key: 'd', label: '轴的直径 d', group: '工况', type: 'number', unit: 'mm', default: 60, step: 'any' },
+      { key: 'material', label: '最弱的材料', group: '工况', type: 'select', options: [
+        { v: '钢', t: '钢' }, { v: '铸铁', t: '铸铁' }
+      ], default: '钢' },
+      { key: 'loadType', label: '载荷类型', group: '工况', type: 'select', options: [
+        { v: '静载荷', t: '静载荷' }, { v: '轻微冲击载荷', t: '轻微冲击载荷' }, { v: '冲击载荷', t: '冲击载荷' }
+      ], default: '静载荷' },
+      { key: 'keySize', label: '键的截面尺寸 b×h', group: '键参数', type: 'select', default: '18x11',
+        options: KEY_BH.map(function (s) { return { v: s, t: s }; }) },
+      { key: 'keyType', label: '键的类型', group: '键参数', type: 'segment', options: [
+        { v: 'A型', t: 'A型（圆头）' }, { v: 'B型', t: 'B型（方头）' }, { v: 'C型', t: 'C型（单圆头）' }
+      ] },
+      { key: 'keyLength', label: '键的长度 L', group: '键参数', type: 'select', default: '90',
+        options: KEY_LEN_SERIES.map(function (n) { return { v: String(n), t: String(n) }; }) },
+      { key: 'keyNumber', label: '键的个数', group: '键参数', type: 'segment', options: [
+        { v: '单键', t: '单键' }, { v: '双键', t: '双键' }
+      ] },
+      { key: 'miu', label: '摩擦系数 μ', group: '键参数', type: 'number', step: 'any', default: 0.14,
+        hint: '键与毂/轴接触面摩擦系数，一般 0.14~0.20' },
+      { key: 'allowableStress', label: '许用应力 [σ<sub>p</sub>]', group: '键参数', type: 'number', unit: 'MPa', step: 'any',
+        placeholder: '自动',
+        hint: '留空自动推荐：钢 135/101/68、铸铁 75/56/38（静/轻微冲击/冲击）' }
+    ],
+    compute: function (v) {
+      var T = +v.T * 1000, d = +v.d, miu = +v.miu;
+      if (!(T > 0)) return { error: '请输入传递转矩 T' };
+      if (!(d > 0)) return { error: '请输入轴的直径 d' };
+      if (!(miu > 0)) return { error: '请输入摩擦系数 μ' };
+      var p = String(v.keySize).split('x');
+      var b = +p[0];
+      var L = +v.keyLength;
+      var l = effLen(v.keyType, L, b);
+      if (!(l > 0)) return { error: '有效长度 l≤0：请检查键长 L 与键宽 b' };
+      var n = nKeys(v.keyNumber);
+      var allow = +v.allowableStress > 0 ? +v.allowableStress : SIGP_FLAT[v.material][v.loadType];
+      var sigmaP = 12 * T / (b * l * (b + 6 * miu * d) * n);
+      var ok = sigmaP <= allow;
+      var rec = flatRec(d);
+      return {
+        sections: [
+          { title: '输入参数', rows: [
+            { label: '键的类型 sType', html: esc(v.keyType) },
+            { label: '键的截面尺寸 b×h', html: esc(v.keySize).replace('x', '×') },
+            { label: '键的长度 L', value: L, unit: 'mm' },
+            { label: '键的有效长度 l', value: l, unit: 'mm', d: 2, hl: true },
+            { label: '摩擦系数 μ', value: miu, d: 2 },
+            { label: '键的个数', html: esc(v.keyNumber) + (n > 1 ? '（承载按 ' + n + ' 倍计）' : '') },
+            { label: '按轴径推荐', html: 'b×h=' + rec.bh + '，L=' + rec.L }
+          ] },
+          { title: '校核结果', rows: [
+            { label: '许用应力 [σ<sub>p</sub>]', value: allow, unit: 'MPa', hl: true },
+            { label: '计算应力 σ<sub>p</sub>=12T/(bl(b+6μd))', value: sigmaP, unit: 'MPa', d: 3, hl: true }
+          ] }
+        ],
+        verdict: {
+          level: ok ? 'ok' : 'bad',
+          text: ok ? '校核通过：σ<sub>p</sub> = ' + fmt(sigmaP, 2) + ' MPa ≤ [σ<sub>p</sub>] = ' + allow + ' MPa'
+                   : '校核不通过：σ<sub>p</sub> = ' + fmt(sigmaP, 2) + ' MPa > [σ<sub>p</sub>] = ' + allow + ' MPa',
+          note: '楔键楔紧后轴与毂产生偏心，不宜用于高速、精密传动。'
+        },
+        notes: ['与 mechtool.cn《普通楔键连接校核计算》1:1 一致：σp = 12T/(b·l·(b+6μd))。']
+      };
+    },
+    formulas: [
+      'σ<sub>p</sub> = 12T/(b·l·(b+6μd)) ≤ [σ<sub>p</sub>]',
+      'l：A型 L−b、B型 L、C型 L−b/2；双键除以 1.5；μ=0.14~0.20'
+    ],
+    reference: 'GB/T 1563-2017《楔键》；mechtool.cn 普通楔键连接校核计算。'
+  });
+
+  /* ============ 6d. 切向键连接强度校核 ============ */
+  // 按轴径推荐切向键（mechtool.cn calculation_keysize 实测：t 厚度、c 倒角、b 宽度、L0=1.5d）
+  var TAN_REC = [
+    { max: 70, t: 7, c: 0.7 }, { max: 90, t: 8, c: 0.7 }, { max: 110, t: 9, c: 0.7 },
+    { max: 130, t: 10, c: 1.1 }, { max: 150, t: 11, c: 1.1 }, { max: 180, t: 12, c: 1.1 },
+    { max: 200, t: 14, c: 1.1 }, { max: 230, t: 16, c: 1.8 }
+  ];
+  App.registerTool({
+    id: 'key-tangent',
+    name: '切向键连接强度校核',
+    category: 'connect',
+    keywords: '切向键 键连接 挤压强度 重载 单向传动',
+    brief: '切向键连接强度校核：σp=2T/(d(t−c)l(0.9+μ))，与 mechtool.cn 1:1 一致。',
+    doc: '切向键连接强度校核：σ<sub>p</sub> = 2T/(d·(t−c)·l·(0.9+μ)) ≤ [σ<sub>p</sub>]。切向键由一对 1:100 楔键组成，沿切向楔紧，能传递大转矩，键工作长度常取 l=1.5d；单向传动用一对，双向用两对互成 120°~135°。与 mechtool.cn《切向键连接校核计算》一致。',
+    inputs: [
+      { key: 'T', label: '传递转矩 T', group: '工况', type: 'number', unit: 'N·m', default: 840, step: 'any' },
+      { key: 'd', label: '轴的直径 d', group: '工况', type: 'number', unit: 'mm', default: 60, step: 'any' },
+      { key: 'material', label: '最弱的材料', group: '工况', type: 'select', options: [
+        { v: '钢', t: '钢' }, { v: '铸铁', t: '铸铁' }
+      ], default: '钢' },
+      { key: 'loadType', label: '载荷类型', group: '工况', type: 'select', options: [
+        { v: '静载荷', t: '静载荷' }, { v: '轻微冲击载荷', t: '轻微冲击载荷' }, { v: '冲击载荷', t: '冲击载荷' }
+      ], default: '静载荷' },
+      { key: 'keyThickness', label: '键的厚度 t', group: '键参数', type: 'select', default: '7',
+        options: [7, 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 26, 30, 34, 38, 42].map(function (n) { return { v: String(n), t: String(n) }; }) },
+      { key: 'keyCorner', label: '键的倒角 c', group: '键参数', type: 'number', unit: 'mm', default: 0.7, step: 'any',
+        hint: '按轴径自动推荐：d≤110 取 0.7，120~200 取 1.1，>200 取 1.8' },
+      { key: 'keyWidth', label: '键的宽度 b', group: '键参数', type: 'number', unit: 'mm', default: 19.26, step: 'any',
+        placeholder: '19.26', hint: '查 GB/T 1974 表，按轴径选取（如 d=60 时 b≈19.26）' },
+      { key: 'keyEffectiveLength', label: '键工作长度 l', group: '键参数', type: 'number', unit: 'mm', default: 90, step: 'any',
+        hint: '默认按 1.5d 自动推荐（d=60 → l=90），可修改' },
+      { key: 'miu', label: '摩擦系数 μ', group: '键参数', type: 'number', step: 'any', default: 0.14,
+        hint: '一般 0.14~0.20' },
+      { key: 'allowableStress', label: '许用应力 [σ<sub>p</sub>]', group: '键参数', type: 'number', unit: 'MPa', step: 'any',
+        placeholder: '自动',
+        hint: '留空自动推荐：钢 135/101/68、铸铁 75/56/38（静/轻微冲击/冲击）' }
+    ],
+    compute: function (v) {
+      var T = +v.T * 1000, d = +v.d, t = +v.keyThickness, c = +v.keyCorner, l = +v.keyEffectiveLength, miu = +v.miu;
+      if (!(T > 0)) return { error: '请输入传递转矩 T' };
+      if (!(d > 0)) return { error: '请输入轴的直径 d' };
+      if (!(l > 0)) return { error: '请输入键工作长度 l' };
+      if (!(miu > 0)) return { error: '请输入摩擦系数 μ' };
+      if (t - c <= 0) return { error: '键厚 t 需大于倒角 c' };
+      var allow = +v.allowableStress > 0 ? +v.allowableStress : SIGP_FLAT[v.material][v.loadType];
+      var sigmaP = 2 * T / (d * (t - c) * l * (0.9 + miu));
+      var ok = sigmaP <= allow;
+      var rec = null;
+      for (var i = 0; i < TAN_REC.length; i++) if (d <= TAN_REC[i].max) { rec = TAN_REC[i]; break; }
+      return {
+        sections: [
+          { title: '输入参数', rows: [
+            { label: '键的厚度 t', value: t, unit: 'mm' },
+            { label: '键的倒角 c', value: c, unit: 'mm', d: 2 },
+            { label: '键的宽度 b', value: +v.keyWidth, unit: 'mm', d: 2 },
+            { label: '键工作长度 l', value: l, unit: 'mm', hl: true },
+            { label: '摩擦系数 μ', value: miu, d: 2 },
+            { label: '按轴径推荐', html: rec ? ('t=' + rec.t + '，c=' + rec.c + '，l=1.5d=' + (1.5 * d)) : '超出推荐范围' }
+          ] },
+          { title: '校核结果', rows: [
+            { label: '许用应力 [σ<sub>p</sub>]', value: allow, unit: 'MPa', hl: true },
+            { label: '计算应力 σ<sub>p</sub>', value: sigmaP, unit: 'MPa', d: 3, hl: true }
+          ] }
+        ],
+        verdict: {
+          level: ok ? 'ok' : 'bad',
+          text: ok ? '校核通过：σ<sub>p</sub> = ' + fmt(sigmaP, 2) + ' MPa ≤ [σ<sub>p</sub>] = ' + allow + ' MPa'
+                   : '校核不通过：σ<sub>p</sub> = ' + fmt(sigmaP, 2) + ' MPa > [σ<sub>p</sub>] = ' + allow + ' MPa',
+          note: '双向传动时采用两对切向键（互成 120°~135°），按单对分别校核。'
+        },
+        notes: ['与 mechtool.cn《切向键连接校核计算》1:1 一致：σp = 2T/(d·(t−c)·l·(0.9+μ))。']
+      };
+    },
+    formulas: [
+      'σ<sub>p</sub> = 2T/(d·(t−c)·l·(0.9+μ)) ≤ [σ<sub>p</sub>]',
+      '工作长度常取 l = 1.5d；μ = 0.14~0.20'
+    ],
+    reference: 'GB/T 1974-2003《切向键》；mechtool.cn 切向键连接校核计算。'
+  });
+
+  /* ============ 6e. 矩形花键连接强度校核（静/动连接） ============ */
+  var RECT_SPLINE = ['6×23×26×6','6×26×30×6','6×28×32×7','8×32×36×6','8×36×40×7','8×42×46×8','8×46×50×9','8×52×58×10','8×56×62×10','8×62×68×12','10×72×78×12','10×82×88×12','10×92×98×11','10×102×108×16','10×112×120×18'];
+  // 矩形花键 [p] 范围表（GB/T 1144，MPa）
+  var RECT_P_STATIC = { heat: { '不良': '40~70', '中等': '100~140', '良好': '120~200' },
+                        noheat: { '不良': '35~50', '中等': '60~100', '良好': '80~120' } };
+  var RECT_P_DYN = { loaded: { '不良': '3~10', '中等': '5~15', '良好': '10~20' },
+                     unload_heat: { '不良': '20~35', '中等': '30~60', '良好': '40~70' },
+                     unload_noheat: { '不良': '15~20', '中等': '20~30', '良好': '25~40' } };
+  App.registerTool({
+    id: 'key-spline-rect',
+    name: '矩形花键连接强度校核',
+    category: 'connect',
+    keywords: '矩形花键 花键连接 GB/T 1144 轻系列 中系列 静连接 动连接',
+    brief: '矩形花键连接（静/动连接）强度校核：p=2T/(φ·N·h·dm·L)，与 mechtool.cn 1:1 一致。',
+    doc: '矩形花键连接（GB/T 1144）强度校核：p = 2T/(φ·N·h·d<sub>m</sub>·L) ≤ [p]，d<sub>m</sub>=(D+d)/2 为平均直径，h=(D−d)/2−2c 为键齿工作高度，φ 为载荷分布不均系数（一般 0.7~0.8）。[p] 按使用/制造情况与齿面热处理自动推荐。与 mechtool.cn《矩形花键连接校核计算》一致。',
+    inputs: [
+      { key: 'connType', label: '连接类型', group: '工况', type: 'segment', options: [
+        { v: 'static', t: '静连接' }, { v: 'dynamic', t: '动连接' }
+      ] },
+      { key: 'workingWay', label: '移动方式', group: '工况', type: 'segment', options: [
+        { v: '空载下移动', t: '空载下移动' }, { v: '载荷作用下移动', t: '载荷作用下移动' }
+      ], visible: function (v) { return v.connType === 'dynamic'; } },
+      { key: 'T', label: '传递转矩 T', group: '工况', type: 'number', unit: 'N·m', default: 85, step: 'any' },
+      { key: 'keySeries', label: '键系列', group: '工况', type: 'segment', options: [
+        { v: '轻系列', t: '轻系列' }, { v: '中系列', t: '中系列' }
+      ], default: '中系列', hint: '同规格下中系列齿数/齿高更大，承载更高' },
+      { key: 'workingCondition', label: '使用和制造情况', group: '工况', type: 'select', options: [
+        { v: '不良', t: '不良' }, { v: '中等', t: '中等' }, { v: '良好', t: '良好' }
+      ], default: '中等' },
+      { key: 'heatTreatment', label: '齿面热处理', group: '工况', type: 'segment', options: [
+        { v: 'yes', t: '齿面经热处理' }, { v: 'no', t: '齿面未经热处理' }
+      ], default: 'yes' },
+      { key: 'keySize', label: '花键规格 N×d×D×B', group: '花键参数', type: 'select', default: '6×23×26×6',
+        options: RECT_SPLINE.map(function (s) { return { v: s, t: s }; }) },
+      { key: 'keyLength', label: '键的长度 L', group: '花键参数', type: 'select', default: '30',
+        options: [10,12,15,18,22,25,28,30,32,36,38,42,45,48,50,56,60,63,71,75,80,85,90,95,100,110,120,130,140,160,180,200].map(function (n) { return { v: String(n), t: String(n) }; }) },
+      { key: 'keyCorner', label: '键的倒角 c', group: '花键参数', type: 'number', unit: 'mm', default: 0.2, step: 'any' },
+      { key: 'phi', label: '载荷不均系数 φ', group: '花键参数', type: 'number', default: 0.75, step: 'any',
+        hint: '各齿载荷分布不均系数，一般 0.7~0.8（齿数多、精度差取小）' },
+      { key: 'allowableStress', label: '许用应力 [p]', group: '花键参数', type: 'number', unit: 'MPa', step: 'any',
+        placeholder: '自动',
+        hint: '留空按范围中值自动推荐（静连接中等/经热处理 100~140 → 120；具体见说明）' }
+    ],
+    compute: function (v) {
+      var T = +v.T * 1000;
+      if (!(T > 0)) return { error: '请输入传递转矩 T' };
+      var p = String(v.keySize).split('×');
+      var N = +p[0], dd = +p[1], D = +p[2];
+      var L = +v.keyLength, c = +v.keyCorner, phi = +v.phi;
+      if (!(phi > 0)) return { error: '请输入载荷不均系数 φ' };
+      var dm = (D + dd) / 2;
+      var h = (D - dd) / 2 - 2 * c;
+      if (!(h > 0)) return { error: '键齿工作高度 h≤0：请减小倒角 c' };
+      // [p] 范围自动推荐
+      var rangeStr, heat = v.heatTreatment === 'yes';
+      if (v.connType === 'static') {
+        rangeStr = (heat ? RECT_P_STATIC.heat : RECT_P_STATIC.noheat)[v.workingCondition];
+      } else if (v.workingWay === '载荷作用下移动') {
+        rangeStr = RECT_P_DYN.loaded[v.workingCondition];
+      } else {
+        rangeStr = (heat ? RECT_P_DYN.unload_heat : RECT_P_DYN.unload_noheat)[v.workingCondition];
+      }
+      var range = rangeStr.split('~').map(Number);
+      var allow = +v.allowableStress > 0 ? +v.allowableStress : (range[0] + range[1]) / 2;
+      var sig = 2 * T / (phi * N * h * dm * L);
+      var ok = sig <= allow;
+      return {
+        sections: [
+          { title: '花键参数', rows: [
+            { label: '花键规格 N×d×D×B', html: esc(v.keySize) },
+            { label: '键系列', html: esc(v.keySeries) },
+            { label: '键的长度 L', value: L, unit: 'mm' },
+            { label: '键的倒角 c', value: c, unit: 'mm', d: 2 },
+            { label: '平均直径 d<sub>m</sub>=(D+d)/2', value: dm, unit: 'mm', d: 2 },
+            { label: '键齿工作高度 h', value: h, unit: 'mm', d: 2, hl: true },
+            { label: '载荷不均系数 φ', value: phi, d: 2 }
+          ] },
+          { title: '校核结果', rows: [
+            { label: '许用应力范围', html: rangeStr + ' MPa（' + (heat ? '齿面经热处理' : '齿面未经热处理') + '）' },
+            { label: '许用应力 [p]', value: allow, unit: 'MPa', hl: true },
+            { label: '计算应力 p=2T/(φNhd<sub>m</sub>L)', value: sig, unit: 'MPa', d: 3, hl: true },
+            { label: '连接允许最大转矩', value: allow * phi * N * h * dm * L / 2000, unit: 'N·m', d: 1 }
+          ] }
+        ],
+        verdict: {
+          level: ok ? 'ok' : 'bad',
+          text: ok ? '校核通过：p = ' + fmt(sig, 2) + ' MPa ≤ [p] = ' + allow + ' MPa'
+                   : '校核不通过：p = ' + fmt(sig, 2) + ' MPa > [p] = ' + allow + ' MPa',
+          note: '不满足时可：① 增加键长 L ② 选用更大规格系列 ③ 齿面淬火提高 [p] ④ 改善制造/使用情况'
+        },
+        notes: [
+          '静连接按挤压（p≤[p]）校核；动连接（移动的花键）按工作面磨损（压强）校核。',
+          '[p] 范围：静/热处理 40~70、100~140、120~200；静/未处理 35~50、60~100、80~120；动·载荷下移动 3~10、5~15、10~20；动·空载移动/热处理 20~35、30~60、40~70；动·空载/未处理 15~20、20~30、25~40 MPa（不良/中等/良好）。',
+          '与 mechtool.cn《矩形花键连接校核计算》1:1 一致。'
+        ]
+      };
+    },
+    formulas: [
+      'p = 2T/(φ·N·h·d<sub>m</sub>·L) ≤ [p]',
+      'd<sub>m</sub> = (D+d)/2，h = (D−d)/2 − 2c，φ = 0.7~0.8'
+    ],
+    reference: 'GB/T 1144-2001《矩形花键尺寸》；mechtool.cn 矩形花键连接校核计算。'
+  });
+
+  /* ============ 6f. 渐开线花键连接强度校核（静/动连接） ============ */
+  App.registerTool({
+    id: 'key-spline-inv',
+    name: '渐开线花键连接强度校核',
+    category: 'connect',
+    keywords: '渐开线花键 花键连接 30度 45度 压力角 模数 定心',
+    brief: '渐开线花键连接（静/动连接）强度校核：p=2T/(φ·z·h·d·L)，与 mechtool.cn 1:1 一致。',
+    doc: '渐开线花键连接（GB/T 3478）强度校核：p = 2T/(φ·z·h·d·L) ≤ [p]，d=m·z 为分度圆直径，工作高度 h：30°压力角取 m、45° 取 0.8m，φ 为载荷不均系数（0.7~0.8）。与 mechtool.cn《渐开线花键连接校核计算》一致。',
+    inputs: [
+      { key: 'connType', label: '连接类型', group: '工况', type: 'segment', options: [
+        { v: 'static', t: '静连接' }, { v: 'dynamic', t: '动连接' }
+      ] },
+      { key: 'workingWay', label: '移动方式', group: '工况', type: 'segment', options: [
+        { v: '空载下移动', t: '空载下移动' }, { v: '载荷作用下移动', t: '载荷作用下移动' }
+      ], visible: function (v) { return v.connType === 'dynamic'; } },
+      { key: 'T', label: '传递转矩 T', group: '工况', type: 'number', unit: 'N·m', default: 840, step: 'any' },
+      { key: 'workingCondition', label: '使用和制造情况', group: '工况', type: 'select', options: [
+        { v: '不良', t: '不良' }, { v: '中等', t: '中等' }, { v: '良好', t: '良好' }
+      ], default: '中等' },
+      { key: 'heatTreatment', label: '齿面热处理', group: '工况', type: 'segment', options: [
+        { v: 'yes', t: '齿面经热处理' }, { v: 'no', t: '齿面未经热处理' }
+      ], default: 'yes' },
+      { key: 'modulus', label: '模数 m', group: '花键参数', type: 'select', default: '2',
+        options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6, 8, 10].map(function (n) { return { v: String(n), t: String(n) }; }) },
+      { key: 'angle', label: '花键压力角 α', group: '花键参数', type: 'segment', options: [
+        { v: '30', t: '30°' }, { v: '45', t: '45°' }
+      ] },
+      { key: 'teethNo', label: '齿数 z', group: '花键参数', type: 'number', default: 20, step: 'any' },
+      { key: 'keyLength', label: '键的长度 L', group: '花键参数', type: 'number', unit: 'mm', default: 30, step: 'any' },
+      { key: 'diameter', label: '分度圆直径 d', group: '花键参数', type: 'number', unit: 'mm', default: 40, step: 'any',
+        hint: 'd = m·z（m=2、z=20 时 d=40），修改模数/齿数后请同步' },
+      { key: 'keyHeight', label: '键齿工作高度 h', group: '花键参数', type: 'number', unit: 'mm', default: 2, step: 'any',
+        hint: '30° 取 h=m，45° 取 h=0.8m' },
+      { key: 'phi', label: '载荷不均系数 φ', group: '花键参数', type: 'number', default: 0.75, step: 'any' },
+      { key: 'allowableStress', label: '许用应力 [p]', group: '花键参数', type: 'number', unit: 'MPa', step: 'any',
+        placeholder: '自动', hint: '留空按范围中值推荐（默认 60~100 → 80 MPa）' }
+    ],
+    compute: function (v) {
+      var T = +v.T * 1000;
+      if (!(T > 0)) return { error: '请输入传递转矩 T' };
+      var m = +v.modulus, z = +v.teethNo, L = +v.keyLength, h = +v.keyHeight, phi = +v.phi;
+      var d = +v.diameter > 0 ? +v.diameter : m * z;
+      if (!(z > 0) || !(L > 0) || !(h > 0) || !(phi > 0)) return { error: '请完整输入齿数、键长、工作高度与 φ' };
+      var rangeStr = (v.connType === 'dynamic' && v.workingWay === '载荷作用下移动')
+        ? RECT_P_DYN.loaded[v.workingCondition]
+        : (v.heatTreatment === 'yes' ? RECT_P_STATIC.heat : RECT_P_STATIC.noheat)[v.workingCondition];
+      var range = rangeStr.split('~').map(Number);
+      var allow = +v.allowableStress > 0 ? +v.allowableStress : (range[0] + range[1]) / 2;
+      var sig = 2 * T / (phi * z * h * d * L);
+      var ok = sig <= allow;
+      var dEE = +v.angle === 30 ? m * (z + 1) : m * (z + 0.8);
+      return {
+        sections: [
+          { title: '花键参数', rows: [
+            { label: '模数 m', value: m, unit: 'mm', d: 2 },
+            { label: '花键压力角 α', value: +v.angle, unit: '°' },
+            { label: '齿数 z', value: z },
+            { label: '分度圆直径 d=m·z', value: d, unit: 'mm', d: 2, hl: true },
+            { label: '花键轴大径 D<sub>ee</sub>', value: dEE, unit: 'mm', d: 2 },
+            { label: '键齿工作高度 h', value: h, unit: 'mm', d: 2 },
+            { label: '键的长度 L', value: L, unit: 'mm' },
+            { label: '载荷不均系数 φ', value: phi, d: 2 }
+          ] },
+          { title: '校核结果', rows: [
+            { label: '许用应力范围', html: rangeStr + ' MPa' },
+            { label: '许用应力 [p]', value: allow, unit: 'MPa', hl: true },
+            { label: '计算应力 p=2T/(φzhdL)', value: sig, unit: 'MPa', d: 3, hl: true },
+            { label: '连接允许最大转矩', value: allow * phi * z * h * d * L / 2000, unit: 'N·m', d: 1 }
+          ] }
+        ],
+        verdict: {
+          level: ok ? 'ok' : 'bad',
+          text: ok ? '校核通过：p = ' + fmt(sig, 2) + ' MPa ≤ [p] = ' + allow + ' MPa'
+                   : '校核不通过：p = ' + fmt(sig, 2) + ' MPa > [p] = ' + allow + ' MPa',
+          note: '不满足时可：① 增加键长 ② 增大模数/齿数 ③ 齿面淬火 ④ 改善制造与使用情况'
+        },
+        notes: [
+          '30° 压力角渐开线花键 h=m；45°（代替矩形花键/轻载）h=0.8m。',
+          '与 mechtool.cn《渐开线花键连接校核计算》1:1 一致。'
+        ]
+      };
+    },
+    formulas: [
+      'p = 2T/(φ·z·h·d·L) ≤ [p]',
+      'd = m·z；h：30° 取 m、45° 取 0.8m；D<sub>ee</sub>：30° m(z+1)、45° m(z+0.8)'
+    ],
+    reference: 'GB/T 3478.1-2008《圆柱直齿渐开线花键》；mechtool.cn 渐开线花键连接校核计算。'
   });
 
   /* ============ 7. 压缩弹簧设计 ============ */
