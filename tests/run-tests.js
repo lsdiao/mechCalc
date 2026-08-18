@@ -74,13 +74,40 @@ ALL.forEach(function (t) {
   ok(t.id + ' 默认计算', !r.error, r.error || ('verdict=' + (r.verdict && r.verdict.level)));
 });
 
-console.log('== 2) 螺栓连接（M12 8.8级 F=5000N） ==');
+console.log('== 2) 螺栓连接（M10 6.8级 F=2kN，与 mechtool.cn 默认一致） ==');
 (function () {
   var r = runTool('bolt-check', {});
-  // F0 = F" + F = 1000 + 5000 = 6000 N；σca = 1.3F0/(πd1²/4)，M12 小径 d1=10.106
-  var sig = 1.3 * 6000 / (Math.PI * 10.106 * 10.106 / 4);
-  ok('总拉力 F0 = 6000 N', near(val(r, '螺栓总拉力'), 6000, 1e-4), String(val(r, '螺栓总拉力')));
+  // F0 = F" + F = 3200 + 2000 = 5200 N；σca = 1.3F0/(πd1²/4)，M10 小径 d1=8.376
+  var sig = 1.3 * 5200 / (Math.PI * 8.376 * 8.376 / 4);
+  ok('总拉力 F0 = 5200 N', near(val(r, '螺栓总拉力'), 5200, 1e-4), String(val(r, '螺栓总拉力')));
   ok('计算应力 σca ≈ ' + sig.toFixed(1), near(val(r, '计算应力'), sig, 1e-3), String(val(r, '计算应力')));
+})();
+
+console.log('== 2b) 动载荷紧螺栓（与 mechtool.cn boltconnection4 API 实测一致） ==');
+(function () {
+  // 用例 A：默认 4.8级 M10 F=1kN λ=0.25 S=2 切制/受压（原网站 σa=2.27，[σa]=23.33）
+  var rA = runTool('bolt-dynamic', {});
+  ok('A: σa = 2.27 MPa', near(val(rA, '计算应力幅'), 2.27, 5e-3), String(val(rA, '计算应力幅')));
+  ok('A: [σa] = 23.33 MPa', near(val(rA, '许用应力幅'), 23.33, 5e-3), String(val(rA, '许用应力幅')));
+  // 用例 B：8.8级 M16 F=10kN λ=0.8 ε=0.87（原网站 σa=26.61，[σa]=25.38，不满足）
+  var rB = runTool('bolt-dynamic', { grade: '8.8', F: 10, lambda: 0.8, d: '16' });
+  ok('B: σa = 26.61 MPa', near(val(rB, '计算应力幅'), 26.61, 5e-3), String(val(rB, '计算应力幅')));
+  ok('B: [σa] = 25.38 MPa', near(val(rB, '许用应力幅'), 25.38, 5e-3), String(val(rB, '许用应力幅')));
+  ok('B: 校核不通过', rB.verdict.level === 'bad', rB.verdict.level);
+  // 用例 C：滚制螺纹 + 受拉螺母（原网站 [σa]=45.21）
+  var rC = runTool('bolt-dynamic', { process: 'roll', nutType: 'tens' });
+  ok('C: [σa] = 45.21 MPa', near(val(rC, '许用应力幅'), 45.21, 5e-3), String(val(rC, '许用应力幅')));
+  // 用例 D：设计计算 8.8级 F=10kN λ=0.8（原网站 d1=13.835 → M16）
+  var rD = runTool('bolt-dynamic', { mode: 'design', grade: '8.8', F: 10, lambda: 0.8 });
+  ok('D: 推荐公称直径 M16', val(rD, '应选用螺栓公称直径') === 'M16', String(val(rD, '应选用螺栓公称直径')));
+  ok('D: 小径 d1 = 13.835', near(parseFloat(val(rD, '螺栓小径')), 13.835, 1e-6), String(val(rD, '螺栓小径')));
+  // 用例 E：不锈钢 C*-110 M24 F=20kN λ=0.3（原网站 σ-1t=385, Kσ=5.2, ε=0.74）
+  var rE = runTool('bolt-dynamic', { matType: 'ss', gradeSS: 'C*-110', d: '24', F: 20, lambda: 0.3 });
+  ok('E: σ-1t = 385 MPa', val(rE, '抗压疲劳强度') === 385, String(val(rE, '抗压疲劳强度')));
+  ok('E: Kσ = 5.2', val(rE, '缺口应力集中因数') === 5.2, String(val(rE, '缺口应力集中因数')));
+  ok('E: ε = 0.74', val(rE, '尺寸因数') === 0.74, String(val(rE, '尺寸因数')));
+  var A24 = Math.PI * 20.752 * 20.752 / 4;
+  ok('E: σa = 0.3×20000/(2A) ≈ 8.86', near(val(rE, '计算应力幅'), 0.3 * 20000 / (2 * A24), 1e-4), String(val(rE, '计算应力幅')));
 })();
 
 console.log('== 3) 平键（d=40 → 12×8；d=100 → 25×14 修正档） ==');
@@ -212,8 +239,8 @@ console.log('== 12) 配合查询（φ40 H7/k6 过渡、H7/f7 间隙、H7/p6 过�
 
 console.log('== 13) 变工况复测（每工具 2 组非常规参数不崩溃） ==');
 var CASES = [
-  ['bolt-check', { d: '24', grade: '10.9', F: 20000, resType: '0.6' }],
-  ['bolt-check', { d: '8', grade: '4.8', F: 800, resType: '1.5' }],
+  ['bolt-check', { d: '24', grade: '10.9', F: 20, resType: '0.6' }],
+  ['bolt-check', { d: '8', grade: '4.8', F: 0.8, resType: '1.5' }],
   ['key-check', { d: 130, T: 5000, L: 200 }],
   ['key-check', { d: 95, T: 3000, L: 160 }],
   ['spring-design', { mat: 'carbon', cls: 'c3', F2: 2000, lam2: 60, C: 8 }],

@@ -30,23 +30,42 @@
     return THREAD_SIZES.map(function (k) { return { v: k, t: 'M' + k + '（d₁=' + THREAD_D1[k] + '）' }; });
   }
 
-  // 性能等级 → 最小屈服强度 σs MPa、抗拉强度 σb MPa (GB/T 3098.1)
+  // 性能等级 → 屈服强度 σs MPa、抗拉强度 σB MPa（与 mechtool.cn 数据 1:1 一致）
   var GRADE_SS = {
     '3.6': 180, '4.6': 240, '4.8': 320, '5.6': 300, '5.8': 400,
-    '6.8': 480, '8.8': 640, '9.8': 720, '10.9': 940, '12.9': 1100, '14.9': 1260
+    '6.8': 480, '8.8': 640, '9.8': 720, '10.9': 900, '12.9': 1080, '14.9': 1260
   };
   var GRADE_SB = {
-    '3.6': 300, '4.6': 400, '4.8': 420, '5.6': 500, '5.8': 520,
-    '6.8': 600, '8.8': 800, '9.8': 900, '10.9': 1040, '12.9': 1220, '14.9': 1400
+    '3.6': 300, '4.6': 400, '4.8': 400, '5.6': 500, '5.8': 500,
+    '6.8': 600, '8.8': 800, '9.8': 900, '10.9': 1000, '12.9': 1200, '14.9': 1400
   };
   function gradeOpts() {
     return Object.keys(GRADE_SS).map(function (k) {
-      return { v: k, t: k + ' 级（σs=' + GRADE_SS[k] + 'MPa, σb=' + GRADE_SB[k] + 'MPa）' };
+      return { v: k, t: k + ' 级（σs=' + GRADE_SS[k] + 'MPa, σB=' + GRADE_SB[k] + 'MPa）' };
     });
   }
 
-  // 不锈钢 A2-70 参考值
-  var SS_GRADE = { name: 'A2-70（不锈钢）', ss: 450, sb: 700 };
+  // 不锈钢等级 → [σs, σB, σ-1t, Kσ]（与 mechtool.cn 数据 1:1 一致）
+  var SS_DATA = {
+    'A*-50': [210, 500, 175, 3.9], 'A*-70': [450, 700, 245, 4.8], 'A*-80': [600, 800, 280, 4.8],
+    'C*-50': [250, 500, 175, 3.9], 'C*-70': [410, 700, 245, 4.8], 'C*-80': [640, 800, 280, 4.8],
+    'C*-110': [820, 1100, 385, 5.2], 'F1-45': [250, 450, 158, 3.9], 'F1-60': [410, 600, 210, 3.9]
+  };
+  function ssGradeOpts() {
+    return Object.keys(SS_DATA).map(function (k) {
+      return { v: k, t: k + '（σs=' + SS_DATA[k][0] + 'MPa, σB=' + SS_DATA[k][1] + 'MPa）' };
+    });
+  }
+  // 兼容旧引用：不锈钢默认 A*-70
+  var SS_GRADE = { name: 'A*-70（不锈钢）', ss: 450, sb: 700 };
+  // 统一取等级数据：返回 { ss, sb }
+  function gradeData(v) {
+    if (v.matType === 'ss') {
+      var g = SS_DATA[v.gradeSS || 'A*-70'] || SS_DATA['A*-70'];
+      return { ss: g[0], sb: g[1] };
+    }
+    return { ss: GRADE_SS[v.grade] || GRADE_SS['4.8'], sb: GRADE_SB[v.grade] || GRADE_SB['4.8'] };
+  }
 
   /* =====================================================
    * 安全系数参考表（预紧螺栓连接，GB/T 150 / 机械设计手册）
@@ -96,8 +115,10 @@
       ] },
       { key: 'grade', label: '机械性能等级', group: '载荷与材料', type: 'select', options: gradeOpts(), default: '4.8',
         visible: function (v) { return v.matType !== 'ss'; } },
+      { key: 'gradeSS', label: '不锈钢等级', group: '载荷与材料', type: 'select', options: ssGradeOpts(), default: 'A*-70',
+        visible: function (v) { return v.matType === 'ss'; } },
       { key: 'F', label: '轴向工作载荷 F', group: '载荷与材料', type: 'number', unit: 'kN', default: 10, step: 'any' },
-      { key: 'S', label: '安全系数 S', group: '载荷与材料', type: 'number', default: 3, step: 'any', hint: '松螺栓通常取 2.5~4' },
+      { key: 'S', label: '安全系数 S', group: '载荷与材料', type: 'number', default: 1.4, step: 'any', hint: '松螺栓常取 1.2~1.7（与 mechtool.cn 默认一致）' },
       { key: 'd', label: '螺栓公称直径', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '12',
         visible: function (v) { return v.mode !== 'design'; } }
     ],
@@ -105,7 +126,7 @@
       var F = +v.F * 1000, S = +v.S;
       if (!(F > 0)) return { error: '请输入轴向工作载荷 F（kN）' };
       if (!(S > 0)) return { error: '请输入安全系数 S' };
-      var ss = v.matType === 'ss' ? SS_GRADE.ss : GRADE_SS[v.grade];
+      var ss = gradeData(v).ss;
       var sigmaAllow = ss / S;
 
       if (v.mode === 'design') {
@@ -179,6 +200,8 @@
       ] },
       { key: 'grade', label: '机械性能等级', group: '载荷与材料', type: 'select', options: gradeOpts(), default: '8.8',
         visible: function (v) { return v.matType !== 'ss'; } },
+      { key: 'gradeSS', label: '不锈钢等级', group: '载荷与材料', type: 'select', options: ssGradeOpts(), default: 'A*-70',
+        visible: function (v) { return v.matType === 'ss'; } },
       { key: 'F', label: '横向载荷 F', group: '载荷与材料', type: 'number', unit: 'kN', default: 15, step: 'any' },
       { key: 'Sp', label: '挤压安全系数 S<sub>p</sub>', group: '载荷与材料', type: 'number', default: 1.5, step: 'any' },
       { key: 'St', label: '抗剪安全系数 S<sub>τ</sub>', group: '载荷与材料', type: 'number', default: 2.5, step: 'any' },
@@ -192,8 +215,8 @@
       { key: 'd', label: '螺栓公称直径', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '12',
         visible: function (v) { return v.mode !== 'design'; } },
       { key: 'd0', label: '受剪直径 d₀', group: '螺栓尺寸', type: 'number', unit: 'mm', step: 'any',
-        default: function(v) { return v.d || '12'; },
-        hint: '铰制孔螺栓受剪段（光杆）直径，默认取公称直径，按所选螺栓修改' }
+        placeholder: '默认取公称直径',
+        hint: '铰制孔螺栓受剪段（光杆）直径，留空默认取所选公称直径' }
     ],
     compute: function (v) {
       var dynFactor = v.dyn === 'yes' ? (+v.dynFactor || 0.7) : 1;
@@ -203,8 +226,7 @@
       if (!(h > 0)) return { error: '请输入受挤压高度 h（mm）' };
       if (!(m >= 1)) return { error: '受剪面数 m 应≥1' };
 
-      var ss = v.matType === 'ss' ? SS_GRADE.ss : GRADE_SS[v.grade];
-      var sb = v.matType === 'ss' ? SS_GRADE.sb : GRADE_SB[v.grade];
+      var gd = gradeData(v), ss = gd.ss, sb = gd.sb;
       // 许用挤压应力 [σp] = σs / Sp × 动载荷系数（动载时折减）
       var sigmaPAllow = ss / Sp * dynFactor;
       // 许用剪切应力 [τ] = σs / St（动载不折减，参考 mechtool.cn）
@@ -238,7 +260,7 @@
 
       var d1 = THREAD_D1[v.d];
       if (!d1) return { error: '未找到所选螺栓的小径数据' };
-      var d0 = +v.d0 || d1;          // 受剪直径，优先取用户输入，默认取螺纹小径
+      var d0 = +v.d0 || +v.d;        // 受剪直径，优先取用户输入，默认取公称直径（与 mechtool.cn 一致）
       var A = Math.PI * d0 * d0 / 4;
       var sigmaP = F / (d0 * h);     // 挤压应力
       var tau = F / (m * A);         // 剪切应力
@@ -300,17 +322,19 @@
       { key: 'matType', label: '螺栓材料', group: '载荷与材料', type: 'segment', options: [
         { v: 'steel', t: '钢' }, { v: 'ss', t: '不锈钢' }
       ] },
-      { key: 'grade', label: '机械性能等级', group: '载荷与材料', type: 'select', options: gradeOpts(), default: '8.8',
+      { key: 'grade', label: '机械性能等级', group: '载荷与材料', type: 'select', options: gradeOpts(), default: '6.8',
         visible: function (v) { return v.matType !== 'ss'; } },
-      { key: 'F', label: '横向载荷 F', group: '载荷与材料', type: 'number', unit: 'kN', default: 5, step: 'any' },
+      { key: 'gradeSS', label: '不锈钢等级', group: '载荷与材料', type: 'select', options: ssGradeOpts(), default: 'A*-70',
+        visible: function (v) { return v.matType === 'ss'; } },
+      { key: 'F', label: '横向载荷 F', group: '载荷与材料', type: 'number', unit: 'kN', default: 0.7, step: 'any' },
       { key: 'Kf', label: '可靠性系数 K<sub>f</sub>', group: '连接参数', type: 'number', default: 1.2, step: 'any', hint: '常取 1.1~1.3' },
       { key: 'm', label: '接合面数 m', group: '连接参数', type: 'number', default: 1, step: '1', hint: '单面=1，双面=2' },
       { key: 'f', label: '接合面摩擦因数 f', group: '连接参数', type: 'number', default: 0.15, step: 'any', hint: '钢-钢：0.1~0.15；钢-铸铁：0.15~0.2' },
-      { key: 'S', label: '安全系数 S', group: '连接参数', type: 'number', default: 2.5, step: 'any', hint: '控制预紧力 1.2~1.5，不控制查手册' },
+      { key: 'S', label: '安全系数 S', group: '连接参数', type: 'number', default: 3.5, step: 'any', hint: '控制预紧力 1.2~1.5，不控制查手册' },
       { key: 'dyn', label: '载荷性质', group: '连接参数', type: 'segment', options: [
         { v: 'static', t: '静载荷' }, { v: 'dynamic', t: '动载荷' }
       ] },
-      { key: 'd', label: '螺栓公称直径', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '12',
+      { key: 'd', label: '螺栓公称直径', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '10',
         visible: function (v) { return v.mode !== 'design'; } }
     ],
     compute: function (v) {
@@ -321,7 +345,7 @@
       if (!(f > 0)) return { error: '请输入摩擦因数 f' };
       if (!(S > 0)) return { error: '请输入安全系数 S' };
 
-      var ss = v.matType === 'ss' ? SS_GRADE.ss : GRADE_SS[v.grade];
+      var ss = gradeData(v).ss;
       var sigmaAllow = ss / S;
       var Fp = Kf * F / (m * f);  // 所需预紧力
 
@@ -395,9 +419,6 @@
    * 工具 4：受轴向载荷-紧螺栓连接（静载荷）校核与设计
    * 1:1 复刻 mechtool.cn 计算方式
    * ===================================================== */
-  var RES_K = { '0.2': '一般静载（F″=0.2F）', '0.6': '变载荷（F″=0.6F）', '1.0': '密封要求（F″=1.0F）', '1.5': '冲击/高压（F″=1.5F）', '1.8': '压力容器（F″=1.8F）' };
-  var GASKET_LAMBDA = { '0.2': '金属垫/无垫片（0.2）', '0.3': '金属垫/无垫片（0.3）', '0.5': '皮革/铜皮石棉（0.5）', '0.7': '皮革石棉垫（0.7）', '0.8': '橡胶垫（0.8）', '0.9': '软垫片（0.9）' };
-
   App.registerTool({
     id: 'bolt-check',
     name: '螺栓连接强度校核',
@@ -412,28 +433,24 @@
       { key: 'matType', label: '螺栓材料', group: '螺栓与工况', type: 'segment', options: [
         { v: 'steel', t: '钢' }, { v: 'ss', t: '不锈钢' }
       ] },
-      { key: 'grade', label: '性能等级', group: '螺栓与工况', type: 'select', options: gradeOpts(), default: '8.8',
+      { key: 'grade', label: '性能等级', group: '螺栓与工况', type: 'select', options: gradeOpts(), default: '6.8',
         visible: function (v) { return v.matType !== 'ss'; } },
-      { key: 'd', label: '螺栓公称直径', group: '螺栓与工况', type: 'select', options: threadOpts(), default: '12',
+      { key: 'gradeSS', label: '不锈钢等级', group: '螺栓与工况', type: 'select', options: ssGradeOpts(), default: 'A*-70',
+        visible: function (v) { return v.matType === 'ss'; } },
+      { key: 'd', label: '螺栓公称直径', group: '螺栓与工况', type: 'select', options: threadOpts(), default: '10',
         visible: function (v) { return v.mode !== 'design'; } },
-      { key: 'F', label: '轴向工作载荷 F', group: '载荷参数', type: 'number', unit: 'N', default: 5000, step: 'any' },
-      { key: 'resType', label: '残余预紧力取值', group: '载荷参数', type: 'select', options: [
-        { v: '0.2', t: '一般静载荷连接 F″=0.2F' }, { v: '0.6', t: '变载荷 / 重要连接 F″=0.6F' },
-        { v: '1.0', t: '有密封要求 F″=1.0F' }, { v: '1.5', t: '冲击载荷 / 高压密封 F″=1.5F' },
-        { v: '1.8', t: '压力容器 F″=1.8F' }
-      ], default: '0.2' },
-      { key: 'lambda', label: '相对刚度 λ', group: '载荷参数', type: 'select', options: [
-        { v: '0.2', t: '金属垫片 / 无垫片（0.2）' }, { v: '0.3', t: '金属垫片 / 无垫片（0.3）' },
-        { v: '0.5', t: '皮革 / 铜皮石棉（0.5）' }, { v: '0.7', t: '皮革石棉垫（0.7）' },
-        { v: '0.8', t: '橡胶垫（0.8）' }, { v: '0.9', t: '软垫片（0.9）' }
-      ], default: '0.3' },
-      { key: 'S', label: '安全系数 S', group: '载荷参数', type: 'number', default: 1.5, step: 'any', hint: '控制预紧力：1.2~1.5；不控制预紧力：查手册（一般1.6~3）' }
+      { key: 'F', label: '轴向工作载荷 F', group: '载荷参数', type: 'number', unit: 'kN', default: 2, step: 'any' },
+      { key: 'resType', label: '残余预紧力系数', group: '载荷参数', type: 'number', default: 1.6, step: 'any',
+        hint: '残余预紧力 F″ = 系数×F；一般 1.5~1.8，变载/密封取大' },
+      { key: 'lambda', label: '相对刚度 λ', group: '载荷参数', type: 'number', default: 0.25, step: 'any',
+        hint: '金属垫/无垫片 0.2~0.3，皮革/铜皮石棉 0.5，软垫片 0.7~0.9' },
+      { key: 'S', label: '安全系数 S', group: '载荷参数', type: 'number', default: 3, step: 'any', hint: '控制预紧力：1.2~1.5；不控制查手册（一般1.6~3）' }
     ],
     compute: function (v) {
-      var F = +v.F, S = +v.S, kRes = +v.resType, lambda = +v.lambda;
-      if (!(F > 0)) return { error: '请输入工作载荷 F（N）' };
+      var F = +v.F * 1000, S = +v.S, kRes = +v.resType, lambda = +v.lambda;
+      if (!(F > 0)) return { error: '请输入工作载荷 F（kN）' };
       if (!(S > 0)) return { error: '请输入安全系数 S' };
-      var ss = v.matType === 'ss' ? SS_GRADE.ss : GRADE_SS[v.grade];
+      var ss = gradeData(v).ss;
       var sigmaAllow = ss / S;
 
       var F2 = kRes * F;                 // 残余预紧力
@@ -504,7 +521,7 @@
       };
     },
     formulas: [
-      'F″ = k·F（k=0.2 静载、0.6 变载、1.0 密封、1.5 冲击/高压、1.8 压力容器）',
+      'F″ = k·F（残余预紧力系数 k 由用户输入，与 mechtool.cn 一致）',
       'F₀ = F″ + F = F′ + λ·F，F′ = F″ + (1−λ)·F',
       'σ<sub>ca</sub> = 1.3·F₀ / (π·d₁²/4) ≤ [σ] = σ<sub>s</sub>/S',
       '设计：d₁ ≥ √(4×1.3·F₀/(π·[σ]))'
@@ -514,29 +531,41 @@
 
   /* =====================================================
    * 工具 5：受轴向载荷-紧螺栓连接（动载荷）校核与设计
-   * 1:1 复刻 mechtool.cn 计算方式
+   * 1:1 复刻 mechtool.cn（calculation_boltconnection4）
+   * σa = λF/(2A)；[σa] = ε·Kt·Ku·σ-1t/(Kσ·Sa1)
    * ===================================================== */
-  // 疲劳强度相关参数
-  var FATIGUE_K_SIGMA = { '3.6': 3.5, '4.6': 3.5, '4.8': 3.5, '5.6': 3.8, '5.8': 3.8, '6.8': 3.8,
-    '8.8': 4.0, '9.8': 4.0, '10.9': 4.2, '12.9': 4.5, '14.9': 4.5 };
-  var FATIGUE_EPSILON = { '1': 0.75, '1.2': 0.75, '1.6': 0.75, '2': 0.75, '2.5': 0.75,
-    '3': 0.75, '4': 0.75, '5': 0.75, '6': 0.75, '8': 0.75,
-    '10': 0.65, '12': 0.65, '14': 0.65, '16': 0.65, '18': 0.65,
-    '20': 0.65, '22': 0.65, '24': 0.65, '27': 0.65, '30': 0.65,
-    '33': 0.65, '36': 0.65, '39': 0.65, '42': 0.65, '45': 0.65,
-    '48': 0.6, '56': 0.6, '64': 0.6 };
-  // 抗压疲劳强度 σ-1p（MPa），按 σb 的比例估算
-  function sigmaMinus1P(sb) {
-    return 0.35 * sb;
+  // 等级 → 抗压疲劳强度 σ-1t（MPa）、缺口应力集中因数 Kσ（与 mechtool.cn 一致）
+  var GRADE_S1T = {
+    '3.6': 105, '4.6': 140, '4.8': 140, '5.6': 175, '5.8': 175,
+    '6.8': 210, '8.8': 280, '9.8': 315, '10.9': 350, '12.9': 420, '14.9': 490
+  };
+  function ksBySb(sb) {           // 按 σB 分段取 Kσ（mechtool.cn 逻辑）
+    return sb <= 400 ? 3 : sb <= 600 ? 3.9 : sb <= 800 ? 4.8 : 5.2;
   }
+  function sizeFactor(d) {        // 尺寸因数 ε（表2，d≤12 取 1，非标准档就近向下取）
+    d = +d;
+    if (!(d > 0)) return 1;
+    if (d <= 12) return 1;
+    if (d <= 16) return 0.87;
+    if (d <= 20) return 0.8;
+    if (d <= 24) return 0.74;
+    if (d <= 30) return 0.65;
+    if (d <= 36) return 0.64;
+    if (d <= 42) return 0.6;
+    if (d <= 48) return 0.57;
+    if (d <= 56) return 0.54;
+    return 0.53;
+  }
+  // mechtool.cn 设计推荐序列（不含 M14/M18/M22/M27/M33/M39/M45）
+  var MT_SIZES = ['1', '1.2', '1.6', '2', '2.5', '3', '4', '5', '6', '8', '10', '12', '16', '20', '24', '30', '36', '42', '48', '56', '64'];
 
   App.registerTool({
     id: 'bolt-dynamic',
     name: '螺栓连接动载荷校核',
     category: 'connect',
-    keywords: '螺栓 动载荷 疲劳 应力幅 疲劳强度 校核 紧螺栓',
-    brief: '受轴向载荷的紧螺栓连接动载荷疲劳强度校核，校核应力幅与疲劳安全系数。',
-    doc: '用于<b>受轴向工作载荷的紧螺栓连接（动载荷）</b>疲劳强度校核。计算螺栓应力幅，综合考虑缺口应力集中因数 K<sub>σ</sub>、尺寸因数 ε、制造工艺因数与受力不均匀因数，校核疲劳安全系数。',
+    keywords: '螺栓 动载荷 疲劳 应力幅 疲劳强度 校核 紧螺栓 轴向载荷',
+    brief: '受轴向载荷的紧螺栓连接动载荷疲劳强度校核与设计，校核应力幅与许用应力幅。',
+    doc: '用于<b>受轴向工作载荷的紧螺栓连接（动载荷）</b>疲劳强度校核与设计。计算螺栓应力幅 σ<sub>a</sub>=λF/(2A)，许用应力幅 [σ<sub>a</sub>]=ε·K<sub>t</sub>·K<sub>u</sub>·σ<sub>-1t</sub>/(K<sub>σ</sub>·S<sub>a1</sub>)，与 mechtool.cn 计算方式 1:1 一致。',
     inputs: [
       { key: 'mode', label: '计算模式', group: '计算模式', type: 'segment', options: [
         { v: 'check', t: '校核计算' }, { v: 'design', t: '设计计算' }
@@ -544,134 +573,136 @@
       { key: 'matType', label: '螺栓材料', group: '载荷与材料', type: 'segment', options: [
         { v: 'steel', t: '钢' }, { v: 'ss', t: '不锈钢' }
       ] },
-      { key: 'grade', label: '机械性能等级', group: '载荷与材料', type: 'select', options: gradeOpts(), default: '8.8',
+      { key: 'grade', label: '机械性能等级', group: '载荷与材料', type: 'select', options: gradeOpts(), default: '4.8',
         visible: function (v) { return v.matType !== 'ss'; } },
-      { key: 'F', label: '轴向工作载荷 F', group: '载荷与材料', type: 'number', unit: 'kN', default: 10, step: 'any' },
-      { key: 'lambda', label: '相对刚度 λ', group: '载荷与材料', type: 'select', options: [
-        { v: '0.2', t: '金属垫片 / 无垫片（0.2）' }, { v: '0.3', t: '金属垫片 / 无垫片（0.3）' },
-        { v: '0.5', t: '皮革 / 铜皮石棉（0.5）' }, { v: '0.7', t: '皮革石棉垫（0.7）' },
-        { v: '0.8', t: '橡胶垫（0.8）' }, { v: '0.9', t: '软垫片（0.9）' }
-      ], default: '0.3' },
-      { key: 'd', label: '螺栓公称直径', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '16',
+      { key: 'gradeSS', label: '不锈钢等级', group: '载荷与材料', type: 'select', options: ssGradeOpts(), default: 'A*-70',
+        visible: function (v) { return v.matType === 'ss'; } },
+      { key: 'F', label: '轴向工作载荷 F', group: '载荷与材料', type: 'number', unit: 'kN', default: 1, step: 'any' },
+      { key: 'lambda', label: '相对刚度 λ', group: '载荷与材料', type: 'number', default: 0.25, step: 'any',
+        hint: '金属垫/无垫片 0.2~0.3，皮革 0.7，铜皮石棉 0.8，橡胶 0.9' },
+      { key: 'd', label: '螺栓公称尺寸', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '10',
         visible: function (v) { return v.mode !== 'design'; } },
-      { key: 'S', label: '安全系数 S', group: '疲劳参数', type: 'number', default: 2, step: 'any', hint: '控制预紧力取 1.5~2.5；不控制预紧力取 2.5~4' },
+      { key: 'Sa1', label: '安全系数 S<sub>a1</sub>', group: '疲劳参数', type: 'number', default: 2, step: 'any',
+        hint: '控制预紧力取 2；不控制预紧力取 3.7' },
       { key: 'preloadCtrl', label: '预紧力控制', group: '疲劳参数', type: 'segment', options: [
         { v: 'yes', t: '控制预紧力' }, { v: 'no', t: '不控制预紧力' }
-      ] },
+      ], hint: '选择后请核对安全系数：控制=2，不控制=3.7' },
       { key: 'process', label: '制造工艺', group: '疲劳参数', type: 'segment', options: [
-        { v: 'cut', t: '切制螺纹' }, { v: 'roll', t: '滚制/搓制螺纹' }
+        { v: 'cut', t: '切制螺纹（Kt=1）' }, { v: 'roll', t: '滚制/搓制螺纹（Kt=1.25）' }
       ] },
       { key: 'nutType', label: '螺母类型', group: '疲劳参数', type: 'segment', options: [
-        { v: 'comp', t: '受压螺母' }, { v: 'tens', t: '受拉螺母' }
+        { v: 'comp', t: '受压螺母（Ku=1）' }, { v: 'tens', t: '受拉螺母（Ku=1.55）' }
       ] },
-      { key: 'Ksigma', label: '缺口应力集中因数 Kσ', group: '疲劳参数', type: 'number', default: 3.5, step: 'any',
-        hint: '按等级自动推荐，可手动修改' },
-      { key: 'epsilon', label: '尺寸因数 ε', group: '疲劳参数', type: 'number', default: 0.75, step: 'any',
-        hint: '按直径自动推荐，可手动修改' }
+      { key: 'Ksigma', label: '缺口应力集中因数 Kσ', group: '疲劳参数', type: 'number', step: 'any',
+        placeholder: '自动',
+        hint: '留空按 σB 自动推荐：≤400→3，≤600→3.9，≤800→4.8，其余 5.2；可手动修改' },
+      { key: 'epsilon', label: '尺寸因数 ε', group: '疲劳参数', type: 'number', step: 'any',
+        placeholder: '自动',
+        hint: '留空按直径自动推荐：≤M12→1，M16→0.87，M20→0.8，M24→0.74，M30→0.65，M36→0.64，M42→0.6，M48→0.57，M56→0.54，M64→0.53' }
     ],
     compute: function (v) {
-      var F = +v.F * 1000, lambda = +v.lambda, S = +v.S;
+      var F = +v.F * 1000, lambda = +v.lambda, S = +v.Sa1;
       if (!(F > 0)) return { error: '请输入轴向工作载荷 F（kN）' };
-      if (!(S > 0)) return { error: '请输入安全系数 S' };
+      if (!(S > 0)) return { error: '请输入安全系数 Sa1' };
 
-      var ss = v.matType === 'ss' ? SS_GRADE.ss : GRADE_SS[v.grade];
-      var sb = v.matType === 'ss' ? SS_GRADE.sb : GRADE_SB[v.grade];
-      var sigmaMinus1 = sigmaMinus1P(sb);
+      var gd = gradeData(v);                       // { ss, sb }
+      var ss = gd.ss, sb = gd.sb;
+      var isSS = v.matType === 'ss';
+      // σ-1t 与 Kσ 推荐值（等级数据表）
+      var s1tRec = isSS ? SS_DATA[v.gradeSS || 'A*-70'][2] : GRADE_S1T[v.grade];
+      var ksRec = ksBySb(sb);
 
-      // 疲劳强度各参数
-      var Ksigma = +v.Ksigma || (FATIGUE_K_SIGMA[v.grade] || 3.5);
-      var epsilon = +v.epsilon || (FATIGUE_EPSILON[v.d] || 0.65);
-      // 制造工艺因数：切制=1，滚制=1.1~1.3
-      var processFactor = v.process === 'roll' ? 1.2 : 1.0;
-      // 受力不均匀因数：受压螺母=1，受拉螺母=1.3~1.5
-      var nutFactor = v.nutType === 'tens' ? 1.4 : 1.0;
-
-      // 综合影响因数 KσD = Kσ / (ε·β)
-      var KsigmaD = Ksigma / (epsilon * processFactor * nutFactor);
-
-      // 许用应力幅 [σa] = σ-1p / (KσD·S)
-      var sigmaAAllow = sigmaMinus1 / (KsigmaD * S);
-
-      // 应力幅：σa = λ·F/(2A)（动载荷下工作载荷在 0~F 之间变化）
-      // 按 0 到 F 的脉动循环，应力幅 = λ·F / (2A)
-      // 若为对称循环则 σa = λ·F/A，此处按脉动处理
+      var Ksigma = +v.Ksigma > 0 ? +v.Ksigma : ksRec;
+      var Kt = v.process === 'roll' ? 1.25 : 1;    // 制造工艺因数
+      var Ku = v.nutType === 'tens' ? 1.55 : 1;    // 受力不均匀因数
 
       if (v.mode === 'design') {
-        var needA = lambda * F / (2 * sigmaAAllow);
-        var needD1 = Math.sqrt(4 * needA / Math.PI);
+        var epsilon = +v.epsilon > 0 ? +v.epsilon : 1;   // 设计模式 ε 取 1（直径未知）
+        var sigmaAAllow = epsilon * Kt * Ku * s1tRec / (ksRec * S);
+        var needD1 = Math.sqrt(2 * lambda * F / (Math.PI * sigmaAAllow));
         var recD = null;
-        for (var i = 0; i < THREAD_SIZES.length; i++) {
-          var k = THREAD_SIZES[i];
+        for (var i = 0; i < MT_SIZES.length; i++) {
+          var k = MT_SIZES[i];
           if (THREAD_D1[k] >= needD1) { recD = k; break; }
         }
         return {
           sections: [
-            { title: '疲劳参数', rows: [
-              { label: '抗压疲劳强度 σ<sub>-1p</sub>', value: sigmaMinus1, unit: 'MPa', d: 0 },
-              { label: '综合影响因数 KσD', value: KsigmaD, d: 3, hl: true },
-              { label: '许用应力幅 [σa]', value: sigmaAAllow, unit: 'MPa', d: 3, hl: true }
+            { title: '材料与疲劳参数', rows: [
+              { label: '螺栓抗拉强度 σB', value: sb, unit: 'MPa' },
+              { label: '螺栓屈服强度 σs', value: ss, unit: 'MPa' },
+              { label: '抗压疲劳强度 σ-1t', value: s1tRec, unit: 'MPa' },
+              { label: '尺寸因数 ε', value: epsilon, unit: '' },
+              { label: '制造工艺因数 Kt', value: Kt, unit: '' },
+              { label: '受力不均匀因数 Ku', value: Ku, unit: '' },
+              { label: '缺口应力集中因数 Kσ', value: ksRec, unit: '' },
+              { label: '安全系数 Sa1', value: S, unit: '' },
+              { label: '许用应力幅 [σa]', value: sigmaAAllow, unit: 'MPa', d: 2, hl: true }
             ] },
             { title: '设计结果', rows: [
-              { label: '所需截面积 A≥', value: needA, unit: 'mm²', d: 3 },
               { label: '所需螺纹小径 d₁≥', value: needD1, unit: 'mm', d: 3, hl: true },
-              { label: '推荐公称直径', html: recD ? 'M' + recD + '（d₁=' + THREAD_D1[recD] + 'mm）' : '超出数据范围' }
+              { label: '应选用螺栓公称直径', html: recD ? 'M' + recD : '超出数据范围' },
+              { label: '螺栓小径 d₁', html: recD ? String(THREAD_D1[recD]) : '--', unit: recD ? 'mm' : '' }
             ] }
           ],
-          verdict: { level: 'ok', text: '按疲劳强度，所需 d₁ ≥ ' + fmt(needD1, 3) + ' mm，推荐 M' + (recD || '--') },
-          notes: ['动载荷设计中还需同时校核静强度（静强度校核另见静载荷工具）。']
+          verdict: { level: 'ok', text: '按疲劳强度设计，所需 d₁ ≥ ' + fmt(needD1, 3) + ' mm，应选用 M' + (recD || '--') },
+          notes: [
+            '设计模式下尺寸因数 ε 取 1（直径未定），与 mechtool.cn 一致。',
+            '动载荷设计后还应进行静强度校核（见静载荷工具）。'
+          ]
         };
       }
 
       var d1 = THREAD_D1[v.d];
       if (!d1) return { error: '未找到所选螺栓的小径数据' };
+      var epsRec = sizeFactor(v.d);
+      var epsilon = +v.epsilon > 0 ? +v.epsilon : epsRec;
       var A = Math.PI * d1 * d1 / 4;
-      var sigmaA = lambda * F / (2 * A); // 应力幅（脉动循环）
-      var sigmaMax = 1.3 * F / A;        // 最大应力（近似）
+      var sigmaA = lambda * F / (2 * A);                    // 应力幅
+      var sigmaAAllow = epsilon * Kt * Ku * s1tRec / (Ksigma * S);  // 许用应力幅
       var ok = sigmaA <= sigmaAAllow;
-      var nA = sigmaAAllow / sigmaA;     // 疲劳安全系数
 
       return {
         sections: [
-          { title: '疲劳强度参数', rows: [
-            { label: '抗拉强度 σb', value: sb, unit: 'MPa', d: 0 },
-            { label: '屈服强度 σs', value: ss, unit: 'MPa', d: 0 },
-            { label: '抗压疲劳强度 σ<sub>-1p</sub>', value: sigmaMinus1, unit: 'MPa', d: 0 },
-            { label: '缺口应力集中因数 Kσ', value: Ksigma, unit: '' },
+          { title: '材料与疲劳参数', rows: [
+            { label: '螺栓抗拉强度 σB', value: sb, unit: 'MPa' },
+            { label: '螺栓屈服强度 σs', value: ss, unit: 'MPa' },
+            { label: '抗压疲劳强度 σ-1t', value: s1tRec, unit: 'MPa' },
             { label: '尺寸因数 ε', value: epsilon, unit: '' },
-            { label: '制造工艺因数 β₁', value: processFactor, unit: '' },
-            { label: '受力不均匀因数 β₂', value: nutFactor, unit: '' },
-            { label: '综合影响因数 KσD', value: KsigmaD, d: 3, hl: true },
-            { label: '许用应力幅 [σa]', value: sigmaAAllow, unit: 'MPa', d: 3, hl: true }
+            { label: '制造工艺因数 Kt', value: Kt, unit: '' },
+            { label: '受力不均匀因数 Ku', value: Ku, unit: '' },
+            { label: '缺口应力集中因数 Kσ', value: Ksigma, unit: '' },
+            { label: '安全系数 Sa1', value: S, unit: '' },
+            { label: '许用应力幅 [σa]', value: sigmaAAllow, unit: 'MPa', d: 2, hl: true }
           ] },
           { title: '校核结果', rows: [
-            { label: '螺纹小径 d₁', value: d1, unit: 'mm' },
+            { label: '螺栓公称直径', html: 'M' + v.d },
+            { label: '螺栓小径 d₁', value: d1, unit: 'mm' },
             { label: '危险截面积 A', value: A, unit: 'mm²', d: 2 },
-            { label: '应力幅 σa=λ·F/(2A)', value: sigmaA, unit: 'MPa', d: 3, hl: true },
-            { label: '疲劳安全系数 n', value: nA, d: 3, hl: true },
-            { label: '最大应力 σmax≈1.3F/A（参考）', value: sigmaMax, unit: 'MPa', d: 2 }
+            { label: '计算应力幅 σa=λF/(2A)', value: sigmaA, unit: 'MPa', d: 2, hl: true }
           ] }
         ],
         verdict: {
           level: ok ? 'ok' : 'bad',
-          text: ok ? '疲劳强度满足：σa=' + fmt(sigmaA, 3) + ' MPa ≤ [σa]=' + fmt(sigmaAAllow, 3) + ' MPa，n=' + fmt(nA, 3)
-                   : '疲劳强度不满足：σa=' + fmt(sigmaA, 3) + ' MPa > [σa]=' + fmt(sigmaAAllow, 3) + ' MPa',
-          note: '若不满足，可：① 增大螺栓直径 ② 提高等级 ③ 降低相对刚度 ④ 采用滚制螺纹 ⑤ 采用受拉螺母'
+          text: ok ? '校核通过：σa = ' + fmt(sigmaA, 2) + ' MPa ≤ [σa] = ' + fmt(sigmaAAllow, 2) + ' MPa'
+                   : '校核不通过：σa = ' + fmt(sigmaA, 2) + ' MPa > [σa] = ' + fmt(sigmaAAllow, 2) + ' MPa',
+          note: '若不满足，可：① 增大螺栓直径 ② 提高性能等级 ③ 降低相对刚度 ④ 采用滚制螺纹 ⑤ 采用受拉螺母'
         },
         notes: [
-          '应力幅按脉动循环计算（工作载荷在 0~F 之间变化），σa = λ·F/(2A)。',
-          '综合影响因数 KσD = Kσ/(ε·β₁·β₂)，其中 β₁ 为制造工艺因数，β₂ 为受力不均匀因数。',
-          '抗压疲劳强度 σ<sub>-1p</sub> ≈ 0.35σb（经验值）。',
-          '动载荷下还需进行静强度校核（见静载荷工具），此处仅校核疲劳强度。'
+          '应力幅 σa = λF/(2A)，工作载荷在 0~F 之间脉动变化。',
+          '许用应力幅 [σa] = ε·Kt·Ku·σ-1t/(Kσ·Sa1)，与 mechtool.cn 完全一致。',
+          '抗压疲劳强度 σ-1t = 0.35σB（按等级数据表）。',
+          'Kσ 按 σB 推荐：≤400→3，≤600→3.9，≤800→4.8，其余 5.2；ε 按公称直径查表。',
+          '动载荷下还需进行静强度校核（见静载荷工具）。'
         ]
       };
     },
     formulas: [
-      'σa = λ·F/(2A)（脉动循环）',
-      'KσD = Kσ/(ε·β₁·β₂)',
-      '[σa] = σ<sub>-1p</sub>/(KσD·S)，σ<sub>-1p</sub>≈0.35σb',
-      '疲劳安全系数 n = [σa]/σa ≥ 1'
+      'σ<sub>a</sub> = λF/(2A)，A = πd₁²/4',
+      '[σ<sub>a</sub>] = ε·K<sub>t</sub>·K<sub>u</sub>·σ<sub>-1t</sub>/(K<sub>σ</sub>·S<sub>a1</sub>)',
+      '设计：d₁ ≥ √(2λF/(π[σ<sub>a</sub>]))',
+      'K<sub>t</sub>：切制 1、滚制搓制 1.25；K<sub>u</sub>：受压螺母 1、受拉螺母 1.55'
     ],
-    reference: 'GB/T 3098.1《紧固件机械性能》；《机械设计》第九版 第四章，VDI 2230 标准。'
+    reference: 'GB/T 3098.1《紧固件机械性能》；《机械设计》第九版 第四章；mechtool.cn 螺栓连接（动载荷）。'
   });
 
   /* ============ 6. 平键连接强度校核 ============ */
