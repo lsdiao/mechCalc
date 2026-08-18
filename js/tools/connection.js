@@ -187,8 +187,8 @@
       { key: 'dyn', label: '动载荷', group: '连接参数', type: 'segment', options: [
         { v: 'no', t: '静载荷' }, { v: 'yes', t: '动载荷' }
       ] },
-      { key: 'dynFactor', label: '动载荷系数', group: '连接参数', type: 'number', default: 1.2, step: 'any',
-        visible: function (v) { return v.dyn === 'yes'; }, hint: '动载常取 1.2~1.5' },
+      { key: 'dynFactor', label: '动载荷系数', group: '连接参数', type: 'number', default: 0.7, step: 'any',
+        visible: function (v) { return v.dyn === 'yes'; }, hint: '许用应力折减系数，常取 0.7~0.8' },
       { key: 'd', label: '螺栓公称直径', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '12',
         visible: function (v) { return v.mode !== 'design'; } },
       { key: 'd0', label: '受剪直径 d₀', group: '螺栓尺寸', type: 'number', unit: 'mm', step: 'any',
@@ -196,8 +196,8 @@
         hint: '铰制孔螺栓受剪段（光杆）直径，默认取 M12 螺纹小径 10.106mm，按所选螺栓修改' }
     ],
     compute: function (v) {
-      var dynF = v.dyn === 'yes' ? (+v.dynFactor || 1.2) : 1;
-      var F = +v.F * 1000 * dynF, Sp = +v.Sp, St = +v.St, h = +v.h, m = +v.m;
+      var dynFactor = v.dyn === 'yes' ? (+v.dynFactor || 0.7) : 1;
+      var F = +v.F * 1000, Sp = +v.Sp, St = +v.St, h = +v.h, m = +v.m;
       if (!(F > 0)) return { error: '请输入横向载荷 F（kN）' };
       if (!(Sp > 0) || !(St > 0)) return { error: '请输入挤压/抗剪安全系数' };
       if (!(h > 0)) return { error: '请输入受挤压高度 h（mm）' };
@@ -205,10 +205,10 @@
 
       var ss = v.matType === 'ss' ? SS_GRADE.ss : GRADE_SS[v.grade];
       var sb = v.matType === 'ss' ? SS_GRADE.sb : GRADE_SB[v.grade];
-      // 许用挤压应力 [σp] = σs / Sp（参考 mechtool.cn）
-      var sigmaPAllow = ss / Sp;
-      // 许用剪切应力 [τ] = σs / St（参考 mechtool.cn，不乘 0.6 系数）
-      var tauAllow = ss / St;
+      // 许用挤压应力 [σp] = σs / Sp × 动载荷系数（动载时折减）
+      var sigmaPAllow = ss / Sp * dynFactor;
+      // 许用剪切应力 [τ] = σs / St × 动载荷系数（动载时折减）
+      var tauAllow = ss / St * dynFactor;
 
       if (v.mode === 'design') {
         // 设计计算：由挤压强度求 d_min，由抗剪强度求 d_min，取较大者
@@ -271,7 +271,7 @@
         },
         notes: [
           '铰制孔螺栓的受剪直径 d₀ 为螺栓杆（光杆）直径，由用户输入；默认取所选螺栓的螺纹小径 d₁。',
-          '动载荷时需勾选"动载荷"并输入动载系数（1.2~1.5），载荷乘以该系数后校核。'
+          '动载荷时许用应力乘以折减系数（0.7~0.8），即 [σp] = σs/Sp × 系数，[τ] = σs/St × 系数。'
         ]
       };
     },
