@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/stylewap.min.css?v=1.2.3"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/common.min.js?v=1.4.7"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+    <meta name='description' content='在线公差配合查询,公差配合查询程序网页版。程序数据严格参照国家标准GB/T 1800。只需要输入相关的参数，
+    即可快速得到极限偏差等信息。欢迎大家提供建议~'>
+    <link rel="stylesheet" type="text/css" href="/css/common/jquery-editable-select.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/dist/css/tolerance_keyboard.min.css?v=1.0.2"/>
+    <script src="/js/common/clipboard.min.js"></script>
+    <script src="/js/common/jquery-editable-select.min.js"></script>
+    <script src="/dist/js/mechtool/tolerance-fit-query.min.js?v=1.0.5"></script>
+
+    <title>配合查询 | 公差与配合查询</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-md-center">
+        <div class="form-check form-switch ps-0 me-5 d-md-flex d-none justify-content-start">
+            <label class="form-check-label d-none d-lg-block text-secondary" for="showSidebar">侧边栏</label>
+            <input class="form-check-input ms-2" type="checkbox" role="switch" id="showSidebar" checked hidden>
+        </div>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fitPageBtn" title="图片适合页面宽度">
+            <i class="bi bi-arrows-fullscreen" style="font-size: 16px;"></i>
+        </div>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <i class="bi bi-unlock" style="font-size: 16px;"></i>
+            <i class="bi bi-lock d-none" style="font-size: 16px;"></i>
+        </div>
+        <div class="dropdown ms-3">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-md-inline">常用设计计算工具</span> <span class="d-md-none">计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+
+
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            <ul class="list-unstyled mb-0 py-3 pt-md-1">
+                <li>
+                    <a href="/calculation/calculation_tolerances.html" class="d-inline-flex align-items-center rounded">
+                        公差与配合查询
+                    </a>
+                </li>
+                <li class="my-3 mx-4 border-bottom"></li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#program-query-collapse" aria-expanded="true" aria-current="true">
+                        程序查询
+                    </button>
+
+                    <div class="collapse show" id="program-query-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/calculation/calculation_tolerances.html"
+                                   class="d-inline-flex align-items-center rounded">公差查询</a>
+                            </li>
+                            <li><a href="/calculation/calculation_tolerancefitquery.html"
+                                   class="d-inline-flex align-items-center rounded">配合查询</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#data-query-collapse" aria-expanded="true" aria-current="true">
+                        数表查询
+                    </button>
+
+                    <div class="collapse show" id="data-query-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_limitsandfits.html"
+                                   class="d-inline-flex align-items-center rounded">极限与配合</a></li>
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_generaltolerance.html"
+                                   class="d-inline-flex align-items-center rounded">一般公差(未注公差)</a></li>
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_tapertoleranceandfit.html"
+                                   class="d-inline-flex align-items-center rounded">圆锥公差</a></li>
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_taperfit.html"
+                                   class="d-inline-flex align-items-center rounded">圆锥配合</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="my-3 mx-4 border-top"></li>
+                <li>
+                    <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                        关于 Mechtool
+                    </a>
+                </li>
+                <li>
+                    <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+                       title="帮助 Mechtool">
+                        帮助 Mechtool
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <div class="d-md-flex flex-md-row align-items-center justify-content-between gap-4">
+                <h1 class="bd-title" id="content">配合查询</h1>
+                <div class="d-flex flex-row align-items-center justify-content-end gap-2">
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                        <i class="bi bi-star" style="font-size: 16px;"></i>
+                    </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_tolerances.html" title="公差查询"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/drawingandaccuracy/drawingandaccuracy_limitsandfits.html" title="极限与配合"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+                </div>
+            </div>
+            <p class="bd-lead">在线公差配合查询,公差配合查询程序网页版。程序数据严格参照国家标准GB/T 1800。只需要输入相关的参数，
+                即可快速得到极限偏差等信息。</p>
+        </div>
+        <div class="bd-toc mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">本页导航</strong>
+            <nav id="TableOfContents">
+                <ul>
+                    <li><a name="工具介绍">工具介绍</a></li>
+                    <li><a name="配合查询">配合查询</a></li>
+                    <li><a name="更新日志">更新日志</a></li>
+                    <li><a name="间隙配合">间隙配合</a></li>
+                    <li><a name="过渡配合">过渡配合</a></li>
+                    <li><a name="过盈配合">过盈配合</a></li>
+                </ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">广告链接</strong>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool右侧栏自适应 -->
+    <ins class="adsbygoogle right"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="3643304998"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <h2 id="工具介绍">工具介绍</h2>
+            <p class="mt-3">你可以在 <a href="http://mp.weixin.qq.com/s?__biz=MzkxNTI4NjMyMA==&mid=2247483687&idx=1&sn=dc348e93b228056fdddf355b66ab95d3&chksm=
+            c1603178f617b86e2ee4fa033c36d573cf65e6d35d7070a3c3c6cfc35ad092e9c5655897c855&token=1078448518&lang=zh_CN#rd" target="_blank">工具介绍</a> 中查看此工具功能和使用方法说明。</p>
+            <h2 id="配合查询">配合查询</h2>
+            <div class="container">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3>配合查询</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-7 col-xl-5">
+                        <label for="basicDim">基本尺寸: </label>
+                        <input style="width: 100px" type="number" id="basicDim" placeholder=""> <span>mm</span>
+                        <div style="width:100%;height:60px;border: 1px solid #aaa;margin-top: 32px;position: relative;">
+                            <div style="position: absolute;margin: -10px 0 0 10px;background-color: #FCFDF8">基准制</div>
+                            <input type="radio" name="benchmarkSystem" id="basicHoleSystem" checked style="margin:0 0 0 10px;">
+                            <label for="basicHoleSystem" style="margin:25px 0 0 0;">基孔制</label>
+                            <input type="radio" name="benchmarkSystem" id="basicShaftSystem" style="margin:0 0 0 10px;">
+                            <label for="basicShaftSystem" style="margin:25px 0 0 0;">基轴制</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5 col-xl-7 mt-4 mt-md-0">
+                        <div style="width:100%;height:122px;border: 1px solid #aaa;position: relative">
+                            <div style="position: absolute;margin: -10px 0 0 10px;background-color: #FCFDF8">配合方式</div>
+                            <input type="radio" name="queryObject" id="clearanceFit" checked style="margin:0 5px 0 15px">
+                            <label for="clearanceFit" style="margin:22px 0 0 0"> 间隙配合</label><br>
+                            <input type="radio" name="queryObject" id="transitionFit" style="margin:0 5px 0 15px">
+                            <label for="transitionFit" style="margin:10px 0 0 0"> 过渡配合</label><br>
+                            <input type="radio" name="queryObject" id="interferenceFit" style="margin:0 5px 0 15px">
+                            <label for="interferenceFit" style="margin:10px 0 0 0"> 过盈配合</label><br>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 25px">
+                    <div class="col-12 col-md-7 col-xl-5">
+                        <div style="width:100%;height:120px;border: 1px solid #aaa;position: relative">
+                            <div style="position: absolute;margin: -10px 0 0 10px;background-color: #FCFDF8">公差带</div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-2"></div>
+                                    <label class="col-5" style="margin: 12px 0 0 0">公差代号</label>
+                                    <label class="col-5" style="margin: 12px 0 0 0">公差等级</label>
+                                </div>
+                                <div class="row" id="rowHoleToleranceZone">
+                                    <div class="col-2 text-end">
+                                        <div style="margin-top: 9px">孔:</div>
+                                    </div>
+                                    <div class="col-5" style="margin-top:5px;">
+                                        <select type="text" name="hole" value="H" id="inputHoleToleranceCode" style="width: 80px;margin-top:0;text-transform:uppercase;">
+                                            <option value="F">F</option>
+                                            <option value="G">G</option>
+                                            <option value="H">H</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-5" style="margin-top:5px">
+                                        <select type="number" name="hole" value="6" id="inputHoleToleranceGrade" style="width: 80px;margin-top:0">
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" id="rowShaftToleranceZone">
+                                    <div class="col-2 text-end">
+                                        <div style="margin-top: 9px">轴:</div>
+                                    </div>
+                                    <div class="col-5" style="margin-top:5px">
+                                        <select type="text" name="shaft" id="inputShaftToleranceCode" style="width: 80px;margin-top:0;text-transform:lowercase;">
+                                            <option value="f">f</option>
+                                            <option value="g">g</option>
+                                            <option value="h">h</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-5" style="margin-top:5px">
+                                        <select type="number" name="shaft" value="5" id="inputShaftToleranceGrade" style="width: 80px;margin-top:0;">
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5 col-xl-7 align-self-center text-md-start text-end">
+                        <button class="btn btn-outline-primary btn-sm" style="margin-top: 20px" id="queryTolerance">
+                            查询配合
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" style="margin-top: 20px" id="refresh">
+                            <span style="visibility:hidden">刷</span>刷新<span style="visibility:hidden">新</span></button>
+                        <button class="btn btn-outline-primary btn-sm" style="margin-top: 20px" id="copyRes"
+                                data-clipboard-action="copy"
+                                data-clipboard-target="#result">拷贝结果
+                        </button>
+                        <br>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;margin-bottom: 10px;height: 30px">
+                    <div class="col-12 col-md-7 col-xl-5 text-start" style="color: red" id="errorInfo"></div>
+                    <div class="col-12 col-md-5 col-xl-7 text-start" style="color: red" id="errorMsg"></div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-8 ">
+                        <div style="width:100%;height:120px;border: 1px solid #aaa; position: relative" class="mt-4 mt-md-2">
+                            <div style="position: absolute;margin: -10px 0 0 10px;background-color: #FCFDF8">查询结果</div>
+                            <div class="container">
+                                <div class="row" style="margin-top:5px;color: #0000FA;font-size: 18px;border: 0 solid salmon" id="result">
+                                    <div class="col-4 text-end" style="border: 0 solid salmon;margin-top: 45px;" id="basicDimRes"></div>
+                                    <div class="col-2" style="border:0 solid salmon;margin-top: 15px" id="toleranceCodeandGradeRes">
+                                        <div class="row" style="border: 0 solid salmon;height: 29px"><div class="col-12 text-end" id="holeToleranceCodeandGradeRes"></div></div>
+                                        <div class="row" style="border: 0 solid salmon;margin-top: 25px"><div class="col-12 text-end" id="shaftToleranceCodeandGradeRes"></div></div>
+                                    </div>
+                                    <div class="col-6 text-start" style="font-family: Roboto,simhei,serif">
+                                        <div class="row" style="border: 0 solid salmon;">
+                                            <div class="col-12">
+                                                <div class="row" id="holeUpperDeviation" style="border:0 solid salmon;height: 27px"></div>
+                                                <div class="row" id="holeLowerDeviation" style="border:0 solid salmon;height: 27px"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="row" id="shaftUpperDeviation"></div>
+                                                <div class="row" id="shaftLowerDeviation"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 基孔制配合键盘区域 -->
+                <div class="row" style="margin-bottom: 15px">
+                    <div class="col-12">
+                        <div class="tolerance-keyboard-wrapper" id="fitKeyboardWrapper">
+                            <div class="tolerance-keyboard-header" id="toggleFitKeyboard">
+                                <span>基孔制优先配合键盘</span>
+                                <i class="bi bi-chevron-down" id="fitKeyboardIcon"></i>
+                            </div>
+                            <div class="tolerance-keyboard-content" id="fitKeyboardContent">
+                                <div class="tolerance-keyboard-table-wrapper">
+                                    <table class="tolerance-keyboard-table fit-keyboard-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="th-grade">孔</th>
+                                                <th colspan="7" class="th-clearance">间隙配合</th>
+                                                <th colspan="4" class="th-transition">过渡配合</th>
+                                                <th colspan="7" class="th-interference">过盈配合</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-hole-grade="6">
+                                                <td class="td-grade">H6</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="g" data-shaft-grade="5" data-hole-grade="6">g5</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="h" data-shaft-grade="5" data-hole-grade="6">h5</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="js" data-shaft-grade="5" data-hole-grade="6">js5</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="k" data-shaft-grade="5" data-hole-grade="6">k5</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="m" data-shaft-grade="5" data-hole-grade="6">m5</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="n" data-shaft-grade="5" data-hole-grade="6">n5</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="p" data-shaft-grade="5" data-hole-grade="6">p5</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-hole-grade="7">
+                                                <td class="td-grade">H7</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="f" data-shaft-grade="6" data-hole-grade="7">f6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="g" data-shaft-grade="6" data-hole-grade="7">g6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="h" data-shaft-grade="6" data-hole-grade="7">h6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="js" data-shaft-grade="6" data-hole-grade="7">js6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="k" data-shaft-grade="6" data-hole-grade="7">k6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="m" data-shaft-grade="6" data-hole-grade="7">m6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="n" data-shaft-grade="6" data-hole-grade="7">n6</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="p" data-shaft-grade="6" data-hole-grade="7">p6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="r" data-shaft-grade="6" data-hole-grade="7">r6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="s" data-shaft-grade="6" data-hole-grade="7">s6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="t" data-shaft-grade="6" data-hole-grade="7">t6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="u" data-shaft-grade="6" data-hole-grade="7">u6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="x" data-shaft-grade="6" data-hole-grade="7">x6</button></td>
+                                            </tr>
+                                            <tr data-hole-grade="8">
+                                                <td class="td-grade" rowspan="2">H8</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="e" data-shaft-grade="7" data-hole-grade="8">e7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="f" data-shaft-grade="7" data-hole-grade="8">f7</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="h" data-shaft-grade="7" data-hole-grade="8">h7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="js" data-shaft-grade="7" data-hole-grade="8">js7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="k" data-shaft-grade="7" data-hole-grade="8">k7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="m" data-shaft-grade="7" data-hole-grade="8">m7</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="s" data-shaft-grade="7" data-hole-grade="8">s7</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="u" data-shaft-grade="8" data-hole-grade="8">u8</button></td>
+                                            </tr>
+                                            <tr data-hole-grade="8">
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="d" data-shaft-grade="8" data-hole-grade="8">d8</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="e" data-shaft-grade="8" data-hole-grade="8">e8</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="f" data-shaft-grade="8" data-hole-grade="8">f8</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="h" data-shaft-grade="8" data-hole-grade="8">h8</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-hole-grade="9">
+                                                <td class="td-grade">H9</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="d" data-shaft-grade="8" data-hole-grade="9">d8</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="e" data-shaft-grade="8" data-hole-grade="9">e8</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="f" data-shaft-grade="8" data-hole-grade="9">f8</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="h" data-shaft-grade="8" data-hole-grade="9">h8</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-hole-grade="10">
+                                                <td class="td-grade">H10</td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="b" data-shaft-grade="9" data-hole-grade="10">b9</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="c" data-shaft-grade="9" data-hole-grade="10">c9</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="d" data-shaft-grade="9" data-hole-grade="10">d9</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="e" data-shaft-grade="9" data-hole-grade="10">e9</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="h" data-shaft-grade="9" data-hole-grade="10">h9</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-hole-grade="11">
+                                                <td class="td-grade">H11</td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="b" data-shaft-grade="11" data-hole-grade="11">b11</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-shaft-code="c" data-shaft-grade="11" data-hole-grade="11">c11</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="d" data-shaft-grade="10" data-hole-grade="11">d10</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-shaft-code="h" data-shaft-grade="10" data-hole-grade="11">h10</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tolerance-keyboard-info">
+                                    <span class="keyboard-legend"><span class="legend-dot legend-blue"></span>优先配合</span>
+                                    <span class="keyboard-legend"><span class="legend-dot legend-yellow"></span>可用配合</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 基轴制配合键盘区域（默认隐藏） -->
+                        <div class="tolerance-keyboard-wrapper" id="shaftFitKeyboardWrapper" style="display: none;">
+                            <div class="tolerance-keyboard-header" id="toggleShaftFitKeyboard">
+                                <span>基轴制优先配合键盘</span>
+                                <i class="bi bi-chevron-down" id="shaftFitKeyboardIcon"></i>
+                            </div>
+                            <div class="tolerance-keyboard-content" id="shaftFitKeyboardContent">
+                                <div class="tolerance-keyboard-table-wrapper">
+                                    <table class="tolerance-keyboard-table shaft-fit-keyboard-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="th-grade">轴</th>
+                                                <th colspan="7" class="th-clearance">间隙配合</th>
+                                                <th colspan="4" class="th-transition">过渡配合</th>
+                                                <th colspan="7" class="th-interference">过盈配合</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-shaft-grade="5">
+                                                <td class="td-grade">h5</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="G" data-hole-grade="6" data-shaft-grade="5">G6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="H" data-hole-grade="6" data-shaft-grade="5">H6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="JS" data-hole-grade="6" data-shaft-grade="5">JS6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="K" data-hole-grade="6" data-shaft-grade="5">K6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="M" data-hole-grade="6" data-shaft-grade="5">M6</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="N" data-hole-grade="6" data-shaft-grade="5">N6</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="P" data-hole-grade="6" data-shaft-grade="5">P6</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-shaft-grade="6">
+                                                <td class="td-grade">h6</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="F" data-hole-grade="7" data-shaft-grade="6">F7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="G" data-hole-grade="7" data-shaft-grade="6">G7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="H" data-hole-grade="7" data-shaft-grade="6">H7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="JS" data-hole-grade="7" data-shaft-grade="6">JS7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="K" data-hole-grade="7" data-shaft-grade="6">K7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="M" data-hole-grade="7" data-shaft-grade="6">M7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="N" data-hole-grade="7" data-shaft-grade="6">N7</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="P" data-hole-grade="7" data-shaft-grade="6">P7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="R" data-hole-grade="7" data-shaft-grade="6">R7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="S" data-hole-grade="7" data-shaft-grade="6">S7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="T" data-hole-grade="7" data-shaft-grade="6">T7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="U" data-hole-grade="7" data-shaft-grade="6">U7</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="X" data-hole-grade="7" data-shaft-grade="6">X7</button></td>
+                                            </tr>
+                                            <tr data-shaft-grade="7">
+                                                <td class="td-grade">h7</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="E" data-hole-grade="8" data-shaft-grade="7">E8</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="F" data-hole-grade="8" data-shaft-grade="7">F8</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="H" data-hole-grade="8" data-shaft-grade="7">H8</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-shaft-grade="8">
+                                                <td class="td-grade">h8</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="D" data-hole-grade="9" data-shaft-grade="8">D9</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="E" data-hole-grade="9" data-shaft-grade="8">E9</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="F" data-hole-grade="9" data-shaft-grade="8">F9</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="H" data-hole-grade="9" data-shaft-grade="8">H9</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-shaft-grade="9">
+                                                <td class="td-grade" rowspan="3">h9</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="E" data-hole-grade="8" data-shaft-grade="7">E8</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="F" data-hole-grade="8" data-shaft-grade="7">F8</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="H" data-hole-grade="8" data-shaft-grade="7">H8</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-shaft-grade="9">
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="D" data-hole-grade="9" data-shaft-grade="8">D9</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="E" data-hole-grade="9" data-shaft-grade="8">E9</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="F" data-hole-grade="9" data-shaft-grade="8">F9</button></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="H" data-hole-grade="9" data-shaft-grade="8">H9</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr data-shaft-grade="9">
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="B" data-hole-grade="11" data-shaft-grade="9">B11</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="C" data-hole-grade="10" data-shaft-grade="9">C10</button></td>
+                                                <td><button type="button" class="kb-btn kb-btn-blue" data-hole-code="D" data-hole-grade="10" data-shaft-grade="9">D10</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button type="button" class="kb-btn kb-btn-yellow" data-hole-code="H" data-hole-grade="10" data-shaft-grade="9">H10</button></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tolerance-keyboard-info">
+                                    <span class="keyboard-legend"><span class="legend-dot legend-blue"></span>优先配合</span>
+                                    <span class="keyboard-legend"><span class="legend-dot legend-yellow"></span>可用配合</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h2 id="更新日志">更新日志</h2>
+            <p>
+                <strong>2026.3.31</strong> <br>
+                1. 增加基孔制与基轴制优先配合键盘。根据GB/T 1800.1—2020，基于经济因素，如有可能，配合应优先选择键盘中所示的公差带代号<br/>
+                2. 点击键盘按钮可自动导入对应公差代号和等级。<br/>
+            </p>
+            <h2 id="间隙配合">间隙配合</h2>
+            <p>
+                在孔与轴的配合中，孔的尺寸减去相配合轴的尺寸，其差值为正时为间隙。间隙配合就是孔公差带在轴公差带之上，具有间隙的配合（包括最小间隙为零的配合）。<br/>
+                间隙配合时轴的基本偏差选用说明：<br/>
+                (1) a、b：可得到特别大的间隙，应用很少。<br/>
+                (2) c：可得到很大的间隙，一般适用于缓慢、松弛的动配合。用于工作条件较差（如农业机械等）、受力变形、或为便于装配而必须保证有较大的间隙时，推荐配合为H11/c11，较高等级的H8/c7配合，适用于轴在高温工作的紧密动配合，如内燃机排气阀和导管等。<br/>
+                (3) d：一般用于IT7-IT11级，适用于松的转动配合，如密封盖、滑轮、空转皮带轮等与轴的配合，也适用于大直径滑动轴承配合，如透平机、球磨机、轧辊成型和重型弯曲机以及其它重型机械中的一些滑动轴承。<br/>
+                (4) e：多用于IT7、8、9级，通常用于要求有明显间隙，易于转动的轴承配合，如大跨距轴承、多支点轴承等配合，高等级的e轴适用于大的、高速、重载支承，如涡轮发动机、大型电动机及内燃机主要轴承、凸轮轴轴承等配合。<br/>
+                (5) f：多用于IT6、7、8级的一般传动配合，当温度影响不大时，被广泛用于普通润滑油（或润滑脂）润滑的支承，如齿轮箱、小电动机、泵等的转轴与滑动轴承的配合。<br/>
+                (6) g：配合间隙很小，制造成本高，除很轻负荷的精密装置外，不推荐用于转动配合。多用于IT5、6、7级，最适合不回转的精密滑动配合，也用于插销等定位配合，如精密连杆轴承、活塞及滑阀、连杆销等。<br/>
+                (7) h：多用于IT4-IT11级。作为一般的定位配合，广泛用于无相对转动的零件。若没有温度、变形影响，也可用于精密滑动配合。</p>
+            <h2 id="过渡配合">过渡配合</h2>
+            <p>
+                过渡配合就是在配合中，孔与轴的公差带相互交迭，任取其中一对孔和轴相配，可能具有间隙，也可能具有过盈的配合。<br/>
+                过渡配合时轴的基本偏差选用说明：<br/>
+                (1) js：偏差完全对称（+IT/2和-IT/2），平均间隙较小的配合，多用于IT4-7级，要求间隙比h轴小，并允许略有过盈的定位配合，如连轴节、齿圈与钢制轮毂等。可用木锤装配。<br/>
+                (2) k：平均间隙接近于零的配合，适用于IT4-7级，推荐用于稍有过盈的定位配合，如为消除震动所使用的配合。一般用木锤装配。<br/>
+                (3) m：平均过盈配合较小的配合，适用于IT4-7级，一般可用木锤装配，但在最大过盈时，要求相当的压入力。<br/>
+                (4) n：平均过盈比m稍大，很少得到间隙，适用于IT4-7级，用锤或压入机装配，通常推荐用于紧密的组件配合。H6/n5配合时为过盈配合。</p>
+            <h2 id="过盈配合">过盈配合</h2>
+            <p>
+                过盈配合就是在孔与轴的配合中，孔的尺寸减去相配合的轴的尺寸，其差值为负时的配合。<br/>
+                过盈配合时轴的基本偏差选用说明：<br/>
+                (1) p：与H6或H7配合时是过盈配合，与H8配合时则为过渡配合。对于非铁类零件，为较轻的压入配合，当需要时易于拆卸。对钢、铸铁或铜、钢组件装配是标准压入配合。<br/>
+                (2) r：对铁类零件为中等打入配合，对非铁类零件为轻打入配合，当需要时可以拆卸。与H8孔配合，直径在100mm以上时为过盈配合，直径小时为过渡配合。<br/>
+                (3) s：用于钢和铁制零件的永久性和半永久性装配，可产生相当大的结合力。当用弹性材料，如轻合金时，配合性质与铁类零件的p轴相当，如套环压装在轴上、阀座等的配合。尺寸较大时，为避免损伤配合表面，需用热胀或冷缩法装配。<br/>
+                (4) t：过盈较大的配合。对钢和铸铁类零件适于作永久性结合，不用键可传递力矩，需用热胀或冷缩法装配，如连轴节与轴的配合。<br/>
+                (5) u：这种配合过盈大，一般应验算在最大过盈时，工件材料是否损坏，要用热胀或冷缩法装配。例如火车轮毂和轴的配合。<br/>
+                (6) v、x、y、z：这些基本偏差所组成的配合过盈量更大，须经试验后才能应用，一般不推荐。</p>
+            <div class="d-flex flex-row align-items-center justify-content-end gap-2 my-4">
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                    <i class="bi bi-star" style="font-size: 16px;"></i>
+                </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_tolerances.html" title="公差查询"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/drawingandaccuracy/drawingandaccuracy_limitsandfits.html" title="极限与配合"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <h4>评论</h4>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <style>
+        .ad-img { max-height: 172px; max-width: 100%; object-fit: contain; }
+        @media (max-width: 575.98px) { .ad-img { width: 100%; max-height: none; } }
+    </style>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.elesa-ganter.com.cn/" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg" alt="elesa-ganter伊莉莎冈特全系列机械标准配件" crossorigin="anonymous">
+            </a>
+        </div>
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.m-haste.com" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="m-haste艾姆华世特传动设备" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="javascript:">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bd-footer py-3 mt-3 bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                       aria-label="Mechtool">
+                        <span class="fs-5">Mechtool</span>
+                    </a>
+                </div>
+                <div class="col-12 mb-2">
+                    <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+                </div>
+                <div class="col-12 mb-2">
+                    <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                        <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                        <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                        <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                        <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                        <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                        <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+<script>
+    var clipboard = new ClipboardJS('#copyRes');
+    clipboard.on('success', function (e) {
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        e.clearSelection();
+        alert("结果已拷贝！")
+    });
+    clipboard.on('error', function (e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+    });
+</script>
+</body>
+</html>
