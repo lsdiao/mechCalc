@@ -47,8 +47,43 @@ window.App = (function () {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  /* ---------- 键盘（公差带/优先配合） ---------- */
+  function keypadHTML(f) {
+    var cols = f.cols || 18;
+    var head;
+    if (f.groups) {
+      head = '<th class="kb-th-grade">' + esc(f.rowLabel || '') + '</th>' +
+        f.groups.map(function (g) { return '<th class="kb-th-group" colspan="' + g.span + '">' + esc(g.t) + '</th>'; }).join('');
+    } else {
+      head = '<th class="kb-th-grade">' + esc(f.rowLabel || '') + '</th><th colspan="' + cols + '">' + esc(f.colLabel || '') + '</th>';
+    }
+    var body = f.rows.map(function (r) {
+      var html = '<tr>';
+      if (r.label) html += '<td class="kb-td-grade"' + (r.span > 1 ? ' rowspan="' + r.span + '"' : '') + '>' + esc(r.label) + '</td>';
+      var byCol = {};
+      r.cells.forEach(function (c) { byCol[c.c] = c; });
+      for (var col = 1; col <= cols; col++) {
+        var c = byCol[col];
+        html += c
+          ? '<td><button type="button" class="kb-btn kb-' + (c.cls === 'B' ? 'blue' : 'yellow') + '" data-set="' + esc(JSON.stringify(c.set)) + '">' + esc(c.t) + '</button></td>'
+          : '<td class="kb-empty"></td>';
+      }
+      return html + '</tr>';
+    }).join('');
+    var legend = (f.legend || []).map(function (l) {
+      return '<span class="kb-leg"><i class="kb-leg-dot ' + esc(l.cls) + '"></i>' + esc(l.t) + '</span>';
+    }).join('');
+    return '<div class="kb-panel" data-targets="' + esc(JSON.stringify(f.targets || {})) + '">' +
+      '<div class="kb-head"><span>' + esc(f.title || '') + '</span><i class="kb-arrow"></i></div>' +
+      '<div class="kb-body"><div class="kb-scroll"><table class="kb-table"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table></div>' +
+      (legend ? '<div class="kb-legend">' + legend + '</div>' : '') + '</div></div>';
+  }
+
   /* ---------- 表单渲染 ---------- */
   function fieldHTML(f) {
+    if (f.type === 'keypad') {
+      return '<div class="field field-keypad" data-key="' + esc(f.key) + '">' + keypadHTML(f) + '</div>';
+    }
     var html = '<div class="field" data-key="' + esc(f.key) + '">';
     html += '<label>' + f.label + (f.unit ? ' <span class="unit-note">(' + esc(f.unit) + ')</span>' : '') + '</label>';
     if (f.type === 'select') {
@@ -78,7 +113,7 @@ window.App = (function () {
   function collectValues(container) {
     var vals = {};
     var seenSeg = {};
-    container.querySelectorAll('[data-key]').forEach(function (el) {
+    container.querySelectorAll('select[data-key],input[data-key],textarea[data-key]').forEach(function (el) {
       var k = el.getAttribute('data-key');
       if (el.type === 'radio') {
         if (el.checked) vals[k] = el.value;
@@ -185,6 +220,29 @@ window.App = (function () {
     main.addEventListener('input', runCalc);
     main.addEventListener('change', runCalc);
     bindSegments(main);
+    /* 键盘按钮点击 → 导入公差带；键盘标题点击 → 折叠/展开 */
+    main.addEventListener('click', function (e) {
+      var t = e.target;
+      var btn = t.closest && t.closest('.kb-btn');
+      if (btn) {
+        var panel = btn.closest('.kb-panel');
+        var targets = {}, set = {};
+        try { targets = JSON.parse(panel.getAttribute('data-targets') || '{}'); } catch (err) { /* noop */ }
+        try { set = JSON.parse(btn.getAttribute('data-set') || '{}'); } catch (err) { /* noop */ }
+        Object.keys(set).forEach(function (k) {
+          var fk = targets[k];
+          if (!fk) return;
+          var el = main.querySelector('select[data-key="' + fk + '"],input[data-key="' + fk + '"]');
+          if (el) el.value = set[k];
+        });
+        panel.querySelectorAll('.kb-btn.on').forEach(function (b) { b.classList.remove('on'); });
+        btn.classList.add('on');
+        runCalc();
+        return;
+      }
+      var kh = t.closest && t.closest('.kb-head');
+      if (kh) kh.parentNode.classList.toggle('fold');
+    });
     document.getElementById('btnCalc').addEventListener('click', function () {
       runCalc();
       var box = document.getElementById('resultBox');

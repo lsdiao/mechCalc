@@ -26,7 +26,7 @@ var ALL = [];
   var orig = App.registerTool;
   App.registerTool = function (t) { if (t && t.id) ALL.push(t); return orig.call(App, t); };
 })();
-['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js'].forEach(function (f) {
+['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js'].forEach(function (f) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 });
 
@@ -40,13 +40,16 @@ function defaults(tool) {
   });
   return v;
 }
-/* 提取 sections 中 label 对应的数值（去掉 html 行） */
+/* 提取 sections 中 label 对应的数值（html 行返回去标签后的文本） */
 function val(res, label) {
   if (!res || !res.sections) return null;
   for (var i = 0; i < res.sections.length; i++) {
     var rows = res.sections[i].rows || [];
     for (var j = 0; j < rows.length; j++) {
-      if (rows[j].label && rows[j].label.indexOf(label) === 0 && rows[j].value !== undefined) return rows[j].value;
+      if (rows[j].label && rows[j].label.indexOf(label) === 0) {
+        if (rows[j].value !== undefined) return rows[j].value;
+        if (rows[j].html !== undefined) return String(rows[j].html).replace(/<[^>]+>/g, '');
+      }
     }
   }
   return null;
@@ -162,7 +165,52 @@ console.log('== 10) 硬度换算（HRC45 → HV≈446 / HBW≈429） ==');
   ok('HRC45 → HBW 429', htmlOf('布氏硬度 HBW') === '429', htmlOf('布氏硬度 HBW'));
 })();
 
-console.log('== 11) 变工况复测（每工具 2 组非常规参数不崩溃） ==');
+console.log('== 11) 公差查询（GB/T 1800，φ40 各公差带） ==');
+(function () {
+  var r = runTool('tolerance-query', { D: 40, obj: 'hole', holeCode: 'H', holeGrade: 7 });
+  ok('φ40 H7 = +0.025/0', val(r, 'φ40 H7') === '+0.025 / 0 mm', String(val(r, 'φ40 H7')));
+  var r2 = runTool('tolerance-query', { D: 40, obj: 'shaft', shaftCode: 'k', shaftGrade: 6 });
+  ok('φ40 k6 = +0.018/+0.002', val(r2, 'φ40 k6') === '+0.018 / +0.002 mm', String(val(r2, 'φ40 k6')));
+  var r3 = runTool('tolerance-query', { D: 40, obj: 'hole', holeCode: 'F', holeGrade: 8 });
+  ok('φ40 F8 = +0.064/+0.025', val(r3, 'φ40 F8') === '+0.064 / +0.025 mm', String(val(r3, 'φ40 F8')));
+  var r4 = runTool('tolerance-query', { D: 40, obj: 'hole', holeCode: 'G', holeGrade: 7 });
+  ok('φ40 G7 = +0.034/+0.009', val(r4, 'φ40 G7') === '+0.034 / +0.009 mm', String(val(r4, 'φ40 G7')));
+  var r5 = runTool('tolerance-query', { D: 40, obj: 'hole', holeCode: 'JS', holeGrade: 7 });
+  ok('φ40 JS7 = +0.0125/-0.0125', val(r5, 'φ40 JS7') === '+0.0125 / -0.0125 mm', String(val(r5, 'φ40 JS7')));
+  var r6 = runTool('tolerance-query', { D: 40, obj: 'hole', holeCode: 'P', holeGrade: 7 });
+  ok('φ40 P7 = -0.017/-0.042（Δ 修正）', val(r6, 'φ40 P7') === '-0.017 / -0.042 mm', String(val(r6, 'φ40 P7')));
+  var r7 = runTool('tolerance-query', { D: 100, obj: 'shaft', shaftCode: 's', shaftGrade: 6 });
+  ok('φ100 s6 = +0.093/+0.071', val(r7, 'φ100 s6') === '+0.093 / +0.071 mm', String(val(r7, 'φ100 s6')));
+})();
+
+console.log('== 12) 配合查询（φ40 H7/k6 过渡、H7/f7 间隙、H7/p6 过盈） ==');
+(function () {
+  var r = runTool('tolerance-fit-query', { D: 40, fitType: 'transition' });
+  ok('φ40 H7/k6 为过渡配合', val(r, '配合类型') === '过渡配合', String(val(r, '配合类型')));
+  ok('Xmax=23μm Ymax=18μm', near(val(r, '最大间隙 Xmax'), 0.023, 1e-9) && near(val(r, '最大过盈 Ymax'), 0.018, 1e-9),
+    'Xmax=' + val(r, '最大间隙 Xmax') + ' Ymax=' + val(r, '最大过盈 Ymax'));
+  var r2 = runTool('tolerance-fit-query', { D: 40, shaftCode: 'f', shaftGrade: 7, fitType: 'clearance' });
+  ok('φ40 H7/f7 为间隙配合', val(r2, '配合类型') === '间隙配合', String(val(r2, '配合类型')));
+  var r3 = runTool('tolerance-fit-query', { D: 40, shaftCode: 'p', shaftGrade: 6, fitType: 'interference' });
+  ok('φ40 H7/p6 为过盈配合', val(r3, '配合类型') === '过盈配合', String(val(r3, '配合类型')));
+  /* 键盘数据完整性：按钮 set 与文本一致 */
+  var t = App.getTool('tolerance-fit-query');
+  var kb = t.inputs.filter(function (f) { return f.type === 'keypad'; });
+  ok('两个配合键盘（基孔制/基轴制）', kb.length === 2, 'keypads=' + kb.length);
+  var bad = 0, total = 0;
+  kb.forEach(function (f) {
+    f.rows.forEach(function (row) { row.cells.forEach(function (c) {
+      total++;
+      var s = c.set;
+      var txt = (s.holeCode + s.holeGrade) + '/' + (s.shaftCode + s.shaftGrade);
+      /* 按钮文本必为孔带或轴带之一，且导入组合中另一侧来自行标签 */
+      if (c.t !== (s.shaftCode + s.shaftGrade) && c.t !== (s.holeCode + s.holeGrade)) bad++;
+    }); });
+  });
+  ok('键盘按钮文本与导入代号一致（' + total + ' 个）', bad === 0, 'bad=' + bad);
+})();
+
+console.log('== 13) 变工况复测（每工具 2 组非常规参数不崩溃） ==');
 var CASES = [
   ['bolt-check', { d: '24', grade: '10.9', F: 20000, resType: '0.6' }],
   ['bolt-check', { d: '8', grade: '4.8', F: 800, resType: '1.5' }],
@@ -179,7 +227,11 @@ var CASES = [
   ['linear-bearing', { Pc: 1200, P: 2000, S: 1200, n1: 15, Lh: 8000 }],
   ['cable-chain', { S: 4500, R: 200, fix: 'end' }],
   ['hardness-convert', { scale: 'HBW', val: 300 }],
-  ['steel-weight', { shape: 'pipe', p1: 89, p2: 80, L: 6, qty: 4 }]
+  ['steel-weight', { shape: 'pipe', p1: 89, p2: 80, L: 6, qty: 4 }],
+  ['tolerance-query', { D: 5, obj: 'shaft', shaftCode: 'm', shaftGrade: 5 }],
+  ['tolerance-query', { D: 450, obj: 'hole', holeCode: 'D', holeGrade: 10 }],
+  ['tolerance-fit-query', { D: 120, holeCode: 'E', holeGrade: 9, shaftCode: 'h', shaftGrade: 8 }],
+  ['tolerance-fit-query', { D: 3, holeCode: 'K', holeGrade: 7, shaftCode: 'p', shaftGrade: 6 }]
 ];
 CASES.forEach(function (c) {
   var r = runTool(c[0], c[1]);
