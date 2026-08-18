@@ -17,6 +17,7 @@
   var SEG_MAX = [3, 6, 10, 18, 30, 50, 80, 120, 180, 250, 315, 400, 500];
   // 标准公差 IT（μm）
   var IT = {
+    4: [3, 4, 4, 5, 6, 7, 8, 10, 12, 14, 16, 18, 20],
     5: [4, 5, 6, 8, 9, 11, 13, 15, 18, 20, 23, 25, 27],
     6: [6, 8, 9, 11, 13, 16, 19, 22, 25, 29, 32, 36, 40],
     7: [10, 12, 15, 18, 21, 25, 30, 35, 40, 46, 52, 57, 63],
@@ -24,11 +25,14 @@
     9: [25, 30, 36, 43, 52, 62, 74, 87, 100, 115, 130, 140, 155],
     10: [40, 48, 58, 70, 84, 100, 120, 140, 160, 185, 210, 230, 250],
     11: [60, 75, 90, 110, 130, 160, 190, 220, 250, 290, 320, 360, 400],
-    12: [100, 120, 150, 180, 210, 250, 300, 350, 400, 460, 520, 570, 630]
+    12: [100, 120, 150, 180, 210, 250, 300, 350, 400, 460, 520, 570, 630],
+    13: [140, 180, 220, 270, 330, 390, 460, 540, 630, 720, 810, 890, 970]
   };
-  // 轴基本偏差（μm）：a~h 为上偏差 es（负值），k~s 为下偏差 ei（正值）
+  // 轴基本偏差（μm）：a~h 为上偏差 es（负值），k~s 为下偏差 ei（正值），js 对称 ±IT/2
   var SHAFT = {
-    c: [-60, -70, -80, -95, -110, -130, -155, -180, -200, -230, -260, -290, -330],
+    a: [-270, -270, -280, -290, -300, -310, -320, -340, -360, -400, -440, -480, -520],
+    b: [-140, -140, -150, -150, -160, -170, -180, -200, -210, -240, -260, -280, -300],
+    c: [-60, -70, -80, -95, -110, -120, -130, -155, -170, -185, -210, -230, -250],
     d: [-20, -30, -40, -50, -65, -80, -100, -120, -145, -170, -190, -210, -230],
     e: [-14, -20, -25, -32, -40, -50, -60, -72, -85, -100, -110, -125, -135],
     f: [-6, -10, -13, -16, -20, -25, -30, -36, -43, -50, -56, -62, -68],
@@ -41,8 +45,12 @@
     r: [10, 13, 15, 19, 28, 34, 42, 52, 65, 80, 96, 111, 129],
     s: [14, 19, 23, 28, 35, 43, 56, 75, 100, 140, 174, 211, 263]
   };
-  // 孔基本偏差（μm）：F~H 为下偏差 EI（正值），K~S 为上偏差 ES（特殊规则计算）
+  // 孔基本偏差（μm）：A~H 为下偏差 EI（正值），K~S 为上偏差 ES（特殊规则计算），JS 对称 ±IT/2
   var HOLE = {
+    A: [270, 270, 280, 290, 300, 310, 320, 340, 360, 400, 440, 480, 520],
+    B: [140, 140, 150, 150, 160, 170, 180, 200, 210, 240, 260, 280, 300],
+    C: [60, 70, 80, 95, 110, 120, 130, 155, 170, 185, 210, 230, 250],
+    D: [20, 30, 40, 50, 65, 80, 100, 120, 145, 170, 190, 210, 230],
     E: [14, 20, 25, 32, 40, 50, 60, 72, 85, 100, 110, 125, 135],
     F: [6, 10, 13, 16, 20, 25, 30, 36, 43, 50, 56, 62, 68],
     G: [2, 4, 5, 6, 7, 9, 10, 12, 14, 15, 17, 18, 20],
@@ -54,11 +62,15 @@
   }
   function devStr(um) {
     var v = um / 1000;
-    return (v >= 0 ? '+' : '') + fmt(v, 3);
+    var d = (Math.abs(um) % 1 === 0) ? 3 : 4; /* js/JS 半公差可能出现 0.5μm */
+    return (v > 0 ? '+' : '') + fmt(v, d);
   }
   /* 计算轴上/下偏差 */
   function shaftDev(letter, grade, idx) {
-    var it = IT[grade][idx], base = SHAFT[letter][idx];
+    var it = IT[grade][idx];
+    if (letter === 'js') return { es: it / 2, ei: -it / 2 };
+    var base = SHAFT[letter][idx];
+    if (letter === 'k' && grade > 7) base = 0; /* k：>IT7 时 ei=0 */
     var lower = letter <= 'h'; // a~h：es=base, ei=es-it；k~s：ei=base, es=ei+it
     if (lower) return { es: base, ei: base - it };
     return { ei: base, es: base + it };
@@ -66,14 +78,14 @@
   /* 计算孔上/下偏差 */
   function holeDev(letter, grade, idx) {
     var it = IT[grade][idx];
+    if (letter === 'JS') return { ES: it / 2, EI: -it / 2 };
     if (letter >= 'A' && letter <= 'H') {
       var ei = HOLE[letter] ? HOLE[letter][idx] : 0;
       return { EI: ei, ES: ei + it };
     }
-    // K~S 特殊规则（7级孔）：ES = -ei(同名轴) + Δ，Δ = IT7 - IT6
+    // K~S：≤IT8 用特殊规则 ES=-ei+Δ（Δ=ITn-IT(n-1)）；>IT8 用通用规则 ES=-ei
     var eiShaft = SHAFT[letter.toLowerCase()][idx];
-    var delta = IT[grade][idx] - IT[grade - 1][idx];
-    var ES = -eiShaft + delta;
+    var ES = grade <= 8 ? -eiShaft + (IT[grade][idx] - IT[grade - 1][idx]) : -eiShaft;
     return { ES: ES, EI: ES - it };
   }
 
@@ -104,32 +116,63 @@
     ]
   };
 
+  /* 自由组合：公差代号与公差等级选项 */
+  var HOLE_LETTERS = [
+    { v: 'A', t: 'A（特大间隙）' }, { v: 'B', t: 'B（大间隙）' }, { v: 'C', t: 'C（大间隙）' },
+    { v: 'D', t: 'D（间隙）' }, { v: 'E', t: 'E（间隙）' }, { v: 'F', t: 'F（间隙，常用）' },
+    { v: 'G', t: 'G（小间隙）' }, { v: 'H', t: 'H（零间隙/基孔）' }, { v: 'JS', t: 'JS（对称过渡）' },
+    { v: 'K', t: 'K（过渡，常用）' }, { v: 'M', t: 'M（过渡）' }, { v: 'N', t: 'N（过渡偏紧）' },
+    { v: 'P', t: 'P（过盈，常用）' }, { v: 'R', t: 'R（过盈）' }, { v: 'S', t: 'S（大过盈）' }
+  ];
+  var SHAFT_LETTERS = [
+    { v: 'a', t: 'a（特大间隙）' }, { v: 'b', t: 'b（大间隙）' }, { v: 'c', t: 'c（大间隙）' },
+    { v: 'd', t: 'd（间隙）' }, { v: 'e', t: 'e（间隙）' }, { v: 'f', t: 'f（间隙，常用）' },
+    { v: 'g', t: 'g（小间隙）' }, { v: 'h', t: 'h（零间隙/基轴）' }, { v: 'js', t: 'js（对称过渡）' },
+    { v: 'k', t: 'k（过渡，常用）' }, { v: 'm', t: 'm（过渡）' }, { v: 'n', t: 'n（过渡偏紧）' },
+    { v: 'p', t: 'p（过盈，常用）' }, { v: 'r', t: 'r（过盈）' }, { v: 's', t: 's（大过盈）' }
+  ];
+  var GRADES = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(function (g) {
+    return { v: g, t: 'IT' + g };
+  });
+  var isCustom = function (v) { return v.mode !== 'hb' && v.mode !== 'hs'; };
+
   App.registerTool({
     id: 'tolerance-fit',
     name: '公差与配合查询',
     category: 'common',
-    keywords: '公差 配合 偏差 基孔制 基轴制 间隙 过盈 极限尺寸',
-    brief: '按 GB/T 1800 查询孔、轴上下偏差与配合性质（间隙/过盈），支持基孔制与基轴制常用配合。',
-    doc: '输入基本尺寸并选择配合代号，按 GB/T 1800.1-2009 计算孔、轴的<b>上下偏差与极限尺寸</b>，并判定配合性质（间隙/过渡/过盈）及最大、最小间隙（过盈）。含基孔制（H7 系列）与基轴制（h6 系列）常用配合。',
+    keywords: '公差 配合 偏差 基孔制 基轴制 间隙 过盈 极限尺寸 公差代号 公差等级',
+    brief: '按 GB/T 1800 查询孔、轴上下偏差与配合性质（间隙/过盈），公差代号与公差等级可自由组合，也支持常用配合快捷选择。',
+    doc: '输入基本尺寸，<b>自由组合</b>孔/轴的公差代号（A~S / a~s）与公差等级（IT4~IT13），按 GB/T 1800.1-2009 计算孔、轴的<b>上下偏差与极限尺寸</b>，并判定配合性质（间隙/过渡/过盈）及最大、最小间隙（过盈）。也可切换到基孔制（H7 系列）/基轴制（h6 系列）常用配合快捷选择。',
     inputs: [
       { key: 'D', label: '基本尺寸 D', group: '查询条件', type: 'number', unit: 'mm', default: 40, step: 'any', hint: '范围 ≤500mm（常用尺寸段）' },
-      { key: 'basis', label: '基准制', group: '查询条件', type: 'segment', options: [
-        { v: 'hb', t: '基孔制（H7 孔）' }, { v: 'hs', t: '基轴制（h6 轴）' }
+      { key: 'mode', label: '选择方式', group: '查询条件', type: 'segment', options: [
+        { v: 'custom', t: '自由组合' }, { v: 'hb', t: '基孔制常用' }, { v: 'hs', t: '基轴制常用' }
       ] },
-      { key: 'fit', label: '配合代号（基孔制 H7 系列）', group: '查询条件', type: 'select', options: FITS.hb, default: 'H7/k6' },
-      { key: 'fit2', label: '配合代号（基轴制 h6 系列）', group: '查询条件', type: 'select', options: FITS.hs, default: 'H7/h6' }
+      { key: 'holeLetter', label: '孔公差代号', group: '自由组合（代号+等级任意搭配）', type: 'select', options: HOLE_LETTERS, default: 'H', visible: isCustom },
+      { key: 'holeGrade', label: '孔公差等级', group: '自由组合（代号+等级任意搭配）', type: 'select', options: GRADES, default: 7, visible: isCustom },
+      { key: 'shaftLetter', label: '轴公差代号', group: '自由组合（代号+等级任意搭配）', type: 'select', options: SHAFT_LETTERS, default: 'k', visible: isCustom },
+      { key: 'shaftGrade', label: '轴公差等级', group: '自由组合（代号+等级任意搭配）', type: 'select', options: GRADES, default: 6, visible: isCustom },
+      { key: 'fit', label: '配合代号（基孔制 H7 系列）', group: '常用配合快捷选择', type: 'select', options: FITS.hb, default: 'H7/k6', visible: function (v) { return v.mode === 'hb'; } },
+      { key: 'fit2', label: '配合代号（基轴制 h6 系列）', group: '常用配合快捷选择', type: 'select', options: FITS.hs, default: 'H7/h6', visible: function (v) { return v.mode === 'hs'; } }
     ],
     compute: function (v) {
       var D = +v.D;
       if (!(D > 0 && D <= 500)) return { error: '基本尺寸应在 1~500mm 范围内（本工具数据段）' };
       var idx = segIdx(D);
       var segName = SEG_NAMES[idx];
-      // 按基准制显式选择配合代号
-      var fitStr = v.basis === 'hs' ? (v.fit2 || 'H7/h6') : (v.fit || 'H7/k6');
+      // 组装配合代号：自由组合 或 常用配合
+      var fitStr;
+      if (v.mode === 'hb') fitStr = v.fit || 'H7/k6';
+      else if (v.mode === 'hs') fitStr = v.fit2 || 'H7/h6';
+      else fitStr = (v.holeLetter || 'H') + (v.holeGrade || 7) + '/' + (v.shaftLetter || 'k') + (v.shaftGrade || 6);
       var fit = fitStr.split('/');
       var holePart = fit[0], shaftPart = fit[1];
-      var holeLetter = holePart[0], holeGrade = +holePart.slice(1);
-      var shaftLetter = shaftPart[0], shaftGrade = +shaftPart.slice(1);
+      var mh = holePart.match(/^([A-Za-z]+)(\d+)$/), ms = shaftPart.match(/^([A-Za-z]+)(\d+)$/);
+      if (!mh || !ms) return { error: '配合代号解析失败：' + fitStr };
+      var holeLetter = mh[1], holeGrade = +mh[2];
+      var shaftLetter = ms[1], shaftGrade = +ms[2];
+      if (!HOLE[holeLetter] && holeLetter !== 'JS' && !(holeLetter >= 'K' && holeLetter <= 'S')) return { error: '暂不支持的孔代号：' + holeLetter + '（支持 A~H、JS、K~S）' };
+      if (!SHAFT[shaftLetter] && shaftLetter !== 'js') return { error: '暂不支持的轴代号：' + shaftLetter + '（支持 a~h、js、k~s）' };
 
       var hole = holeDev(holeLetter, holeGrade, idx);
       var shaft = shaftDev(shaftLetter.toLowerCase(), shaftGrade, idx);

@@ -89,6 +89,23 @@ window.App = (function () {
     return vals;
   }
 
+  /* 按字段 visible 规则联动显隐（visible(vals) 返回 false 时隐藏该字段及空分组） */
+  function applyVisibility(tool, container) {
+    var vals = collectValues(container);
+    var groupVisible = {};
+    tool.inputs.forEach(function (f) {
+      var g = f.group || '参数输入';
+      var on = !f.visible || !!f.visible(vals);
+      groupVisible[g] = groupVisible[g] || on;
+      var el = container.querySelector('.field[data-key="' + f.key + '"]');
+      if (el) el.style.display = on ? '' : 'none';
+    });
+    container.querySelectorAll('.form-section').forEach(function (sec) {
+      var t = sec.querySelector('.form-section-title');
+      if (t) sec.style.display = groupVisible[t.textContent] === false ? 'none' : '';
+    });
+  }
+
   function bindSegments(container) {
     container.querySelectorAll('.seg-group').forEach(function (g) {
       g.querySelectorAll('label').forEach(function (lab) {
@@ -161,7 +178,10 @@ window.App = (function () {
       '  </div>' +
       '</div>';
 
-    var runCalc = function () { renderResult(tool, tool.compute(collectValues(main))); };
+    var runCalc = function () {
+      applyVisibility(tool, main);
+      renderResult(tool, tool.compute(collectValues(main)));
+    };
     main.addEventListener('input', runCalc);
     main.addEventListener('change', runCalc);
     bindSegments(main);
