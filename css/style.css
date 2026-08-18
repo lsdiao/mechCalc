@@ -189,12 +189,16 @@ sub, sup { font-size: .68em; }
 }
 .field select { cursor: pointer; }
 .seg-group { display: flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; height: 38px; }
+.seg-group[data-cols] { display: grid; grid-template-columns: repeat(var(--cols, 2), 1fr); height: auto; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
 .seg-group label {
   flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px;
   cursor: pointer; margin: 0; color: var(--ink-soft); border-right: 1px solid var(--line);
   transition: all .12s; font-weight: 400; padding: 0 6px; text-align: center;
 }
 .seg-group label:last-child { border-right: none; }
+.seg-group[data-cols] label { flex: none; min-height: 36px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.seg-group[data-cols] label:nth-child(2n) { border-right: none; }
+.seg-group[data-cols] label:nth-last-child(-n+2) { border-bottom: none; }
 .seg-group input { display: none; }
 .seg-group label.on { background: var(--navy-700); color: #fff; font-weight: 600; }
 .field .hint { font-size: 11.5px; color: #98a7b3; margin-top: 3px; }

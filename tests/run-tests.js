@@ -26,7 +26,7 @@ var ALL = [];
   var orig = App.registerTool;
   App.registerTool = function (t) { if (t && t.id) ALL.push(t); return orig.call(App, t); };
 })();
-['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js'].forEach(function (f) {
+['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 });
 
@@ -238,5 +238,30 @@ CASES.forEach(function (c) {
   ok(c[0] + ' 变工况', !r.error, r.error || '');
 });
 
-console.log('\n结果：' + passed + ' 通过，' + failed + ' 失败');
-process.exit(failed ? 1 : 0);
+console.log('== 14) 形状与位置公差查询（GB/T 1184） ==');
+(function () {
+  /* 形状·直线度 D=40/7级 → >25~40段 10μm */
+  var r = runTool('shape-tolerance', { D: 40, grade: 7, item: 'straightness' });
+  ok('φ40 直线度 7 级 = 0.01 mm', val(r, '直线度7级') === '0.01 mm', String(val(r, '直线度7级')));
+  /* 形状·圆度 D=40/7级 → >30~50段 7μm */
+  var r2 = runTool('shape-tolerance', { D: 40, grade: 7, item: 'roundness' });
+  ok('φ40 圆度 7 级 = 0.007 mm', val(r2, '圆度7级') === '0.007 mm', String(val(r2, '圆度7级')));
+  /* 形状·平面度 D=100/6级 → >63~100段 10μm */
+  var r3 = runTool('shape-tolerance', { D: 100, grade: 6, item: 'flatness' });
+  ok('φ100 平面度 6 级 = 0.01 mm', val(r3, '平面度6级') === '0.01 mm', String(val(r3, '平面度6级')));
+  /* 形状·圆柱度 D=500/12级 → 400~500段 155μm */
+  var r4 = runTool('shape-tolerance', { D: 500, grade: 12, item: 'cylindricity' });
+  ok('φ500 圆柱度 12 级 = 0.155 mm', val(r4, '圆柱度12级') === '0.155 mm', String(val(r4, '圆柱度12级')));
+  /* 圆度主参数超 500 报错 */
+  var r5 = runTool('shape-tolerance', { D: 600, item: 'roundness' });
+  ok('圆度超 500 报错', !!r5.error, r5.error || '');
+  /* 位置·平行度 D=100/6级 → >63~100段 25μm */
+  var p = runTool('position-tolerance', { D: 100, grade: 6, item: 'parallelism' });
+  ok('φ100 平行度 6 级 = 0.025 mm', val(p, '平行度6级') === '0.025 mm', String(val(p, '平行度6级')));
+  /* 位置·同轴度 D=100/6级 → >50~120段 15μm */
+  var p2 = runTool('position-tolerance', { D: 100, grade: 6, item: 'coaxiality' });
+  ok('φ100 同轴度 6 级 = 0.015 mm', val(p2, '同轴度6级') === '0.015 mm', String(val(p2, '同轴度6级')));
+  /* 位置·全跳动 D=500/9级 → >250~500段 120μm */
+  var p3 = runTool('position-tolerance', { D: 500, grade: 9, item: 'fullbeat' });
+  ok('φ500 全跳动 9 级 = 0.12 mm', val(p3, '全跳动9级') === '0.12 mm', String(val(p3, '全跳动9级')));
+})();

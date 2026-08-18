@@ -94,7 +94,7 @@ window.App = (function () {
       });
       html += '</select>';
     } else if (f.type === 'segment') {
-      html += '<div class="seg-group">';
+      html += '<div class="seg-group"' + (f.cols ? ' data-cols="' + esc(f.cols) + '"' : '') + '>';
       (f.options || []).forEach(function (o, i) {
         html += '<label class="' + (i === 0 ? 'on' : '') + '"><input type="radio" name="seg_' + esc(f.key) +
           '" value="' + esc(o.v) + '" data-key="' + esc(f.key) + '"' + (i === 0 ? ' checked' : '') + '>' + esc(o.t) + '</label>';

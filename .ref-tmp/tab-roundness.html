@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/stylewap.min.css?v=1.2.3"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/common.min.js?v=1.4.7"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+
+    <style>
+         table td img{
+            width: 400px;
+            margin: 10px;
+        }
+         table td{
+           padding: 9px 9px 9px 9px;
+            text-align: center;
+            vertical-align: middle;
+        }
+         table tr td.img{
+            vertical-align: middle;
+            text-align: center;
+            padding:5px;
+            background-color: white;
+        }
+    </style>
+    <title>圆度与圆柱度公差值(摘自GB/T 1184-1996) | 常用数据及公差表 | 机械制图和几何精度</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-md-center">
+        <div class="form-check form-switch ps-0 me-5 d-md-flex d-none justify-content-start">
+            <label class="form-check-label d-none d-lg-block text-secondary" for="showSidebar">侧边栏</label>
+            <input class="form-check-input ms-2" type="checkbox" role="switch" id="showSidebar" checked hidden>
+        </div>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fitPageBtn" title="图片适合页面宽度">
+            <i class="bi bi-arrows-fullscreen" style="font-size: 16px;"></i>
+        </div>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <i class="bi bi-unlock" style="font-size: 16px;"></i>
+            <i class="bi bi-lock d-none" style="font-size: 16px;"></i>
+        </div>
+        <div class="dropdown ms-3">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-md-inline">常用设计计算工具</span> <span class="d-md-none">计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+
+
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            
+    <ul class="list-unstyled mb-0 py-3 pt-md-1">
+        <li>
+            <a href="/drawingandaccuracy/index.html" class="d-inline-flex align-items-center rounded">
+                机械制图和几何精度
+            </a>
+        </li>
+        <li class="my-3 mx-4 border-bottom"></li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#drawingandaccuracy-item1-collapse" aria-expanded="true" aria-current="true">
+                制图及制图符号
+            </button>
+
+            <div class="collapse show" id="drawingandaccuracy-item1-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/drawingandaccuracy/index.html" class="d-inline-flex align-items-center rounded" title="图样的通用规定">图样的通用规定</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_view.html" class="d-inline-flex align-items-center rounded" title="图样画法">图样画法</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_drawingannotation.html" class="d-inline-flex align-items-center rounded" title="图样注法">图样注法</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_componentrepresentation.html" class="d-inline-flex align-items-center rounded" title="零部件表示法">零部件表示法</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_productdrawingformatsandbasicrequirements.html" class="d-inline-flex align-items-center rounded" title="产品图样格式和基本要求">产品图样格式和基本要求</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_commonlyusedgeometricdrawingmethods.html" class="d-inline-flex align-items-center rounded" title="常用几何画法">常用几何画法</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_drawingofpipingsystem.html" class="d-inline-flex align-items-center rounded" title="管路系统的绘制">管路系统的绘制</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_standardfordrawinganddrawingsymbols.html" class="d-inline-flex align-items-center rounded" title="制图及制图符号标准">制图及制图符号标准</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#drawingandaccuracy-item2-collapse" aria-expanded="true" aria-current="true">
+                公差与配合
+            </button>
+
+            <div class="collapse show" id="drawingandaccuracy-item2-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_thebasisoftolerancesdeviationsandfits.html" class="d-inline-flex align-items-center rounded" title="公差、偏差和配合的基础">公差、偏差和配合的基础</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_selectionoftolerancesandfits.html" class="d-inline-flex align-items-center rounded" title="公差与配合的选择">公差与配合的选择</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_generaltolerance.html" class="d-inline-flex align-items-center rounded" title="一般公差(未注公差)">一般公差(未注公差)</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_calculationofassemblyclearanceunderhighorlowtemperatureoperatingconditions.html" class="d-inline-flex align-items-center rounded" title="在高温或低温工作条件下装配间隙的计算 ">在高温或低温工作条件下装配间隙的计算 </a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_tapertoleranceandfit.html" class="d-inline-flex align-items-center rounded" title="圆锥公差和圆锥配合">圆锥公差和圆锥配合</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_limitsandfitsstandard.html" class="d-inline-flex align-items-center rounded" title="公差与配合标准">公差与配合标准</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_limitsandfits.html" class="d-inline-flex align-items-center rounded" title="极限与配合（旧）">极限与配合（旧）</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#drawingandaccuracy-item3-collapse" aria-expanded="true" aria-current="true">
+                几何公差
+            </button>
+
+            <div class="collapse show" id="drawingandaccuracy-item3-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_termsanddefinitions.html" class="d-inline-flex align-items-center rounded" title="术语与定义">术语与定义</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_definitionmarkingandexplanationofgeometrictolerancezones.html" class="d-inline-flex align-items-center rounded" title="几何公差带的定义、标注和解释">几何公差带的定义、标注和解释</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_symbolsandmarkingsofgeometrictolerances.html" class="d-inline-flex align-items-center rounded" title="几何公差的符号及其标注">几何公差的符号及其标注</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_selectionofshapeandpositiontolerances.html" class="d-inline-flex align-items-center rounded" title="几何公差的选择">几何公差的选择</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_tolerancevaluesornumbersystemtablesofshapeandpositiontolerancesandapplicationexamples.html" class="d-inline-flex align-items-center rounded" title="几何公差的公差值或数系表及应用举例">几何公差的公差值或数系表及应用举例</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_shapeandpositiontolerancestandard.html" class="d-inline-flex align-items-center rounded" title="几何公差常用标准">几何公差常用标准</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_taperdimensionandtolerance.html" class="d-inline-flex align-items-center rounded" title="圆锥尺寸与公差标注">圆锥尺寸与公差标注</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#drawingandaccuracy-item4-collapse" aria-expanded="true" aria-current="true">
+                表面结构
+            </button>
+
+            <div class="collapse show" id="drawingandaccuracy-item4-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_overview.html" class="d-inline-flex align-items-center rounded" title="概述">概述</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_surfacestructureparametersandtheirnumericalvalues.html" class="d-inline-flex align-items-center rounded" title="表面结构参数及其数值">表面结构参数及其数值</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_productgeometrictechnicalspecification(GPS)representationofsurfacestructureintechnicalproductdocuments.html" class="d-inline-flex align-items-center rounded" title="产品几何技术规范(GPS) 技术产品文件中表面结构的表示法">产品几何技术规范(GPS) 技术产品文件中表面结构的表示法</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_selectionofsurfacestructureparameters.html" class="d-inline-flex align-items-center rounded" title="表面结构参数的选择">表面结构参数的选择</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_commondataofroughness.html" class="d-inline-flex align-items-center rounded" title="常用数据">常用数据</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_standardofsurfacestructure.html" class="d-inline-flex align-items-center rounded" title="表面结构标准">表面结构标准</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#drawingandaccuracy-item5-collapse" aria-expanded="true" aria-current="true">
+                孔间距偏差
+            </button>
+
+            <div class="collapse show" id="drawingandaccuracy-item5-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_calculationformulaforholespacingdeviation.html" class="d-inline-flex align-items-center rounded" title="孔间距偏差的计算公式">孔间距偏差的计算公式</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_allowabledeviationofholespacingaccordingtodirectarrangement.html" class="d-inline-flex align-items-center rounded" title="按直接排列孔间距允许偏差">按直接排列孔间距允许偏差</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_allowabledeviationofholespacingdistributedaccordingtothecircumference.html" class="d-inline-flex align-items-center rounded" title="按圆周分布的孔间距允许偏差">按圆周分布的孔间距允许偏差</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#drawingandaccuracy-item6-collapse" aria-expanded="true" aria-current="true">
+                产品标注示例
+            </button>
+
+            <div class="collapse show" id="drawingandaccuracy-item6-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_typicalpartannotationexample.html" class="d-inline-flex align-items-center rounded" title="典型零件标注实例">典型零件标注实例</a></li>
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_comparativeanalysisofincorrectexamplesofgeometrictolerancemarking.html" class="d-inline-flex align-items-center rounded" title="几何公差标注错例比较分析">几何公差标注错例比较分析</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="my-3 mx-4 border-top"></li>
+        <li>
+            <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                关于 Mechtool
+            </a>
+        </li>
+        <li>
+            <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+               title="帮助 Mechtool">
+                帮助 Mechtool
+            </a>
+        </li>
+    </ul>
+
+        </nav>
+    </aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <div class="d-md-flex flex-md-row align-items-center justify-content-between gap-4">
+                <h1 class="bd-title" id="content">常用数据及公差表</h1>
+                <div class="d-flex flex-row align-items-center justify-content-end gap-2">
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                        <i class="bi bi-star" style="font-size: 16px;"></i>
+                    </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/drawingandaccuracy/drawingandaccuracy_simplifiedannotationrules.html" title="简化标注规定及避免采用的标注形式"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/drawingandaccuracy/drawingandaccuracy_shapeandpositiontolerancestandard.html" title="形状与位置公差标准"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+                </div>
+            </div>
+            <p class="bd-lead">常用数据及公差表圆度与圆柱度公差值(摘自GB/T 1184-1996)</p>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">常用数据及公差表分页导航</strong>
+            <nav id="paging-nav">
+                <ul class="list-unstyled fw-normal">
+                    <li><a href="/drawingandaccuracy/drawingandaccuracy_commondataandtolerancetable.html">直线度与平面度公差值(摘自GB/T 1184-1996)</a></li>
+                	<li><a href="/drawingandaccuracy/drawingandaccuracy_roundnessandcylindricitytolerancevalues.html">圆度与圆柱度公差值(摘自GB/T 1184-1996)</a></li>
+                	<li><a href="/drawingandaccuracy/drawingandaccuracy_parallelismperpendicularityandinclinationtolerancevalues.html">平行度、垂直度和倾斜度公差值(摘自GB/T 1184-1996)</a></li>
+                	<li><a href="/drawingandaccuracy/drawingandaccuracy_tolerancevaluesofcoaxialitysymmetrycircularrunoutandtotalrunout.html">同轴度、对称度、圆跳动和全跳动公差值(摘自GB/T 1184-1996)</a></li>
+                	<li><a href="/drawingandaccuracy/drawingandaccuracy_undeclaredtolerancevaluesforshapeandposition.html">形状和位置的未注公差值(摘自GB/T 1184-1996)</a></li>
+                	<li><a href="/drawingandaccuracy/drawingandaccuracy_calculationmethodofpositionaltolerance.html">位置度公差值的计算方法(摘自GB/T 13319-1991)</a></li>
+                	<li><a href="/drawingandaccuracy/drawingandaccuracy_seriesofpositionaltolerancevalues.html">位置度公差值数系(摘自GB/T 13319-1991)</a></li>
+                </ul>
+            </nav>
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm justify-content-center d-none" id="pagination"></ul>
+            </nav>
+        </div>
+        <div class="bd-toc mt-2 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">本页导航</strong>
+            <nav id="TableOfContents">
+                <ul>
+                    <li><a name="圆度与圆柱度公差值(摘自GB/T 1184-1996)">圆度与圆柱度公差值(摘自GB/T 1184-1996)</a></li>
+				</ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">广告链接</strong>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool右侧栏自适应 -->
+    <ins class="adsbygoogle right"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="3643304998"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        
+            <h2 id="圆度与圆柱度公差值(摘自GB/T 1184-1996)">圆度与圆柱度公差值(摘自GB/T 1184-1996)</h2>
+
+            <div class="table-responsive mb-3">
+			<table class="dataintable">
+                <tr>
+                    <td class="img" colspan="14">
+                        <img src="https://www.mechdoc.cn/images/drawingandaccuracy/drawingandaccuracy_standardsandsymbols57.jpg" alt="" crossorigin="anonymous">
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3">
+                        公差等级
+                    </td>
+                    <td colspan="13">
+                        主参数d（D）/mm
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ≤3
+                    </td>
+                    <td>
+                        ＞3
+                        ～6
+                    </td>
+                    <td>
+                        ＞6
+                        ～10
+                    </td>
+                    <td>
+                        ＞10
+                        ～18
+                    </td>
+                    <td>
+                        ＞18
+                        ～30
+                    </td>
+                    <td>
+                        ＞30
+                        ～50
+                    </td>
+                    <td>
+                        ＞50
+                        ～80
+                    </td>
+                    <td>
+                        ＞80
+                        ～120
+                    </td>
+                    <td>
+                        ＞120
+                        ～180
+                    </td>
+                    <td>
+                        ＞180
+                        ～250
+                    </td>
+                    <td>
+                        ＞250
+                        ～315
+                    </td>
+                    <td>
+                        ＞315
+                        ～400
+                    </td>
+                    <td>
+                        ＞400
+                        ～500
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="13">
+                        公差值/μm
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        0
+                    </td>
+                    <td>
+                        0.1
+                    </td>
+                    <td>
+                        0.1
+                    </td>
+                    <td>
+                        0.12
+                    </td>
+                    <td>
+                        0.15
+                    </td>
+                    <td>
+                        0.2
+                    </td>
+                    <td>
+                        0.25
+                    </td>
+                    <td>
+                        0.3
+                    </td>
+                    <td>
+                        0.4
+                    </td>
+                    <td>
+                        0.6
+                    </td>
+                    <td>
+                        0.8
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1.2
+                    </td>
+                    <td>
+                        1.5
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        l
+                    </td>
+                    <td>
+                        0.2
+                    </td>
+                    <td>
+                        0.2
+                    </td>
+                    <td>
+                        0.25
+                    </td>
+                    <td>
+                        0.25
+                    </td>
+                    <td>
+                        0.3
+                    </td>
+                    <td>
+                        0.4
+                    </td>
+                    <td>
+                        0.5
+                    </td>
+                    <td>
+                        0.6
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1.2
+                    </td>
+                    <td>
+                        1.6
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        2.5
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        0.3
+                    </td>
+                    <td>
+                        0.4
+                    </td>
+                    <td>
+                        0.4
+                    </td>
+                    <td>
+                        0.5
+                    </td>
+                    <td>
+                        0.6
+                    </td>
+                    <td>
+                        0.6
+                    </td>
+                    <td>
+                        0.8
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1.2
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        2.5
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        4
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        0.5
+                    </td>
+                    <td>
+                        0.6
+                    </td>
+                    <td>
+                        0.6
+                    </td>
+                    <td>
+                        0.8
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1.2
+                    </td>
+                    <td>
+                        1.5
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        5
+                    </td>
+                    <td>
+                        6
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        0.8
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1.2
+                    </td>
+                    <td>
+                        1.5
+                    </td>
+                    <td>
+                        1.5
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        2.5
+                    </td>
+                    <td>
+                        3.5
+                    </td>
+                    <td>
+                        4.5
+                    </td>
+                    <td>
+                        6
+                    </td>
+                    <td>
+                        7
+                    </td>
+                    <td>
+                        8
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        5
+                    </td>
+                    <td>
+                        1.2
+                    </td>
+                    <td>
+                        1.5
+                    </td>
+                    <td>
+                        1.5
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        2.5
+                    </td>
+                    <td>
+                        2.5
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        5
+                    </td>
+                    <td>
+                        7
+                    </td>
+                    <td>
+                        8
+                    </td>
+                    <td>
+                        9
+                    </td>
+                    <td>
+                        10
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        6
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        2.5
+                    </td>
+                    <td>
+                        2.5
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        5
+                    </td>
+                    <td>
+                        6
+                    </td>
+                    <td>
+                        8
+                    </td>
+                    <td>
+                        10
+                    </td>
+                    <td>
+                        12
+                    </td>
+                    <td>
+                        13
+                    </td>
+                    <td>
+                        15
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        7
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        5
+                    </td>
+                    <td>
+                        6
+                    </td>
+                    <td>
+                        7
+                    </td>
+                    <td>
+                        8
+                    </td>
+                    <td>
+                        10
+                    </td>
+                    <td>
+                        12
+                    </td>
+                    <td>
+                        14
+                    </td>
+                    <td>
+                        16
+                    </td>
+                    <td>
+                        18
+                    </td>
+                    <td>
+                        20
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        8
+                    </td>
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        5
+                    </td>
+                    <td>
+                        6
+                    </td>
+                    <td>
+                        8
+                    </td>
+                    <td>
+                        9
+                    </td>
+                    <td>
+                        11
+                    </td>
+                    <td>
+                        13
+                    </td>
+                    <td>
+                        15
+                    </td>
+                    <td>
+                        18
+                    </td>
+                    <td>
+                        20
+                    </td>
+                    <td>
+                        23
+                    </td>
+                    <td>
+                        25
+                    </td>
+                    <td>
+                        27
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        9
+                    </td>
+                    <td>
+                        6
+                    </td>
+                    <td>
+                        8
+                    </td>
+                    <td>
+                        9
+                    </td>
+                    <td>
+                        11
+                    </td>
+                    <td>
+                        13
+                    </td>
+                    <td>
+                        16
+                    </td>
+                    <td>
+                        19
+                    </td>
+                    <td>
+                        22
+                    </td>
+                    <td>
+                        25
+                    </td>
+                    <td>
+                        29
+                    </td>
+                    <td>
+                        32
+                    </td>
+                    <td>
+                        36
+                    </td>
+                    <td>
+                        40
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        10
+                    </td>
+                    <td>
+                        10
+                    </td>
+                    <td>
+                        12
+                    </td>
+                    <td>
+                        15
+                    </td>
+                    <td>
+                        18
+                    </td>
+                    <td>
+                        21
+                    </td>
+                    <td>
+                        25
+                    </td>
+                    <td>
+                        30
+                    </td>
+                    <td>
+                        35
+                    </td>
+                    <td>
+                        40
+                    </td>
+                    <td>
+                        46
+                    </td>
+                    <td>
+                        52
+                    </td>
+                    <td>
+                        57
+                    </td>
+                    <td>
+                        63
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        11
+                    </td>
+                    <td>
+                        14
+                    </td>
+                    <td>
+                        18
+                    </td>
+                    <td>
+                        22
+                    </td>
+                    <td>
+                        27
+                    </td>
+                    <td>
+                        33
+                    </td>
+                    <td>
+                        39
+                    </td>
+                    <td>
+                        46
+                    </td>
+                    <td>
+                        54
+                    </td>
+                    <td>
+                        63
+                    </td>
+                    <td>
+                        72
+                    </td>
+                    <td>
+                        8l
+                    </td>
+                    <td>
+                        89
+                    </td>
+                    <td>
+                        97
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        12
+                    </td>
+                    <td>
+                        25
+                    </td>
+                    <td>
+                        30
+                    </td>
+                    <td>
+                        36
+                    </td>
+                    <td>
+                        43
+                    </td>
+                    <td>
+                        52
+                    </td>
+                    <td>
+                        62
+                    </td>
+                    <td>
+                        74
+                    </td>
+                    <td>
+                        87
+                    </td>
+                    <td>
+                        100
+                    </td>
+                    <td>
+                        115
+                    </td>
+                    <td>
+                        130
+                    </td>
+                    <td>
+                        140
+                    </td>
+                    <td>
+                        155
+                    </td>
+                </tr>
+
+            </table>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-end gap-2 my-4">
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                    <i class="bi bi-star" style="font-size: 16px;"></i>
+                </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/drawingandaccuracy/drawingandaccuracy_simplifiedannotationrules.html" title="简化标注规定及避免采用的标注形式"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/drawingandaccuracy/drawingandaccuracy_shapeandpositiontolerancestandard.html" title="形状与位置公差标准"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <h4>评论</h4>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <style>
+        .ad-img { max-height: 172px; max-width: 100%; object-fit: contain; }
+        @media (max-width: 575.98px) { .ad-img { width: 100%; max-height: none; } }
+    </style>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.elesa-ganter.com.cn/" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg" alt="elesa-ganter伊莉莎冈特全系列机械标准配件" crossorigin="anonymous">
+            </a>
+        </div>
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.m-haste.com" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="m-haste艾姆华世特传动设备" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="javascript:">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bd-footer py-3 mt-3 bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                       aria-label="Mechtool">
+                        <span class="fs-5">Mechtool</span>
+                    </a>
+                </div>
+                <div class="col-12 mb-2">
+                    <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+                </div>
+                <div class="col-12 mb-2">
+                    <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                        <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                        <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                        <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                        <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                        <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                        <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

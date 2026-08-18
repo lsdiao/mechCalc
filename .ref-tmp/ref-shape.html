@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/stylewap.min.css?v=1.2.3"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/common.min.js?v=1.4.7"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+    <meta name='description' content='形状与位置公差查询,形状与位置公差查询程序网页版。程序数据严格参照国家标准GB/T 1184。只需要输入相关的参数，
+    即可快速得到极限偏差等信息。欢迎大家提供建议~'>
+    <link rel="stylesheet" type="text/css" href="/css/common/jquery-editable-select.min.css"/>
+    <script src="/js/common/jquery-editable-select.min.js"></script>
+    <script src="/dist/js/mechtool/shapeandpositon-tolerance-query.min.js"></script>
+    <style type="text/css">
+        div picture#firstpic{
+            background: transparent url('/images/calculation/calculation_shapeandpositiontolerance1.png')  10px 10px no-repeat;
+        }
+        div picture#secondpic{
+            background: transparent url('/images/calculation/calculation_shapeandpositiontolerance2.png')  10px -10px no-repeat;
+        }
+        div picture#thirdpic{
+            background: transparent url('/images/calculation/calculation_shapeandpositiontolerance3.png')  10px 50px no-repeat;
+        }
+        div picture#fourthpic{
+            background: transparent url('/images/calculation/calculation_shapeandpositiontolerance4.png')  10px 50px no-repeat;
+        }
+    </style>
+    <title>形状公差查询 | 形状与位置公差查询</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-md-center">
+        <div class="form-check form-switch ps-0 me-5 d-md-flex d-none justify-content-start">
+            <label class="form-check-label d-none d-lg-block text-secondary" for="showSidebar">侧边栏</label>
+            <input class="form-check-input ms-2" type="checkbox" role="switch" id="showSidebar" checked hidden>
+        </div>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fitPageBtn" title="图片适合页面宽度">
+            <i class="bi bi-arrows-fullscreen" style="font-size: 16px;"></i>
+        </div>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <i class="bi bi-unlock" style="font-size: 16px;"></i>
+            <i class="bi bi-lock d-none" style="font-size: 16px;"></i>
+        </div>
+        <div class="dropdown ms-3">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-md-inline">常用设计计算工具</span> <span class="d-md-none">计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+
+
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            <ul class="list-unstyled mb-0 py-3 pt-md-1">
+                <li>
+                    <a href="/calculation/calculation_shapeandpositiontolerance.html" class="d-inline-flex align-items-center rounded">
+                        形状与位置公差查询
+                    </a>
+                </li>
+                <li class="my-3 mx-4 border-bottom"></li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#program-query-collapse" aria-expanded="true" aria-current="true">
+                        程序查询
+                    </button>
+
+                    <div class="collapse show" id="program-query-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/calculation/calculation_shapeandpositiontolerance.html"
+                                   class="d-inline-flex align-items-center rounded">形状公差查询</a>
+                            </li>
+                            <li><a href="/calculation/calculation_positiontolerance.html"
+                                   class="d-inline-flex align-items-center rounded">位置公差查询</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#data-query-collapse" aria-expanded="true" aria-current="true">
+                        数表查询
+                    </button>
+
+                    <div class="collapse show" id="data-query-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_standardsandsymbols.html"
+                                   class="d-inline-flex align-items-center rounded" aria-current="page">形位公差标准与符号</a></li>
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_specialannotationrules.html"
+                                   class="d-inline-flex align-items-center rounded">形位公差标注的特殊规定(摘自GB/T 1182-1996)</a></li>
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_simplifiedannotationrules.html"
+                                   class="d-inline-flex align-items-center rounded">简化标注规定及避免采用的标注形式</a></li>
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_commondataandtolerancetable.html"
+                                   class="d-inline-flex align-items-center rounded">常用数据及公差表</a></li>
+                            <li><a href="/drawingandaccuracy/drawingandaccuracy_taperdimensionandtolerance.html"
+                                   class="d-inline-flex align-items-center rounded">圆锥尺寸与公差标注</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="my-3 mx-4 border-top"></li>
+                <li>
+                    <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                        关于 Mechtool
+                    </a>
+                </li>
+                <li>
+                    <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+                       title="帮助 Mechtool">
+                        帮助 Mechtool
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <div class="d-md-flex flex-md-row align-items-center justify-content-between gap-4">
+                <h1 class="bd-title" id="content">形状公差查询</h1>
+                <div class="d-flex flex-row align-items-center justify-content-end gap-2">
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                        <i class="bi bi-star" style="font-size: 16px;"></i>
+                    </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状公差查询"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_positiontolerance.html" title="位置公差查询"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+                </div>
+            </div>
+            <p class="bd-lead">形状与位置公差查询,形状与位置公差查询程序网页版。程序数据严格参照国家标准GB/T 1184。只需要输入相关的参数，
+                即可快速得到极限偏差等信息。</p>
+        </div>
+        <div class="bd-toc mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">本页导航</strong>
+            <nav id="TableOfContents">
+                <ul>
+                    <li><a name="工具介绍">工具介绍</a></li>
+                    <li><a name="形状公差查询">形状公差查询</a></li>
+                    <li><a name="直线度与平面度应用举例">直线度与平面度应用举例</a></li>
+                    <li><a name="圆度与圆柱度应用举例">圆度与圆柱度应用举例</a></li>
+                </ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">广告链接</strong>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool右侧栏自适应 -->
+    <ins class="adsbygoogle right"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="3643304998"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <h2 id="工具介绍">工具介绍</h2>
+            <p class="mt-3">你可以在 <a href="http://mp.weixin.qq.com/s?__biz=MzkxNTI4NjMyMA==&mid=2247483724&idx=1&sn=d1de91feeb90bfe6cc42be932219b830&chksm=
+            c1603113f617b805d02c9c583f8a8f8c5e41fcf78e1e3ea83bb7efff767a8a0947830518e97e&token=1078448518&lang=zh_CN#rd" target="_blank">工具介绍</a> 中查看此工具功能和使用方法说明。</p>
+            <h2 id="形状公差查询">形状公差查询</h2>
+            <div class="container">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-sm text-center">
+                        <h3>形状公差查询</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="row">
+                            <div class="col-7" style="border: 0 solid salmon">
+                                <div class="row mb-2" style="border: 0 solid salmon;margin-left: 0">
+                                    <label for="basicDim">主参数: </label>
+                                </div>
+                                <div class="row" style="border: 0 solid salmon;margin-left: 0">
+                                    <div class="col-12">
+                                        <input style="width: 90px;margin: 0" type="number" value="500" id="basicDim" placeholder=""><span>&nbsp; mm</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <label for="inputToleranceGrade">公差等级: </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <select type="number" value="12" name="shaft" id="inputToleranceGrade" style="width: 80px;margin:0;height:30px;">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 20px">
+                            <div class="col-5 text-end" style="font-size: 16px">公差值</div>
+                            <div class="col-7 text-start" style="color: #0000FA;font-size: 16px" id="toleranceRes">1 mm</div>
+                        </div>
+                        <div class="row" style="border: 0 solid salmon">
+                            <div class="col-12 col-sm-10 col-md-12">
+                                <div style="width:100%;height:240px;border: 1px solid #aaa;margin-top: 32px;position: relative;">
+                                    <div style="position: absolute;margin: -10px 0 0 10px;background-color: #FCFDF8">形位公差名称</div>
+                                    <input type="radio" checked name="benchmarkSystem" id="straightness" style="margin:0 0 0 25px;">
+                                    <label for="straightness" style="margin:25px 0 0 0;">直线度</label>
+                                    <input type="radio" disabled name="benchmarkSystem" id="inclination" style="margin:0 0 0 50px;">
+                                    <label for="inclination" style="margin:10px 0 0 0;color:#A0A0A0">倾斜度</label><br/>
+                                    <input type="radio" name="benchmarkSystem" id="flatness" style="margin:0 0 0 25px;">
+                                    <label for="flatness" style="margin:10px 0 0 0">平面度</label>
+                                    <input type="radio" disabled  name="benchmarkSystem" id="concentricity" style="margin:0 0 0 50px;">
+                                    <label for="concentricity" style="margin:10px 0 0 0;color:#A0A0A0">同轴度</label><br/>
+                                    <input type="radio" name="benchmarkSystem" id="roundness" style="margin:0 0 0 25px;">
+                                    <label for="roundness" style="margin:10px 0 0 0">圆度</label>
+                                    <input type="radio" disabled name="benchmarkSystem" id="symmetry" style="margin:0 0 0 64px;">
+                                    <label for="symmetry" style="margin:10px 0 0 0;color:#A0A0A0">对称度</label><br/>
+                                    <input type="radio" name="benchmarkSystem" id="cylindricity" style="margin:0 0 0 25px;">
+                                    <label for="cylindricity" style="margin:10px 0 0 0">圆柱度</label>
+                                    <input type="radio" disabled name="benchmarkSystem" id="roundbeating" style="margin:0 0 0 50px;">
+                                    <label for="roundbeating" style="margin:10px 0 0 0;color:#A0A0A0">圆跳动</label><br/>
+                                    <input type="radio" disabled  name="benchmarkSystem" id="parallelism" style="margin:0 0 0 25px;">
+                                    <label for="parallelism" style="margin:10px 0 0 0;color:#A0A0A0">平行度</label>
+                                    <input type="radio" disabled  name="benchmarkSystem" id="fullbeat" style="margin:0 0 0 50px;">
+                                    <label for="fullbeat" style="margin:10px 0 0 0;color:#A0A0A0">全跳动</label><br/>
+                                    <input type="radio" disabled  name="benchmarkSystem" id="verticality" style="margin:0 0 0 25px;">
+                                    <label for="verticality" style="margin:10px 0 0 0;color:#A0A0A0">垂直度</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 text-center">
+                        <div class="row">
+                            <picture id="firstpic" style="width:100%;height:320px;border: 0 solid #aaa;margin: 20px 0 0 0;display: block">
+                            </picture>
+                            <picture id="secondpic" style="width:100%;height:320px;border: 0 solid #aaa;margin: 20px 0 0 0;display: none">
+                            </picture>
+                            <picture id="thirdpic" style="width:100%;height:320px;border: 0 solid #aaa;margin: 20px 0 0 0;display: none">
+                            </picture>
+                            <picture id="fourthpic" style="width:100%;height:320px;border: 0 solid #aaa;margin: 20px 0 0 0;display: none">
+                            </picture>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="height:18px;margin-top: 15px">
+                    <div class="col-12 col-md-6 text-start" id="errorInfo" style="color: red;"></div>
+                </div>
+            </div>
+            <h2 id="直线度与平面度应用举例">直线度与平面度应用举例</h2>
+            <p>
+                公差等级为1、2时：用于精密量具、测量仪器以及精度要求极高的精密机械零件，如0级样板、平尺、0级宽平尺、工具显微镜等精密测量仪器的导轨面，喷油嘴针阀体端面平面度，油泵柱塞套端面的平面度等。<br/>
+                公差等级为3时：用于0级及1级宽平尺工作面，1级样板平尺的工作面、测量仪器圆弧导轨的直线度、测量仪器的测杆等。<br/>
+                公差等级为4时：用于量具、测量仪器和机床导轨，如1级宽平尺、0级平板、测量仪器的V形导轨、高精度平面磨床的V形导轨和滚动导轨、轴承磨床及平面磨床床身直线度等。<br/>
+                公差等级为5时：用于1级平板、2级宽平尺、平面磨床的纵导轨、垂直导轨、立柱导轨和平面磨床的工作台，液压龙门刨床导轨面、六角车床床身导轨面、柴油机进排气门导杆等。<br/>
+                公差等级为6时：用于1级平板、普通车床床身导轨面、龙门刨床导轨面、滚齿机立柱导轨、床身导轨及工作台、自动车床床身导轨、平面磨床垂直导轨、卧式镗床、铣床工作台以及机床主轴箱导轨、柴油机进排气门导杆直线度、柴油机机体上部结合面等。<br/>
+                公差等级为7时：用于2级平板、0.02游标卡尺尺身的直线度、机床床头箱体、滚齿机床身导轨的直线度、镗床工作台、摇臂钻底座工作台、柴油机气门导杆、液压泵盖的平面度，压力机导轨及滑块。<br/>
+                公差等级为8时：用于2级平板、车床溜板箱体、机床主轴箱体、机床传动箱体、自动车床底座的直线度，气缸盖结合面、气缸座、内燃机连杆分离面的平面度，减速器壳体的结合面。<br/>
+                公差等级为9时：用于3级平板、机床溜板箱、立钻工作台、螺纹磨床的挂轮架、金相显微镜的载物台、柴油机气缸体、连杆的分离面、缸盖的结合面、阀片的平面度、空气压缩机的汽缸体、柴油机缸孔环面的平面度以及液压管件和法兰的连接面等。<br/>
+                公差等级为10时：用于3级平板、自动车床床身底面的平面度，车床挂轮架的平面度，柴油机汽缸体、摩托车的曲轴箱体、汽车变速箱的壳体、汽车发动机缸盖结合面、阀片的平面度，以及辅助机构及手动机械的支承面。<br/>
+                公差等级为11、12时：用于易变形的薄片、薄壳零件，如离合器的摩擦片、汽车发动机缸盖的结合面、手动机械支架、机床法兰等。</p>
+            <h2 id="圆度与圆柱度应用举例">圆度与圆柱度应用举例</h2>
+            <p>
+                公差等级为0、1时：高精度量仪主轴、高精度机床主轴，滚动轴承滚珠和滚柱等。<br/>
+                公差等级为2时：精密量仪主轴，外套、阀套，高压油泵柱塞及套，纺锭轴承，高速柴油机进、排气门，精密机床主轴轴颈，针阀圆柱表面，喷油泵柱塞及柱塞套。<br/>
+                公差等级为3时：小工具显微镜套管外圆，高精度外圆磨床轴承，磨床砂轮主轴套筒，喷油嘴针、阀体，高精度微型轴承内外圈。<br/>
+                公差等级为4时：较精密机床主轴、精密机床主轴箱孔，高压阀门活塞、活塞销、阀体孔，小工具显微镜顶针，高压油泵柱塞，较高精度滚动轴承的配合轴，铣削动力头箱体孔等。<br/>
+                公差等级为5时：一般量仪主轴、测杆外圆，陀螺仪轴颈，一般机床主轴、较精密机床主轴及主轴箱孔，柴油机汽油机活塞、活塞销孔，铣削动力头轴承箱座孔，高压空气压缩机十字头销、活塞，较低精度滚动轴承配合轴等。<br/>
+                公差等级为6时：仪表端盖外圆，一般机床主轴及箱孔，中等压力下液压装置工作面（包括泵、压缩机的活塞和气缸），汽车发动机凸轮轴，纺机锭子，通用减速器轴颈，高速船用发动机曲轴、拖拉机曲轴主轴颈，风动绞车曲轴。<br/>
+                公差等级为7时：大功率低速柴油机曲轴、活塞、活塞销、连杆、气缸，高速柴油机箱体孔，千斤顶或压力油缸活塞，液压传动系统的分配机构，机车传动轴，水泵及一般减速器轴颈。<br/>
+                公差等级为8时：低速发动机、减速器、大功率曲柄轴轴颈，压气机连杆盖、体，拖拉机气缸体、活塞，炼胶机冷铸轴辊、印刷机传墨辊，内燃机曲轴，柴油机机体孔，凸轮轴，拖拉机、小型船用柴油机气缸套。<br/>
+                公差等级为9时：空气压缩机缸体、液压传动筒、通用机械杠杆与拉杆用套筒销子、拖拉机活塞环套筒孔，氧压机机座。<br/>
+                公差等级为10、11、12时：印染机导布辊、绞车、吊车、起重机滑动轴承轴颈等。</p>
+            <div class="d-flex flex-row align-items-center justify-content-end gap-2 my-4">
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                    <i class="bi bi-star" style="font-size: 16px;"></i>
+                </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状公差查询"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_positiontolerance.html" title="位置公差查询"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <h4>评论</h4>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <style>
+        .ad-img { max-height: 172px; max-width: 100%; object-fit: contain; }
+        @media (max-width: 575.98px) { .ad-img { width: 100%; max-height: none; } }
+    </style>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.elesa-ganter.com.cn/" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg" alt="elesa-ganter伊莉莎冈特全系列机械标准配件" crossorigin="anonymous">
+            </a>
+        </div>
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.m-haste.com" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="m-haste艾姆华世特传动设备" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="javascript:">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bd-footer py-3 mt-3 bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                       aria-label="Mechtool">
+                        <span class="fs-5">Mechtool</span>
+                    </a>
+                </div>
+                <div class="col-12 mb-2">
+                    <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+                </div>
+                <div class="col-12 mb-2">
+                    <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                        <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                        <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                        <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                        <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                        <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                        <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>
