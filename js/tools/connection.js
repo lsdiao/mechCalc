@@ -192,8 +192,8 @@
       { key: 'd', label: '螺栓公称直径', group: '螺栓尺寸', type: 'select', options: threadOpts(), default: '12',
         visible: function (v) { return v.mode !== 'design'; } },
       { key: 'd0', label: '受剪直径 d₀', group: '螺栓尺寸', type: 'number', unit: 'mm', step: 'any',
-        default: '10.106',
-        hint: '铰制孔螺栓受剪段（光杆）直径，默认取 M12 螺纹小径 10.106mm，按所选螺栓修改' }
+        default: function(v) { return v.d || '12'; },
+        hint: '铰制孔螺栓受剪段（光杆）直径，默认取公称直径，按所选螺栓修改' }
     ],
     compute: function (v) {
       var dynFactor = v.dyn === 'yes' ? (+v.dynFactor || 0.7) : 1;
@@ -207,8 +207,8 @@
       var sb = v.matType === 'ss' ? SS_GRADE.sb : GRADE_SB[v.grade];
       // 许用挤压应力 [σp] = σs / Sp × 动载荷系数（动载时折减）
       var sigmaPAllow = ss / Sp * dynFactor;
-      // 许用剪切应力 [τ] = σs / St × 动载荷系数（动载时折减）
-      var tauAllow = ss / St * dynFactor;
+      // 许用剪切应力 [τ] = σs / St（动载不折减，参考 mechtool.cn）
+      var tauAllow = ss / St;
 
       if (v.mode === 'design') {
         // 设计计算：由挤压强度求 d_min，由抗剪强度求 d_min，取较大者
@@ -270,8 +270,8 @@
           note: ok ? '' : '若不满足：① 增大螺栓直径 ② 提高性能等级 ③ 增加受剪面数 ④ 增大挤压高度'
         },
         notes: [
-          '铰制孔螺栓的受剪直径 d₀ 为螺栓杆（光杆）直径，由用户输入；默认取所选螺栓的螺纹小径 d₁。',
-          '动载荷时许用应力乘以折减系数（0.7~0.8），即 [σp] = σs/Sp × 系数，[τ] = σs/St × 系数。'
+          '铰制孔螺栓的受剪直径 d₀ 为螺栓杆（光杆）直径，由用户输入；默认取公称直径。',
+          '动载荷时仅对挤压许用应力进行折减，即 [σp] = σs/Sp × 系数；剪切许用应力 [τ] = σs/St 不变。'
         ]
       };
     },
