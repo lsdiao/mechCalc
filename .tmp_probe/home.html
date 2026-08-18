@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="mechtool.cn-在线机械设计工具网站.提供机械设计计算工具,机械设计手册,机械设计数据资料,国家标准,机械CAD资料等."/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <meta name="keywords" content="机械设计工具,机械设计手册,机械设计资料,机械设计计算,国家标准,机械CAD">
+    <meta name="Copyright" content="Copyright Mechtool.cn All Rights Reserved."/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/styleindex.min.css?v=1.1.0"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <link rel="stylesheet" type="text/css" href="/iconfont/iconfont.css">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/index.min.js?v=1.1.3"></script>
+    <script src="/dist/js/mechtool/quickcalculation.min.js?v=1.0.3"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+    <title>Mechtool 在线机械设计工具</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-center justify-content-between">
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 me-2 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+            </svg>
+        </div>
+        <div class="dropdown ms-3 d-none d-md-inline">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-quickcal" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-lg-inline">便捷计算工具</span> <span class="d-lg-none">便捷计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-quickcal">
+                <li><a class="dropdown-item" href="/calculation/calculation_cablechainlengthcalculation.html" title="拖链长度计算">拖链长度计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hardnessconversiontool.html" title="硬度换算工具">硬度换算工具</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_deflectionapp.html" title="结构梁计算器">结构梁计算器</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_fastenercalculationtool.html" title="紧固件计算工具">紧固件计算工具</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_calculationofsteelweight.html" title="钢材重量计算">钢材重量计算</a></li>
+            </ul>
+        </div>
+        <div class="dropdown ms-3 d-none d-md-inline">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-tools" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-lg-inline">机械工程实用工具</span> <span class="d-lg-none">实用工具</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-tools">
+                <li><a class="dropdown-item" href="/translation/index.html" title="机械工程常用英汉词汇">机械工程常用英汉词汇</a></li>
+                <li><a class="dropdown-item" href="/translation/translation_baidutranslation.html" title="在线翻译">在线翻译</a></li>
+                <li><a class="dropdown-item" href="/translation/translation_englishretouchingwebsite.html" title="英语润色网站">英语润色网站</a></li>
+                <li><a class="dropdown-item" href="/unitandconversion/unitandconversion_unitconversion.html" title="在线单位换算">在线单位换算</a></li>
+                <li><a class="dropdown-item" href="/site/index.html" title="供应商资料搜索">供应商资料搜索</a></li>
+                <li><a class="dropdown-item" href="/site/site_mechanicalsupplierwebsite.html" title="知名机械供应商官网">知名机械供应商官网</a></li>
+                <li><a class="dropdown-item" href="/site/site_online3dresourcelibrarywebsite.html" title="在线3D资源库网站">在线3D资源库网站</a></li>
+            </ul>
+        </div>
+        <div class="dropdown ms-3 d-none d-md-inline">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-formular" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-lg-inline">机械工程常用公式计算</span> <span class="d-lg-none">常用公式</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-formular">
+                
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/index.html" title="几何体及物性计算">几何体及物性计算</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/index.html" title="几何体面积/体积/重心位置">几何体面积/体积/重心位置</a></li>
+                        <li><a class="dropdown-item" href="/formular/index_planefigure.html" title="平面图形/立体/重心">平面图形/立体/重心</a></li>
+                        <li><a class="dropdown-item" href="/formular/index_slimstraightrod.html" title="一般物体旋转时的转动惯量">一般物体旋转时的转动惯量</a></li>
+                        <li><a class="dropdown-item" href="/formular/index_flywheelmoments.html" title="常用旋转体零件的飞轮矩">常用旋转体零件的飞轮矩</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/mechanicalproperties.html" title="各种截面的力学性能">各种截面的力学性能</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/mechanicalproperties.html" title="各种截面">各种截面</a></li>
+                        <li><a class="dropdown-item" href="/formular/mechanicalproperties_ribs1.html" title="筋板截面">筋板截面</a></li>
+                    </ul>
+                </li>
+                <li><a class="dropdown-item" href="/formular/calculationofmomentofinertia.html" title="转动惯量计算">转动惯量计算</a></li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/levercal.html" title="板、壳和杆件计算">板、壳和杆件计算</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/levercal.html" title="杆件计算">杆件计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/levercal_rectangularplatebendingcalculations.html" title="平板弯曲计算">平板弯曲计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/levercal_criticalloadofplate.html" title="平板的临界载荷">平板的临界载荷</a></li>
+                        <li><a class="dropdown-item" href="/formular/levercal_calculationofstressanddisplacementinthinshell.html" title="薄壳中应力与位移计算">薄壳中应力与位移计算</a></li>
+                    </ul>
+                </li>
+                <li><a class="dropdown-item" href="/formular/neutralaxis.html" title="不同形状截面中性轴曲率半径">不同形状截面中性轴曲率半径</a></li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/staticloadbeam.html" title="梁的计算">梁的计算</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/staticloadbeam.html" title="受静载荷梁的内力及变位">受静载荷梁的内力及变位</a></li>
+                        <li><a class="dropdown-item" href="/formular/staticloadbeam_visualizationtoolforthemechanicalbehaviorofbeams.html" title="梁挠度与应力分析">梁挠度与应力分析</a></li>
+                        <li><a class="dropdown-item" href="/formular/staticloadbeam_criticalloadofrectangularbeam.html" title="梁的稳定性">梁的稳定性</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/rigidframesandcolumns.html" title="刚架与柱的计算">刚架与柱的计算</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/rigidframesandcolumns.html" title="单跨刚架计算">单跨刚架计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/rigidframesandcolumns_internalforceofuniformsectionrigidframe1.html" title="等截面刚架内力计算">等截面刚架内力计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/rigidframesandcolumns_reactionforceatthetopsupportofacolumnwithaconstantcrosssectionandhingedsupportatthetop.html" title="柱的柱顶反力与位移计算">柱的柱顶反力与位移计算</a></li>
+                    </ul>
+                </li>
+                <li><a class="dropdown-item" href="/formular/staticloadbeam_beamdeflectionandstressanalysissimulator.html" title="梁挠度与应力分析工具">梁挠度与应力分析工具</a></li>
+                <li><a class="dropdown-item" href="/formular/formular_contactstress.html" title="接触应力计算公式">接触应力计算公式</a></li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/dynamics.html" title="动力学与机构学">动力学与机构学</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/dynamics.html" title="动力学基本计算">动力学基本计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_longitudinalimpact.html" title="冲击载荷计算">冲击载荷计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_calculationofcomponentinertiaforce.html" title="平面机构的受力分析">平面机构的受力分析</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_stoppushstopmovement.html" title="凸轮机构基本运动规律的方程式">凸轮机构基本运动规律的方程式</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_parabolicrectilinearparaboliclaw.html" title="凸轮机构常用组合运动规律的方程式及其比较与运用">凸轮机构常用组合运动规律的方程式及其比较与运用</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_improvedconstantvelocity.html" title="分度凸轮机构常用运动规律的曲线图型与计算公式">分度凸轮机构常用运动规律的曲线图型与计算公式</a></li>
+                    </ul>
+                </li>
+                <li><a class="dropdown-item" href="/geardrive/geardrive_commonnormallengthcalculation.html" title="渐开线圆柱齿轮齿厚计算公式">渐开线圆柱齿轮齿厚计算公式</a></li>
+                <li><a class="dropdown-item" href="/geardrive/geardrive_involutefunction.html" title="渐开线和反渐开线函数计算">渐开线和反渐开线函数计算</a></li>
+                
+            </ul>
+        </div>
+        <div class="dropdown ms-3 d-none d-md-inline">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-lg-inline">常用设计计算工具</span> <span class="d-lg-none">设计计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+        <button class="btn bd-sidebar-r-toggle d-md-none py-0 px-1 ms-3 order-2 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-cal-nav" aria-controls="bd-cal-nav"
+                aria-expanded="false" aria-label="Toggle cal navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            <ul class="list-unstyled mb-0 py-3 pt-md-1">
+                <li>
+                    <a href="/" class="d-inline-flex align-items-center rounded">
+                        数据资料
+                    </a>
+                </li>
+                <li class="my-3 mx-4 border-bottom"></li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item1-collapse" aria-expanded="true" aria-current="true">
+                        机械设计基础资料
+                    </button>
+
+                    <div class="collapse show" id="index-item1-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/infoanddata/index.html" title="常用资料和数据">常用资料和数据</a></li>
+                            <li><a href="/unitandconversion/index.html" title="计量单位与换算">计量单位与换算</a></li>
+                            <li><a href="/mechanicsformula/index.html" title="常用力学公式">常用力学公式</a></li>
+                            <li><a href="/drawingandaccuracy/index.html" title="机械制图和几何精度">机械制图和几何精度</a></li>
+                            <li><a href="/metalmaterial/index.html" title="机械工程材料(金属)">机械工程材料(金属)</a></li>
+                            <li><a href="/nonmetalmaterial/index.html" title="机械工程材料(非金属)">机械工程材料(非金属)</a></li>
+                            <li><a href="/othermaterial/index.html" title="其他材料及制品">其他材料及制品</a></li>
+                            <li><a href="/heattreatment/index.html" title="热处理和表面技术">热处理和表面技术</a></li>
+                            <li><a href="/boltsandnuts/index.html" title="连接件与紧固件">连接件与紧固件</a></li>
+                            <li><a href="/factorstoconsiderindesign/index.html" title="设计中需要考虑的因素">设计中需要考虑的因素</a></li>
+                            <li><a href="/thread/index.html" title="公制、美制和英制螺纹">公制、美制和英制螺纹</a></li>
+                            <li><a href="/measuringandcuttingtools/index.html" title="量具、刃具和工具">量具、刃具和工具</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item2-collapse" aria-expanded="true" aria-current="true">
+                        机械零部件设计
+                    </button>
+
+                    <div class="collapse show" id="index-item2-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/shaftsandcouplings/index.html" title="轴及其连接">轴及其连接</a></li>
+                            <li><a href="/bearing/index.html" title="轴承">轴承</a></li>
+                            <li><a href="/liftingandtransportmachineryparts/index.html" title="起重运输机械零部件">起重运输机械零部件</a></li>
+                            <li><a href="/rackandcabinet/index.html" title="机架和箱体">机架和箱体</a></li>
+                            <li><a href="/guide/index.html" title="导轨">导轨</a></li>
+                            <li><a href="/spring/index.html" title="弹簧">弹簧</a></li>
+                            <li><a href="/hardwareandpipefittings/index.html" title="操作件、小五金及管件">操作件、小五金及管件</a></li>
+                            <li><a href="/mechanism/index.html" title="机构分析与设计">机构分析与设计</a></li>
+                            <li><a href="/partstructure/index.html" title="零件结构设计">零件结构设计</a></li>
+                            <li><a href="/structuraldesignandassembly/index.html" title="结构设计和装配工艺性">结构设计和装配工艺性</a></li>
+                            <li><a href="/molddesign/index.html" title="塑料制品与塑料注射成型模具设计">塑料制品与塑料注射成型模具设计</a></li>
+                            <li><a href="/mechanicaldesigntaboo/index.html" title="机械设计禁忌">机械设计禁忌</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item3-collapse" aria-expanded="true" aria-current="true">
+                        机械传动 润滑与密封
+                    </button>
+
+                    <div class="collapse show" id="index-item3-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/beltdrive/index.html" title="带传动">带传动</a></li>
+                            <li><a href="/chaindrive/index.html" title="链传动">链传动</a></li>
+                            <li><a href="/geardrive/index.html" title="齿轮传动">齿轮传动</a></li>
+                            <li><a href="/screwdrive/index.html" title="螺旋传动">螺旋传动</a></li>
+                            <li><a href="/reducer/index.html" title="减速器">减速器</a></li>
+                            <li><a href="/motor/index.html" title="电机及电气传动系统">电机及电气传动系统</a></li>
+                            <li><a href="/lubricating/index.html" title="润滑">润滑</a></li>
+                            <li><a href="/seal/index.html" title="密封">密封</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item4-collapse" aria-expanded="true" aria-current="true">
+                        液压与气压传动
+                    </button>
+
+                    <div class="collapse show" id="index-item4-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/hydraulic/index.html" title="液压传动">液压传动</a></li>
+                            <li><a href="/hydrauliccontrol/index.html" title="液压控制">液压控制</a></li>
+                            <li><a href="/pneumatic/index.html" title="气压传动">气压传动</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item5-collapse" aria-expanded="true" aria-current="true">
+                        机械书籍
+                    </button>
+
+                    <div class="collapse show" id="index-item5-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/manual/index.html" title="机械手册">机械手册</a></li>
+                            <li><a href="/teachingmaterial/index.html" title="机械教材">机械教材</a></li>
+<!--                            <li><a href="/mechanicalmonograph/index.html" title="机械专著">机械专著</a></li>-->
+                            <li><a href="/mechanicalbook/automataandautoline/index.html" title="自动机与自动线">自动机与自动线</a></li>
+                            <li><a href="/mechanicalbook/standardchainmanual/index.html" title="标准链条手册：动力传动链与物料输送链">标准链条手册：动力传动链与物料输送链</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item6-collapse" aria-expanded="true" aria-current="true">
+                        计算机辅助设计
+                    </button>
+
+                    <div class="collapse show" id="index-item6-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/CAD/index.html" title="CAD">CAD</a></li>
+                            <li><a href="/CAE/index.html" title="CAE">CAE</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item7-collapse" aria-expanded="true" aria-current="true">
+                        机械资料
+                    </button>
+
+                    <div class="collapse show" id="index-item7-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/catalog/index.html" title="机械样本">机械样本</a></li>
+<!--                            <li><a href="/standard/index.html" title="机械标准汇编">机械标准汇编</a></li>-->
+                            <li><a href="/video/index.html" title="机械视频">机械视频</a></li>
+                            <li><a href="/site/index.html" title="机械网站">机械网站</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="my-3 mx-4 border-top"></li>
+                <li>
+                    <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                        关于 Mechtool
+                    </a>
+                </li>
+                <li>
+                    <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+                       title="帮助 Mechtool">
+                        帮助 Mechtool
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <aside class="bd-sidebar-r order-1 d-md-none d-lg-inline">
+        <nav class="collapse bd-links" id="bd-cal-nav" aria-label="cal navigation">
+            <ul class="list-unstyled mb-0 py-3 pt-md-1">
+                <li>
+                    <a href="/" class="d-inline-flex align-items-center rounded">
+                        计算工具
+                    </a>
+                </li>
+                <li class="my-3 mx-4 border-bottom"></li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item101-collapse" aria-expanded="true" aria-current="true">
+                        机械工程常用公式计算
+                    </button>
+
+                    <div class="collapse show" id="index-item101-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/formular/index.html" title="几何体及物性计算">几何体及物性计算</a></li>
+                            <li><a href="/formular/mechanicalproperties.html" title="各种截面的力学性能">各种截面的力学性能</a></li>
+                            <li><a href="/formular/calculationofmomentofinertia.html" title="转动惯量计算">转动惯量计算</a></li>
+                            <li><a href="/formular/levercal.html" title="板、壳和杆件计算">板、壳和杆件计算</a></li>
+                            <li><a href="/formular/neutralaxis.html" title="不同形状截面中性轴曲率半径">不同形状截面中性轴曲率半径</a></li>
+                            <li><a href="/formular/staticloadbeam.html" title="梁的计算">梁的计算</a></li>
+                            <li><a href="/formular/rigidframesandcolumns.html" title="刚架与柱的计算">刚架与柱的计算</a></li>
+                            <li><a href="/formular/staticloadbeam_beamdeflectionandstressanalysissimulator.html" title="梁挠度与应力分析工具">梁挠度与应力分析工具</a></li>
+                            <li><a href="/formular/formular_contactstress.html" title="接触应力计算公式">接触应力计算公式</a></li>
+                            <li><a href="/formular/dynamics.html" title="动力学与机构学">动力学与机构学</a></li>
+                            <li><a href="/geardrive/geardrive_commonnormallengthcalculation.html" title="渐开线圆柱齿轮齿厚计算公式">渐开线圆柱齿轮齿厚计算公式</a></li>
+                            <li><a href="/geardrive/geardrive_involutefunction.html" title="渐开线和反渐开线函数计算">渐开线和反渐开线函数计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item102-collapse" aria-expanded="true" aria-current="true">
+                        常用设计计算程序
+                    </button>
+
+                    <div class="collapse show" id="index-item102-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                            <li><a href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                            <li><a href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                            <li><a href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                            <li><a href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                            <li><a href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                            <li><a href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                            <li><a href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                            <li><a href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                            <li><a href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                            <li><a href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                            <li><a href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                            <li><a href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                            <li><a href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                            <li><a href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                            <li><a href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                            <li><a href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                            <li><a href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                            <li><a href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                            <li><a href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                            <li><a href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                            <li><a href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                            <li><a href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item103-collapse" aria-expanded="true" aria-current="true">
+                        机械工程实用工具
+                    </button>
+
+                    <div class="collapse show" id="index-item103-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/translation/index.html" title="机械工程常用英汉词汇">机械工程常用英汉词汇</a></li>
+                            <li><a href="/translation/translation_baidutranslation.html" title="在线翻译软件">在线翻译软件</a></li>
+                            <li><a href="/translation/translation_englishretouchingwebsite.html" title="英语润色网站">英语润色网站</a></li>
+                            <li><a href="/unitandconversion/unitandconversion_unitconversion.html" title="在线单位换算">在线单位换算</a></li>
+                            <li><a href="/site/index.html" title="供应商资料搜索">供应商资料搜索</a></li>
+                            <li><a href="/site/site_mechanicalsupplierwebsite.html" title="知名机械供应商官网">知名机械供应商官网</a></li>
+                            <li><a href="/site/site_online3dresourcelibrarywebsite.html" title="在线3D资源库网站">在线3D资源库网站</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#index-item104-collapse" aria-expanded="true" aria-current="true">
+                        便捷计算工具
+                    </button>
+
+                    <div class="collapse show" id="index-item104-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/calculation/calculation_cablechainlengthcalculation.html" title="拖链长度计算">拖链长度计算</a></li>
+                            <li><a href="/calculation/calculation_hardnessconversiontool.html" title="硬度换算工具">硬度换算工具</a></li>
+                            <li><a href="/calculation/calculation_deflectionapp.html" title="结构梁计算器">结构梁计算器</a></li>
+                            <li><a href="/calculation/calculation_fastenercalculationtool.html" title="紧固件计算工具">紧固件计算工具</a></li>
+                            <li><a href="/calculation/calculation_calculationofsteelweight.html" title="钢材重量计算">钢材重量计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="my-3 mx-4 border-top"></li>
+                <li>
+                    <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                        关于 Mechtool
+                    </a>
+                </li>
+                <li>
+                    <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+                       title="帮助 Mechtool">
+                        帮助 Mechtool
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="bd-main order-2" id="maincontent">
+        <div class="bd-intro ps-lg-4">
+            <div id="d1">
+                <h2>一个面向机械设计制造的通用工具网站</h2>
+                <p>在 Mechtool,可以找到需要的机械设计数据资源和计算工具.</p>
+                <p>包括常用机械产品的技术参数,技术条件,零部件外形尺寸的国家标准和行业标准数据</p>
+                <p><strong>从左侧的菜单选择需要的数据资源!</strong></p>
+                <p><strong>从右侧的菜单选择需要的计算工具!</strong></p>
+            </div>
+        </div>
+
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="idea" id="d2">
+                <i class="iconfont">&#xe612;</i>
+                <h4>常用在线机械设计计算和查询工具</h4>
+            </div>
+            <p>常用在线机械设计计算和查询工具涵盖了机械设计技术的各方面.</p>
+            <p>其中包括 <a href="/one.html">设计基础</a>,
+                <a href="/two.html">零部件设计</a>, <a href="/three.html">机械传动</a>,
+                <a href="/four.html">液压与气压</a>, <a href="/five.html">机械书籍</a> 等.</p>
+
+            <div class="idea" id="d3">
+                <i class="iconfont">&#xe619;</i>
+                <h4>常用在线机械工程公式计算</h4>
+            </div>
+            <div class="dropdown">
+            在 Mechtool,拥有常用的
+                <a href="javascript:;" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    在线公式计算工具
+                </a>
+                <ul class="dropdown-menu">
+                    
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/index.html" title="几何体及物性计算">几何体及物性计算</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/index.html" title="几何体面积/体积/重心位置">几何体面积/体积/重心位置</a></li>
+                        <li><a class="dropdown-item" href="/formular/index_planefigure.html" title="平面图形/立体/重心">平面图形/立体/重心</a></li>
+                        <li><a class="dropdown-item" href="/formular/index_slimstraightrod.html" title="一般物体旋转时的转动惯量">一般物体旋转时的转动惯量</a></li>
+                        <li><a class="dropdown-item" href="/formular/index_flywheelmoments.html" title="常用旋转体零件的飞轮矩">常用旋转体零件的飞轮矩</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/mechanicalproperties.html" title="各种截面的力学性能">各种截面的力学性能</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/mechanicalproperties.html" title="各种截面">各种截面</a></li>
+                        <li><a class="dropdown-item" href="/formular/mechanicalproperties_ribs1.html" title="筋板截面">筋板截面</a></li>
+                    </ul>
+                </li>
+                <li><a class="dropdown-item" href="/formular/calculationofmomentofinertia.html" title="转动惯量计算">转动惯量计算</a></li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/levercal.html" title="板、壳和杆件计算">板、壳和杆件计算</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/levercal.html" title="杆件计算">杆件计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/levercal_rectangularplatebendingcalculations.html" title="平板弯曲计算">平板弯曲计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/levercal_criticalloadofplate.html" title="平板的临界载荷">平板的临界载荷</a></li>
+                        <li><a class="dropdown-item" href="/formular/levercal_calculationofstressanddisplacementinthinshell.html" title="薄壳中应力与位移计算">薄壳中应力与位移计算</a></li>
+                    </ul>
+                </li>
+                <li><a class="dropdown-item" href="/formular/neutralaxis.html" title="不同形状截面中性轴曲率半径">不同形状截面中性轴曲率半径</a></li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/staticloadbeam.html" title="梁的计算">梁的计算</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/staticloadbeam.html" title="受静载荷梁的内力及变位">受静载荷梁的内力及变位</a></li>
+                        <li><a class="dropdown-item" href="/formular/staticloadbeam_visualizationtoolforthemechanicalbehaviorofbeams.html" title="梁挠度与应力分析">梁挠度与应力分析</a></li>
+                        <li><a class="dropdown-item" href="/formular/staticloadbeam_criticalloadofrectangularbeam.html" title="梁的稳定性">梁的稳定性</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/rigidframesandcolumns.html" title="刚架与柱的计算">刚架与柱的计算</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/rigidframesandcolumns.html" title="单跨刚架计算">单跨刚架计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/rigidframesandcolumns_internalforceofuniformsectionrigidframe1.html" title="等截面刚架内力计算">等截面刚架内力计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/rigidframesandcolumns_reactionforceatthetopsupportofacolumnwithaconstantcrosssectionandhingedsupportatthetop.html" title="柱的柱顶反力与位移计算">柱的柱顶反力与位移计算</a></li>
+                    </ul>
+                </li>
+                <li><a class="dropdown-item" href="/formular/staticloadbeam_beamdeflectionandstressanalysissimulator.html" title="梁挠度与应力分析工具">梁挠度与应力分析工具</a></li>
+                <li><a class="dropdown-item" href="/formular/formular_contactstress.html" title="接触应力计算公式">接触应力计算公式</a></li>
+                <li class="dropdown-submenu"><a class="dropdown-item" href="/formular/dynamics.html" title="动力学与机构学">动力学与机构学</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/formular/dynamics.html" title="动力学基本计算">动力学基本计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_longitudinalimpact.html" title="冲击载荷计算">冲击载荷计算</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_calculationofcomponentinertiaforce.html" title="平面机构的受力分析">平面机构的受力分析</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_stoppushstopmovement.html" title="凸轮机构基本运动规律的方程式">凸轮机构基本运动规律的方程式</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_parabolicrectilinearparaboliclaw.html" title="凸轮机构常用组合运动规律的方程式及其比较与运用">凸轮机构常用组合运动规律的方程式及其比较与运用</a></li>
+                        <li><a class="dropdown-item" href="/formular/dynamics_improvedconstantvelocity.html" title="分度凸轮机构常用运动规律的曲线图型与计算公式">分度凸轮机构常用运动规律的曲线图型与计算公式</a></li>
+                    </ul>
+                </li>
+                <li><a class="dropdown-item" href="/geardrive/geardrive_commonnormallengthcalculation.html" title="渐开线圆柱齿轮齿厚计算公式">渐开线圆柱齿轮齿厚计算公式</a></li>
+                <li><a class="dropdown-item" href="/geardrive/geardrive_involutefunction.html" title="渐开线和反渐开线函数计算">渐开线和反渐开线函数计算</a></li>
+                
+                </ul>
+            </div>
+            <p>通过使用在线公式计算,可以得到想要的设计计算结果.</p>
+
+            <div class="idea" id="d4">
+                <i class="iconfont">&#xe617;</i>
+                <h4>机械CAD软件与教程、图纸与模型</h4>
+            </div>
+            <p>软件与教程内容包括FA 3D选型软件,autocad,creo,inventor,solidworks设计软件等 --><a href="/six.html">计算机辅助设计</a> </p>
+            <p>图纸与模型内容包括标准件、常用零件和装配部件、自动化机械等  --><a href="/r.html">机械资料</a></p>
+
+            <div class="idea" id="d5">
+                <i class="iconfont">&#xe6ba;</i>
+                <h4>机械工程常用数据查询</h4>
+            </div>
+            <h5 id="数据资源">常用数据资源:</h5>
+            <ul class="nav nav-tabs justify-content-between" style="margin-top: 0">
+                <div class="btn-group">
+                    <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        常用滚动轴承查询
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/bearing/bearing_basicdimensionsanddataofcommonlyusedrollingbearings.html" title="常用滚动轴承查询(旧)">常用滚动轴承查询(旧)</a></li>
+                        <li><a class="dropdown-item" href="/bearing/bearing_commondimensionsandperformanceparametersofrollingbearings.html" title="常用滚动轴承查询(新)">常用滚动轴承查询(新)</a></li>
+                    </ul>
+                </div>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            紧固件查询
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/boltsandnuts/boltsandnuts_standardcomponentsforthreadedconnections.html" title="螺纹联接的标准元件(简)">螺纹联接的标准元件(简)</a></li>
+                            <li><a class="dropdown-item" href="/stdboltsandnuts/index.html" title="螺纹联接的标准元件(详)">螺纹联接的标准元件(详)</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            挡圈查询
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/boltsandnuts/boltsandnuts_shaftendretainingrings.html" title="弹性挡圈">弹性挡圈</a></li>
+                            <li><a class="dropdown-item" href="/stdboltsandnuts/stdboltsandnuts_retainingring.html" title="更多挡圈">更多挡圈</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boltsandnuts/boltsandnuts_structuralelementsofthreadedparts.html" title="螺纹零件的结构要素">螺纹零件的结构要素</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/seal/seal_oilsealrelatedstandards.html" title="油封标准查询">油封标准查询</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/spring/spring_cylindricalspiralcompressionspring.html" title="圆柱螺旋压缩弹簧查询">圆柱螺旋压缩弹簧查询</a>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            液压配管
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/hydraulic/hydraulic_pipejoint.html" title="液压管接头">液压管接头</a></li>
+                            <li><a class="dropdown-item" href="/hydraulic/hydraulic_summaryofnationalstandardsforhydraulicpipefittings.html" title="液压管接头国家标准汇总">液压管接头国家标准汇总</a></li>
+                            <li><a class="dropdown-item" href="/hydraulic/hydraulic_pipeclamp.html" title="液压管夹">液压管夹</a></li>
+                            <li><a class="dropdown-item" href="/hydraulic/hydraulic_hydraulicpipingstandards.html" title="液压配管标准">液压配管标准</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/spring/spring_cylindricalspiraltensionspring.html" title="圆柱螺旋拉伸弹簧查询">圆柱螺旋拉伸弹簧查询</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/CAD/CAD_solidworkstutorial.html" title="solidworks教程">solidworks教程</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/CAD/CAD_solidworksvideotutorial.html" title="solidworks视频教程">solidworks视频教程</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/boltsandnuts/boltsandnuts_keyandkeyconnection.html" title="键和键连接尺寸查询">键和键连接尺寸查询</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/CAD/CAD_misumi3dmodels.html" title="3D选型软件">3D选型软件</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/seal/seal_sealsandrelatedstandards.html" title="密封件及相关标准查询">密封件及相关标准查询</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/CAE/CAE_ansys.html" title="CAE软件教程">CAE软件教程</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/CAE/CAE_ansysvideotutorial.html" title="CAE视频教程">CAE视频教程</a>
+                </li>
+            </ul>
+            <h5 id="计算工具">常用计算工具:</h5>
+            <ul class="nav nav-tabs justify-content-between" style="margin-top: 0">
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            公差与配合查询
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差查询">公差查询</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_tolerancefitquery.html" title="配合查询">配合查询</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            形状与位置公差查询
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状公差查询">形状公差查询</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_positiontolerance.html" title="位置公差查询">位置公差查询</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            螺栓连接设计校核
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="受轴向载荷-松螺栓连接强度校核与设计">受轴向载荷-松螺栓连接强度校核与设计</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_boltconnection1.html" title="受横向载荷-铰制孔螺栓连接强度校核与设计">受横向载荷-铰制孔螺栓连接强度校核与设计</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_boltconnection2.html" title="受横向载荷-紧螺栓连接强度校核与设计">受横向载荷-紧螺栓连接强度校核与设计</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_boltconnection3.html" title="受轴向载荷-紧螺栓连接（静载荷）校核与设计">受轴向载荷-紧螺栓连接（静载荷）校核与设计</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_boltconnection4.html" title="受轴向载荷-紧螺栓连接（动载荷）校核与设计">受轴向载荷-紧螺栓连接（动载荷）校核与设计</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            弹簧设计
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="压缩弹簧设计计算">压缩弹簧设计计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_springs1.html" title="拉伸弹簧设计计算">拉伸弹簧设计计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            键连接设计校核
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="平键连接校核计算">平键连接校核计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_halfcirclekeyconnection.html" title="半圆键连接校核计算">半圆键连接校核计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_wedgekeyconnection.html" title="普通楔键连接校核计算">普通楔键连接校核计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_tangentialkeyconnection.html" title="切向键连接校核计算">切向键连接校核计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_rectangularsplineconnection.html" title="矩形花键连接校核计算">矩形花键连接校核计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_involutesplineconnection.html" title="渐开线花键连接校核计算">渐开线花键连接校核计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_chaindrive.html" title="滚子链传动设计计算">滚子链传动设计计算</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            螺旋传动设计
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="滑动螺旋传动计算">滑动螺旋传动计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            带传动设计
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="V型带设计">V型带设计</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_flatbelt.html" title="平带设计">平带设计</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_timingbeltdrive.html" title="同步带设计">同步带设计</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_polyvbeltdesign.html" title="多楔带设计">多楔带设计</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            液压传动系统计算
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="阻力(压降)计算">阻力(压降)计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_hydrauliccylindercalculation.html" title="液压油缸计算">液压油缸计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_hydraulicpumpcalculation.html" title="液压泵计算">液压泵计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_hydraulicmotorcalculation.html" title="液压马达计算">液压马达计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_hydraulicjackcalculation.html" title="液压千斤顶计算">液压千斤顶计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_oiltankthermalbalancecalculation.html" title="油箱热平衡计算">油箱热平衡计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            气压传动系统计算
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="普通气缸最小缸径计算">普通气缸最小缸径</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_pneumaticfingerclampingforcecalculation.html" title="气动手指夹紧力计算">气动手指夹紧力计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_cylindergasconsumptioncalculation.html" title="气缸耗气量计算">气缸耗气量计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_pneumaticcircuitcalculation.html" title="气动回路计算">气动回路计算</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_selectionofvacuumchuckandvacuumgenerator.html" title="真空吸盘与真空发生器选型">真空吸盘与真空发生器</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_chelionlinecalculationtool.html" title="气动供应商在线计算工具">气动供应商在线计算工具</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_sealingsolutions.html" title="O形圈计算器">O形圈计算器</a>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            水系统设计计算
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水泵选型">水泵选型</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_pressuredroponlinecalculation.html" title="压降在线计算">压降在线计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            滚动轴承设计与查询
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_deepgrooveballbearing.html" title="深沟球轴承设计与查询">深沟球轴承设计与查询</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_angularcontactballbearings.html" title="角接触球轴承设计与查询">角接触球轴承设计与查询</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_thrustballbearing.html" title="推力球轴承设计与查询">推力球轴承设计与查询</a></li>
+                            <li><a class="dropdown-item" href="/calculation/calculation_taperedrollerbearing.html" title="圆锥滚子轴承设计与查询">圆锥滚子轴承设计与查询</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_motor(gearmotor)selection.html" title="电机(减速机)选型">电机(减速机)选型</a>
+                </li>
+            </ul>
+            <h5>实用工具:</h5>
+            <ul class="nav nav-tabs justify-content-between" style="margin-top: 0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/translation/index.html" title="机械工程常用英汉词汇">机械工程常用英汉词汇</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/translation/translation_baidutranslation.html" title="在线翻译软件">在线翻译软件</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/translation/translation_englishretouchingwebsite.html" title="英语润色网站">英语润色网站</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/unitandconversion/unitandconversion_unitconversion.html" title="在线单位换算">在线单位换算</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/site/index.html" title="供应商资料搜索">供应商资料搜索</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/site/site_mechanicalsupplierwebsite.html" title="知名机械供应商官网">知名机械供应商官网</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/site/site_online3dresourcelibrarywebsite.html" title="在线3D资源库网站">在线3D资源库网站</a>
+                </li>
+            </ul>
+            <h5>便捷计算工具:</h5>
+            <ul class="nav nav-tabs justify-content-between" style="margin-top: 0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_cablechainlengthcalculation.html" title="拖链长度计算">拖链长度计算</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_hardnessconversiontool.html" title="硬度换算工具">硬度换算工具</a>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            紧固件计算工具
+                        </button>
+                        <ul class="dropdown-menu" style="width: 240px">
+                            <li><a class="dropdown-item" href="/calculation/calculation_fastenercalculationtool.html" title="紧固件计算工具">紧固件计算工具</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/thousandWeight-gD.html" title="千支重计算" target="_blank">千支重计算</a></li>
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item tool" href="javascript:" title="铆钉计算工具" target="_blank">铆钉计算工具</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/rivetThroughHoleSize-Ex.html" title="铆钉通孔尺寸计算" target="_blank">铆钉通孔尺寸计算</a></li>
+                                    <li><a class="dropdown-item tool" href="/boltsandnuts/boltsandnuts_nominaldiameterofrivet.html#铆钉长度计算" title="铆钉长度计算" target="_blank"><span style="display: inline-flex; align-items: center; gap: 2px;">铆钉长度计算 <i class="bi bi-star-fill" style="color: red; font-size: .7em;"></i></span></a></li>
+                                    <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/rivetLength-oW.html" title="铆钉长度计算" target="_blank">铆钉长度计算</a></li>
+                                    <li><a class="dropdown-item tool" href="/boltsandnuts/boltsandnuts_rivetholespacing.html#铆钉孔间距计算" title="铆钉孔间距计算" target="_blank"><span style="display: inline-flex; align-items: center; gap: 2px;">铆钉孔间距计算 <i class="bi bi-star-fill" style="color: red; font-size: .7em;"></i></span></a></li>
+                                    <a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/distanceBetweenHolesRivet-ad.html" title="铆钉的孔间距离计算" target="_blank">铆钉的孔间距离计算</a>
+                                </ul>
+                            </li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/minBreakingTorque-rn.html" title="最小破坏扭矩计算" target="_blank">最小破坏扭矩计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/limitSize-yP.html" title="螺纹极限尺寸计算" target="_blank">螺纹极限尺寸计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/tighteningTorque-Zn.html" title="拧紧力矩计算" target="_blank">拧紧力矩计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/whorlStress-kw.html" title="螺纹应力截面积计算" target="_blank">螺纹应力截面积计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/roughDiameter-zM.html" title="毛坯直径计算" target="_blank">毛坯直径计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/gaugeEffectiveDiameter-3X.html" title="量规有效径计算" target="_blank">量规有效径计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/boltScrewThroughHole-1Y.html" title="螺栓和螺钉通孔计算" target="_blank">螺栓和螺钉通孔计算</a></li>
+                            <li><a class="dropdown-item tool overflow-hidden" href="https://cn.fastencloud.com/tools/platingThickness-8r.html" title="米制螺纹镀层厚度和螺纹间隙计算" target="_blank">米制螺纹镀层厚度和螺纹间隙计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/threadComparison-eR.html" title="米英制螺纹计算" target="_blank">米英制螺纹计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/relevantHeadTypeCategory-5N.html" title="紧固件相关头型沉孔尺寸计算" target="_blank">紧固件相关头型沉孔尺寸计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/fillingRateTriangularThread-qQ.html" title="三角螺纹填充率计算" target="_blank">三角螺纹填充率计算</a></li>
+                            <li><a class="dropdown-item tool" href="https://cn.fastencloud.com/tools/endLengthDiameter-vA.html" title="螺栓突出螺母的末端长度计算" target="_blank">螺栓突出螺母的末端长度计算</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_deflectionapp.html" title="结构梁计算器">结构梁计算器</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_calculationofsteelweight.html" title="钢材重量计算">钢材重量计算</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculation/calculation_calculationofmaterialweight.html" title="材料重量计算">材料重量计算</a>
+                </li>
+            </ul>
+
+            <div class="idea" id="d7">
+                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="82" fill="#77BBFF" class="bi bi-newspaper" viewBox="0 0 16 16">
+                    <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12z"/>
+                    <path d="M2 3h10v2H2V3zm0 3h4v3H2V6zm0 4h4v1H2v-1zm0 2h4v1H2v-1zm5-6h2v1H7V6zm3 0h2v1h-2V6zM7 8h2v1H7V8zm3 0h2v1h-2V8zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1z"/>
+                </svg>
+                <h4>Mechtool 更新信息</h4>
+            </div>
+            <h6>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="purple" class="bi bi-caret-right-fill d-none" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                </svg>
+                <a class="updatelog" href="javascript:"> 更新日志</a>  <a class="float-end" href="/updatelog.html">全部</a>
+            </h6>
+            <p style="font-size: 14px">
+                <strong>2026.7.5</strong> <br>
+                1、本站资料（文档）增加限次下载功能。注册会员单日下载次数为10次/天，每年下载总次数为1500次。<br>
+            </p>
+            <p style="font-size: 14px">
+                <strong>2026.3.29</strong> <br>
+                1、网站增加会员功能。部分新增功能和新增资料将需要成为会员才能访问或使用。了解<a href="/about/about_helping.html#成为会员" target="_blank"> 如何加入会员? </a>
+                或直接<a href="/register" target="_blank"> 注册 </a>。<br/>
+                2、增加收藏功能（需成为会员），用户可以创建收藏夹，收藏网站任意网页并进行分类保存。<br/>
+                3、导航工具栏增加图片适合页面宽度功能按钮。<br/>
+                4、增加会员中心，用户可以查看会员信息，管理收藏夹，修改密码、用户昵称、邮箱等。<br/>
+            </p>
+            <p style="font-size: 14px" class="moreupdatelog"><a class="updatelog" href="javascript:">更多...</a></p>
+            <article style="display: none;">
+                <p style="font-size: 14px">
+                    <strong>2025.10.19</strong> <br>
+                    1、网站增加评论和网页访问量功能。<br/>
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2025.9.24</strong> <br>
+                    1、优化网站访问速度。<br/>
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2025.5.24</strong> <br>
+                    1、更新数据资源，更正数据错误。<br/>
+                    2、增加PC端网页设计宽度、隐藏侧边栏功能，可扩大内容展示区域，增加锁定上方导航栏功能。<br/>
+                    3、如遇数据资源缺少或数据错误，请使用公众号私信或发邮件给站长,谢谢。<br/>
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2024.10.4</strong> <br>
+                    1、网站不定时更新，如遇到网页显示或功能异常，请使用公众号私信或发邮件给站长,谢谢。<br/>
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2024.8.21</strong> <br>
+                    1、增加  便捷计算工具-><a href="/calculation/calculation_fastenercalculationtool.html">紧固件计算工具</a> 模块。<br/>
+                    2、增加  便捷计算工具-><a href="/calculation/calculation_calculationofsteelweight.html">钢材重量计算</a> 模块。<br/>
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2023.2.12</strong> <br>
+                    1、增加  计算工具-><a href="/calculation/calculation_motor(gearmotor)selection.html">电动机(减速机)选型计算</a> 模块。<br/>
+                    2、增加  机械资料。包括多本 <a href="/teachingmaterial/index.html">机械教材</a> 等。<br/>
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2022.11.9</strong> <br>
+                    1、增加 在线翻译软件 -> <a href="/translation/translation_englishretouchingwebsite.html">英语润色网站</a> 模块。<br/>
+                    2、增加 CAD软件 -> <a href="/CAD/CAD_solidworks2022sp5simplifiedchinese.html">Solidworks 2022 SP5多国语言版</a>。<br/>
+                    3、增加3D选型软件。
+                    计算机辅助设计->CAD->3D选型软件-> <a href="/CAD/CAD_misumi3dmodels2022.html" title="Misumi 3D选型软件2022版">Misumi 3D选型软件2022版</a> <br/>
+                    3D选型软件 -> <a href="/CAD/CAD_smc3dmodels2022.html" title="SMC 2D/3D选型软件2022">SMC 2D/3D选型软件2022</a> 等。<br/>
+                    4、如果有任何意见和建议请发 <a href="mailto:mechtool@126.com">电子邮件</a> 或在Mechtool微信公众号内发消息，谢谢。
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2022.5.10</strong> <br>
+                    1、更新 机械工程实用工具 -> <a href="/translation/translation_baidutranslation.html">在线翻译</a> 模块。<br/>
+                    更新 机械工程实用工具 -> <a href="/site/site_mechanicalsupplierwebsite.html">知名机械供应商官网</a> 模块。<br/>
+                    增加 便捷计算工具 -> <a href="/calculation/calculation_cablechainlengthcalculation.html">拖链长度计算</a> 模块。<br/>
+                    2、增加 CAE软件 -> <a href="/CAE/CAE_matlab2023b.html">Matlab for linux</a>。<br/>
+                    3、增加 连接件与紧固件 -> <a href="/boltsandnuts/boltsandnuts_commonstandardsforboltsandscrews.html">螺栓、螺钉常用标准</a>。<br/>
+                    4、需要了解更多内容请关注'Mechtool'微信公众号，如果有任何意见和建议也请在公众号内发消息，谢谢。
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2022.1.22</strong> <br>
+                    1、增加 数据资料-><a href="/hardwareandpipefittings/index.html"> 操作件、小五金及管件</a> 模块。<br/>
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2022.1.9</strong> <br>
+                    1、网站完成移动端适配。<br/>
+                    2、感谢热心网友的问题反馈，感谢支持，您的帮助都将使其他用户共同受益。<br/>
+                    3、感谢个别网友的小额捐赠，谢谢支持。<br/>
+                    4、感谢热心网友对网站的分享和宣传，谢谢支持。<br/>
+                    5、今年网站打算扩充更多内容，包括现在欠缺的图纸、资料，和计算工具等。<br/>
+                    6、如大家有任何建议或需要找寻资料，可发邮件或公众号留言给我，本人会及时回复。<br/>
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2021.11.18</strong> <br>
+                    1. 网站各个模块开始进行移动端适配。其中：<br/>
+                    计算工具-><a href="/calculation/calculation_keyconnection.html">键连接设计校核</a> 模块完成移动端适配。<br/>
+                    计算工具-><a href="/calculation/calculation_pneumaticdrivesystemcalculation.html">气压传动系统计算</a> 模块完成移动端适配。<br/>
+                    计算机辅助设计-><a href="/CAD/index.html">CAD</a> 、<a href="/CAE/index.html">CAE</a> 模块完成移动端适配。<br/>
+                    2. 增加CAD选型软件。包括 <a href="/CAD/CAD_chelic3dmodels.html">CHELIC 台湾气立3D选型</a>，
+                    <a href="/CAD/CAD_sew3dmodels.html">SEW 减速机3D选型</a> ，
+                    <a href="/CAD/CAD_calculationandselectiontoolsoftware.html">东方马达选型软件</a> 等。<br/>
+                    3. 增加CAD教程。包括多本 <a href="/CAD/CAD_solidworkstutorial.html">Solidworks教程</a> 等。
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2021.11.5</strong> <br>
+                    1. 计算工具进行移动端适配。<br/>
+                    计算工具-><a href="/calculation/calculation_boltconnection.html">螺栓连接设计校核</a> 模块完成移动端适配。<br/>
+                    计算工具-><a href="/calculation/calculation_shapeandpositiontolerance.html">形状与位置公差查询</a> 模块完成移动端适配。<br/>
+                    2. 增加CAD软件。包括 <a href="/CAD/CAD_inventor2021simplifiedchinese64bit.html">inventor 2021.5.2 简体中文64位</a>，
+                    <a href="/CAD/CAD_solidworks2021sp5simplifiedchinese.html">solidworks 2021 SP5多语言版64位</a> 等。
+                </p>
+                <p style="font-size: 14px">
+                    <strong>2021.10.31</strong> <br>
+                    1. 计算工具进行移动端适配。<br/>
+                    计算工具->公差与配合查询->
+                    <a href="/calculation/calculation_tolerances.html">公差查询</a> 以及
+                    <a href="/calculation/calculation_tolerancefitquery.html">配合查询</a> 进行了移动端适配。<br/>
+                </p>
+            </article>
+
+            <div class="idea" id="d8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="82" fill="#77BBFF" class="bi bi-folder-symlink" viewBox="0 0 16 16">
+                    <path d="m11.798 8.271-3.182 1.97c-.27.166-.616-.036-.616-.372V9.1s-2.571-.3-4 2.4c.571-4.8 3.143-4.8 4-4.8v-.769c0-.336.346-.538.616-.371l3.182 1.969c.27.166.27.576 0 .742z"/>
+                    <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14h10.348a2 2 0 0 0 1.991-1.819l.637-7A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm.694 2.09A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09l-.636 7a1 1 0 0 1-.996.91H2.826a1 1 0 0 1-.995-.91l-.637-7zM6.172 2a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z"/>
+                </svg>
+                <h4>Mechtool 友情链接</h4>
+            </div>
+            <div id="partner">
+                <a target="_blank" href="https://www.zhwtk.com/">至和网</a>
+                <a target="_blank" href="https://www.cnczxw.com">CNC自学网</a>
+                <a target="_blank" href="https://www.u557.com/">机械资源网</a>
+                <a target="_blank" href="https://www.baidu.com/">Baidu</a>
+                <a target="_blank" href="https://www.google.com">Google</a>
+                <a target="_blank" href="https://www.sogou.com/">sogou</a>
+                <a target="_blank" href="https://www.so.com/">360</a>
+                <a target="_blank" href="https://cn.bing.com/">bing</a>
+            </div>
+
+            <div class="container mt-3">
+                <div class="row">
+                    <div id="d9" class="col-12 col-md-6 ps-0">
+                        <h4>百家号</h4>
+                        <p><a target="_blank" href="https://baijiahao.baidu.com/u?app_id=1685733001465637">Mechtool 百家号</a></p>
+                    </div>
+
+                    <div id="d10" class="col-12 col-md-6 ps-0 mt-3 mt-md-0">
+                        <h4>微信公众号</h4>
+                        <p><a href="javascript:">Mechtool 官方服务号</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="idea" id="d11">
+                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="82" fill="#77BBFF" class="bi bi-person-heart" viewBox="0 0 16 16">
+                    <path d="M9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4Zm13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276Z"/>
+                </svg>
+                <h4>帮助 Mechtool</h4>
+            </div>
+            <div id="donate" class="mb-3">
+                <a href="/about/about_helping.html"> <button class="btn btn-outline-primary">帮助 Mechtool</button></a>
+            </div>
+            <div class="idea" id="d12">
+                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="82" fill="#77BBFF" class="bi bi-badge-ad" viewBox="0 0 16 16">
+                    <path d="m3.7 11 .47-1.542h2.004L6.644 11h1.261L5.901 5.001H4.513L2.5 11zm1.503-4.852.734 2.426H4.416l.734-2.426zm4.759.128c-1.059 0-1.753.765-1.753 2.043v.695c0 1.279.685 2.043 1.74 2.043.677 0 1.222-.33 1.367-.804h.057V11h1.138V4.685h-1.16v2.36h-.053c-.18-.475-.68-.77-1.336-.77zm.387.923c.58 0 1.002.44 1.002 1.138v.602c0 .76-.396 1.2-.984 1.2-.598 0-.972-.449-.972-1.248v-.453c0-.795.37-1.24.954-1.24z"/>
+                    <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+                </svg>
+                <h4>Mechtool 赞助商</h4>
+            </div>
+            <div class="col-12 text-left mb-3">
+                <a href="https://www.m-haste.com" target="_blank">
+                    <img class="d-sm-block d-none" height="172" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="" crossorigin="anonymous">
+                    <img class="d-block d-sm-none w-100" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="" crossorigin="anonymous">
+                </a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <div class="idea" id="d13">
+                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="82" fill="#77BBFF" class="bi bi-chat-left-text" viewBox="0 0 16 16">
+                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                    <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+                <h4>评论</h4>
+            </div>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12 col-xl-6 text-left">
+            <a href="javascript:">
+                <img class="d-sm-block d-none" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+                <img class="d-block d-sm-none w-100" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+<footer class="bd-footer py-3 mt-3 bg-light">
+    <div class="container py-3">
+        <div class="row">
+            <div class="col-12 mb-2">
+                <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                   aria-label="Mechtool">
+                    <span class="fs-5">Mechtool</span>
+                </a>
+            </div>
+            <div class="col-12 mb-2">
+                <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+            </div>
+            <div class="col-12 mb-2">
+                <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                    <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                    <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                    <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                    <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                    <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                    <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    <li class="mb-2" id="realtime-visitors-container" style="display:none;">在线：<span id="realtime-visitors">加载中...</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

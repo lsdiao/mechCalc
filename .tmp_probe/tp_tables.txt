@@ -1,0 +1,9 @@
+
+===== TABLE tp_resultTable =====
+序号 | 名称 | 计算结果
+
+===== SELECT beltSize ===== MXL:MXL, XXL:XXL, XL:XL, L:L, H:H, XH:XH, XXH:XXH, T2.5:T2.5, T5:T5, T10:T10, T20:T20
+
+===== SELECT tp_beltType ===== MXL:MXL, XXL:XXL, XL:XL, L:L, H:H, XH:XH, XXH:XXH
+
+===== SELECT tp_toothProfile ===== involute:渐开线齿廓---齿条刀具, straight:直边齿廓

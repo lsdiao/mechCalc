@@ -1,0 +1,62 @@
+===== WORMDRIVE1 (centerDisA) =====
+--- 1 -d k=1.2075 -d torque2=948.4 -d zRou=2.9 -d zE=160 -d sigmaHAllowable=217.98
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":173.13}
+--- 1 -d k=1.0 -d torque2=1000 -d zRou=3.0 -d zE=160 -d sigmaHAllowable=200
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":179.26}
+--- 1 -d k=1.5 -d torque2=2500.5 -d zRou=2.5 -d zE=155 -d sigmaHAllowable=180.5
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":258.56}
+--- 1 -d k=2.05 -d torque2=123.456 -d zRou=3.1 -d zE=160 -d sigmaHAllowable=130
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":154.45}
+--- 1 -d k=1.2075 -d torque2=948.4 -d zRou=2.9 -d zE=160 -d sigmaHAllowable=217.985
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":173.12}
+===== WORMDRIVE2 (gama,m2d1,x2,d2,q) =====
+--- 2 -d m=8 -d z2=41 -d z1=2 -d d1=80 -d a=200
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"m2d1":5120.0,"q":10.0,"x2":-0.5,"d2":328.0,"gama":11.31}}
+--- 2 -d m=10 -d z2=31 -d z1=4 -d d1=90 -d a=250
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"m2d1":9000.0,"q":9.0,"x2":5.0,"d2":310.0,"gama":23.962}}
+--- 2 -d m=5 -d z2=71 -d z1=1 -d d1=50 -d a=200
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"m2d1":1250.0,"q":10.0,"x2":-0.5,"d2":355.0,"gama":5.711}}
+--- 2 -d m=3.15 -d z2=53 -d z1=2 -d d1=35.5 -d a=125
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"m2d1":352.25,"q":11.27,"x2":7.548,"d2":166.95,"gama":10.063}}
+--- 2 -d m=12.5 -d z2=29 -d z1=6 -d d1=112 -d a=250
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"m2d1":17500.0,"q":8.96,"x2":1.02,"d2":362.5,"gama":33.808}}
+--- 2 -d m=2 -d z2=40 -d z1=1 -d d1=22.4 -d a=63
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"m2d1":89.6,"q":11.2,"x2":5.9,"d2":80.0,"gama":5.102}}
+===== WORMDRIVE3 decimals (vS rounding, gamma variants) =====
+--- 3 -d gama=11.31 -d d1=80 -d n1=1450 -d wormHardness=≥45HRC -d wormWheelMaterial=锡青铜
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"phiV":1.169,"efficiency":0.859,"vS":6.194}}
+--- 3 -d gama=5.5 -d d1=63 -d n1=960 -d wormHardness=<45HRC -d wormWheelMaterial=灰铸铁
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+--- 3 -d gama=18.435 -d d1=45 -d n1=2900 -d wormHardness=≥45HRC -d wormWheelMaterial=铝铁青铜
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"phiV":1.794,"efficiency":0.859,"vS":7.203}}
+--- 3 -d gama=10 -d d1=100 -d n1=333 -d wormHardness=≥45HRC -d wormWheelMaterial=锡青铜
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"phiV":2.136,"efficiency":0.779,"vS":1.77}}
+===== WORMDRIVE4 (yBeta,zV2,kFN,sigmaFAllowable,sigmaF) =====
+--- 4 -d k=1.2075 -d torque2=948.4 -d yFa2=2.87 -d gama=11.31 -d m=8 -d d1=80 -d d2=328 -d z2=41 -d cycleTimes=52200000 -d sigmaFAllowableBasic=56
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"yBeta":0.92,"kFN":0.644,"sigmaF":22.02,"sigmaFAllowable":36.09,"zV2":43.48}}
+--- 4 -d k=1.0 -d torque2=1000 -d yFa2=2.0 -d gama=5 -d m=5 -d d1=50 -d d2=300 -d z2=60 -d cycleTimes=1000000 -d sigmaFAllowableBasic=40
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"yBeta":0.96,"kFN":1.0,"sigmaF":39.34,"sigmaFAllowable":40.0,"zV2":60.69}}
+--- 4 -d k=1.6 -d torque2=3333.3 -d yFa2=3.0 -d gama=15 -d m=10 -d d1=90 -d d2=310 -d z2=31 -d cycleTimes=2500000000 -d sigmaFAllowableBasic=80
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"yBeta":0.89,"kFN":0.541,"sigmaF":78.34,"sigmaFAllowable":43.32,"zV2":34.4}}
+--- 4 -d k=1.15 -d torque2=555.55 -d yFa2=2.5 -d gama=8 -d m=6.3 -d d1=63 -d d2=371.7 -d z2=59 -d cycleTimes=50000 -d sigmaFAllowableBasic=64
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"yBeta":0.94,"kFN":1.292,"sigmaF":15.62,"sigmaFAllowable":82.66,"zV2":60.76}}
+--- 4 -d k=1.2075 -d torque2=948.4 -d yFa2=2.87 -d gama=11.31 -d m=8 -d d1=80 -d d2=328 -d z2=41 -d cycleTimes=10000000 -d sigmaFAllowableBasic=56
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"yBeta":0.92,"kFN":0.774,"sigmaF":22.02,"sigmaFAllowable":43.36,"zV2":43.48}}
+===== WORMDRIVE5 (forceT1,forceR1,dF1,inertia,maxY,yAllowable) =====
+--- 5 -d torque=59.27 -d torque2=948.4 -d m=8 -d d1=80 -d d2=328 -d distanceL=295.2
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"forceR1":2104.81,"yAllowable":0.08,"forceT1":1481.75,"inertia":670786.35,"maxY":0.01,"dF1":60.8}}
+--- 5 -d torque=100 -d torque2=2000 -d m=10 -d d1=90 -d d2=310 -d distanceL=280
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"forceR1":4696.39,"yAllowable":0.09,"forceT1":2222.22,"inertia":931420.18,"maxY":0.0124,"dF1":66.0}}
+--- 5 -d torque=12.5 -d torque2=250.25 -d m=4 -d d1=40 -d d2=280 -d distanceL=250
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"forceR1":650.6,"yAllowable":0.04,"forceT1":625.0,"inertia":41924.15,"maxY":0.034,"dF1":30.4}}
+--- 5 -d torque=33.33 -d torque2=666.66 -d m=6.3 -d d1=63 -d d2=371.7 -d distanceL=334.5
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"forceR1":1305.59,"yAllowable":0.063,"forceT1":1058.1,"inertia":257980.25,"maxY":0.0247,"dF1":47.88}}
+===== WORMDRIVE6 (coolingArea,minCoolingArea) =====
+--- 6 -d efficiency=0.87 -d t0=60 -d t1=20 -d alphaD=8.5 -d power=9
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"coolingArea":3.44,"minCoolingArea":2.29}}
+--- 6 -d efficiency=0.75 -d t0=70 -d t1=30 -d alphaD=12 -d power=5.5
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"coolingArea":2.86,"minCoolingArea":2.29}}
+--- 6 -d efficiency=0.596 -d t0=65 -d t1=25 -d alphaD=10 -d power=2.2
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"coolingArea":2.22,"minCoolingArea":1.62}}
+--- 6 -d efficiency=0.8 -d t0=60 -d t1=20 -d alphaD=15 -d power=100
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"coolingArea":33.33,"minCoolingArea":22.22}}

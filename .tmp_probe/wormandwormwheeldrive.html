@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/stylewap.min.css?v=1.2.3"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/common.min.js?v=1.4.7"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+    <meta name='description' content=''>
+    <script src="/dist/js/mechtool/wormandwormwheeldrive.min.js"></script>
+
+    <title>普通圆柱蜗杆传动设计 | 蜗轮蜗杆强度计算与校核</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-md-center">
+        <div class="form-check form-switch ps-0 me-5 d-md-flex d-none justify-content-start">
+            <label class="form-check-label d-none d-lg-block text-secondary" for="showSidebar">侧边栏</label>
+            <input class="form-check-input ms-2" type="checkbox" role="switch" id="showSidebar" checked hidden>
+        </div>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fitPageBtn" title="图片适合页面宽度">
+            <i class="bi bi-arrows-fullscreen" style="font-size: 16px;"></i>
+        </div>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <i class="bi bi-unlock" style="font-size: 16px;"></i>
+            <i class="bi bi-lock d-none" style="font-size: 16px;"></i>
+        </div>
+        <div class="dropdown ms-3">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-md-inline">常用设计计算工具</span> <span class="d-md-none">计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+
+
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            <ul class="list-unstyled mb-0 py-3 pt-md-1">
+                <li>
+                    <a href="/calculation/calculation_wormandwormwheeldrive.html" class="d-inline-flex align-items-center rounded">
+                        普通圆柱蜗杆传动设计
+                    </a>
+                </li>
+                <li class="my-3 mx-4 border-bottom"></li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#program-query-collapse" aria-expanded="true" aria-current="true">
+                        设计
+                    </button>
+
+                    <div class="collapse show" id="program-query-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/calculation/calculation_wormandwormwheeldrive.html" class="d-inline-flex align-items-center rounded" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#data-query-collapse" aria-expanded="true" aria-current="true">
+                        查询
+                    </button>
+
+                    <div class="collapse show" id="data-query-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/calculation/calculation_wormandwormwheeldrivedescription.html" class="d-inline-flex align-items-center rounded" title="普通圆柱蜗杆传动设计方法">普通圆柱蜗杆传动设计方法</a></li>
+                            <li><a href="/geardrive/geardrive_cylindricalwormdrive.html" class="d-inline-flex align-items-center rounded" title="圆柱蜗杆传动">圆柱蜗杆传动</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="my-3 mx-4 border-top"></li>
+                <li>
+                    <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                        关于 Mechtool
+                    </a>
+                </li>
+                <li>
+                    <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+                       title="帮助 Mechtool">
+                        帮助 Mechtool
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <div class="d-md-flex flex-md-row align-items-center justify-content-between gap-4">
+                <h1 class="bd-title" id="content">普通圆柱蜗杆传动设计</h1>
+                <div class="d-flex flex-row align-items-center justify-content-end gap-2">
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                        <i class="bi bi-star" style="font-size: 16px;"></i>
+                    </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_wormandwormwheeldrivedescription.html" title="普通圆柱蜗杆传动设计方法"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+                </div>
+            </div>
+            <p class="bd-lead">普通圆柱蜗杆传动设计</p>
+        </div>
+        <div class="bd-toc mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">本页导航</strong>
+            <nav id="TableOfContents">
+                <ul>
+                    <li><a name="参考资料">参考资料</a></li>
+                    <li><a name="工具介绍及使用说明">工具介绍及使用说明</a></li>
+                    <li><a name="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a>
+                        <ul>
+                            <li><a name="输入初始参数">输入初始参数</a></li>
+                            <li><a name="蜗轮按齿面接触疲劳强度计算最小中心距">蜗轮按齿面接触疲劳强度计算最小中心距</a></li>
+                            <li><a name="蜗杆与蜗轮主要参数与几何尺寸">蜗杆与蜗轮主要参数与几何尺寸</a></li>
+                            <li><a name="蜗轮按齿根弯曲疲劳强度校核">蜗轮按齿根弯曲疲劳强度校核</a></li>
+                            <li><a name="校核蜗杆刚度">校核蜗杆刚度</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">广告链接</strong>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool右侧栏自适应 -->
+    <ins class="adsbygoogle right"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="3643304998"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <h2 id="参考资料">参考资料</h2>
+            <p>查询资料：<br/>
+                <a href="/calculation/calculation_wormandwormwheeldrivedescription.html" title="普通圆柱蜗杆传动设计方法">普通圆柱蜗杆传动设计方法</a>&nbsp;&nbsp;&nbsp;
+                <a href="https://res.mechtool.cn/js/web/viewer.html?file=res/article/calculation/西北工大机械设计第八版第十一章 蜗杆传动&amp;v=1.0.0" title="西北工大机械设计第八版第十一章 蜗杆传动" target="_blank">西北工大机械设计第八版第十一章 蜗杆传动</a>
+            </p>
+            <details>
+                <summary class="text-primary mb-3">计算程序方法说明...</summary>
+                <article>
+                    由于材料与结构原因，蜗杆螺旋齿部分强度总是高于蜗轮轮齿强度，所有失效经常发生在蜗轮上，一般只校核计算蜗轮。
+                    <br/>本程序按照蜗杆设计校核计算的一般顺序：根据理论传动比初选蜗杆齿数z1、蜗轮齿数z2，初算传动效率η，假设d1/a值，按齿面接触疲劳强度计算最小中心距——按蜗杆蜗轮参数匹配表选取参数——验证d1/a与η——若不合理则将计算值带回重算，直至d1/a与η验证合格——以齿根弯曲疲劳强度校核——校核蜗杆刚度——热平衡核算。
+                    <br/>1）开式蜗杆传动：失效多为齿面磨损和轮齿折断，以齿根弯曲疲劳强度作为主要设计基准。（实际也先按齿面接触疲劳强度计算——参数选取-——以齿根弯曲疲劳强度校核）
+                    <br/>2）闭式蜗杆传动：失效多为齿面胶合或齿面点蚀，以齿面接触疲劳强度作为设计基准，按照齿根弯曲疲劳强度校核，还应做热平衡核算。
+                    <br/>此外，还应校核蜗杆刚度。
+                </article>
+            </details>
+            <h2 id="工具介绍及使用说明">工具介绍及使用说明</h2>  
+            <h2 id="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</h2>
+            <div class="container">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="输入初始参数">输入初始参数</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 5px 10px 5px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td>蜗杆类型</td>
+                                    <td>
+                                        <input type="text" step="0.1" readonly name="wormType" id="wormType" value="ZI/ZA/ZN/ZK蜗杆"
+                                               style="width: 150px">
+                                    </td>
+                                    <td>蜗轮材料</td>
+                                    <td>
+                                        <select type="text" name="wormWheelMaterial" id="wormWheelMaterial"
+                                                style="margin-top: 0;width: 100px;">
+                                            <option selected value="锡青铜">锡青铜</option>
+                                            <option value="铝铁青铜">铝铁青铜</option>
+                                            <option value="灰铸铁">灰铸铁</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>蜗杆输入功率P</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="power" id="power" value="9"
+                                               style="width: 80px"><span> KW</span>
+                                    </td>
+                                    <td>蜗杆转速n1</td>
+                                    <td>
+                                        <input type="number" step="1" name="n1" id="n1" value="1450"
+                                               style="width: 80px"><span> r/min</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>蜗杆输入转矩T</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="torque" id="torque" value="59.27"
+                                               style="width: 80px"><span> N·m</span>
+                                    </td>
+                                    <td>蜗轮转速n2</td>
+                                    <td>
+                                        <input type="number" step="1" name="n2" id="n2" value="72.5"
+                                               style="width: 80px"><span> r/min</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>传动比i</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="transmissionRatio" id="transmissionRatio" value="20"
+                                               style="width: 80px">
+                                    </td>
+                                    <td>工作寿命L</td>
+                                    <td>
+                                        <input type="number" step="1" name="lifeTime" id="lifeTime" value="12000"
+                                               style="width: 80px"><span> h</span>
+                                    </td>
+                                <tr>
+                                <tr style="height: 45px">
+                                    <td colspan="2" id="errorInfo1" style="color: red;text-align: center"></td>
+                                    <td colspan="2" id="chkInfo1" style="color: green;text-align: center"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p>
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc1" aria-expanded="false" aria-controls="collapseDesc1">
+                                显示说明
+                            </button>
+                        </p>
+                    </div>
+                </div>
+                <div class="row collapse" id="collapseDesc1">
+                    <div class="col-12" style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                        <div id="desc1" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                            <div style="font-size: 15px;text-align: left">
+                                1	输入原始参数包括：蜗杆输入功率与转矩、蜗轮蜗杆转速和工作寿命。<br/>
+                                2	功率与转矩的可任选一个输入，另一个程序将自动计算。
+                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="<img src='/images/calculation/calculation_geardrive1.gif' alt=''>">
+                                    <a href="javascript:">计算公式</a>
+                                </span>
+                                <br/>
+                                3	转速首先输入蜗杆的转速，蜗轮的转速和传动比可任选一个输入，另一个将自动计算。
+                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="<img src='/images/calculation/calculation_geardrive2.gif' alt=''>">
+                                    <a href="javascript:">计算公式</a>
+                                </span>
+                                <br/>
+                                4	工作寿命说明： 班次X班时X天数X年限（比如2班倒，每班8小时，一年300天，5年，则L=2*8*300*5）。<br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="蜗轮按齿面接触疲劳强度计算最小中心距">蜗轮按齿面接触疲劳强度计算最小中心距</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 5px 0px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td colspan="4" class="text-center">初选几何参数</td>
+                                </tr>
+                                <tr>
+                                    <td>蜗杆头数Z1</td>
+                                    <td>
+                                        <input type="number" step="1" name="assumeZ1" id="assumeZ1" value="2"
+                                               style="width: 70px">
+                                        <span><a href="/calculation/calculation_wormandwormwheeldrivedescription.html#计算传动比i，并确定蜗杆、蜗轮齿数" target="_blank"> 查询</a>
+                                    </span>
+                                    </td>
+                                    <td>蜗轮齿数z2</td>
+                                    <td>
+                                        <input type="number" disabled step="1" name="assumeZ2" id="assumeZ2" value="40"
+                                               style="width:70px">
+                                    </td>
+                                </tr>
+                                <td>假设d1/a</td>
+                                <td>
+                                    <input type="number" step="0.01" name="assumeD1A" id="assumeD1A" value="0.35"
+                                           style="width: 70px">
+                                </td>
+                                <td colspan="2" id="errorInfo2" style="color: red;text-align: center"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">计算蜗轮输出转矩T2</td>
+                                </tr>
+                                <tr>
+                                    <td>初算传动效率η</td>
+                                    <td>
+                                        <input type="number" step="0.01" name="assumeEfficiency" id="assumeEfficiency" value="0.8"
+                                               style="width: 70px">
+                                    </td>
+                                    <td>蜗轮转矩T2</td>
+                                    <td>
+                                        <input type="number" disabled step="1" name="torque2" id="torque2" value="948.4"
+                                               style="width:80px"><span> N·m</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">计算载荷系数K=
+                                                                        K<sub>A</sub>*K<sub>V</sub>*K<sub>β</sub></td>
+                                </tr>
+                                <tr>
+                                    <td>使用系数K<sub>A</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" name="kA" id="kA" value="1.15" style="width: 70px">
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#wormandwormwheeldrive1Modal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="wormandwormwheeldrive1Modal" tabindex="-1" aria-labelledby="wormandwormwheeldrive1ModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive1.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>动载系数K<sub>V</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" name="kV" id="kV" value="1.05" style="width: 70px">
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#wormandwormwheeldrive2Modal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="wormandwormwheeldrive2Modal" tabindex="-1" aria-labelledby="wormandwormwheeldrive2ModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive2.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>齿向载荷<br>分布系数K<sub>β</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" name="kBeta" id="kBeta" value="1" style="width: 70px">
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#wormandwormwheeldrive3Modal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="wormandwormwheeldrive3Modal" tabindex="-1" aria-labelledby="wormandwormwheeldrive3ModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive3.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>载荷系数K</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="k" id="k" value="1.2075" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">设计计算公式内其余系数的确定</td>
+                                </tr>
+                                <tr>
+                                    <td>材料弹性系数<br>Z<sub>E</sub>(MPa<sup>1/2</sup>)</td>
+                                    <td> <input type="number" step="0.1" name="zE" id="zE" value="160" style="width: 70px">
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#wormandwormwheeldrive9Modal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="wormandwormwheeldrive9Modal" tabindex="-1" aria-labelledby="wormandwormwheeldrive9ModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive9.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>接触系数Z<sub>ρ</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" readonly name="zRou" id="zRou" value="2.9" style="width: 70px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">[σ<sub>H</sub>]的确定</td>
+                                </tr>
+                                <tr>
+                                    <td>轮齿啮合次数j</td>
+                                    <td> <input type="number" step="1" name="j" id="j" value="1" style="width: 70px">
+                                    </td>
+                                    <td>应力循环次数N</td>
+                                    <td> <input type="number" step="0.1" readonly name="cycleTimes" id="cycleTimes" value="5.22e+7" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>寿命系数K<sub>HN</sub></td>
+                                    <td> <input type="number" step="0.1" readonly name="kHN" id="kHN" value="0.81" style="width: 70px">
+                                    </td>
+                                    <td>基本<br/>许用应力[σ<sub>H</sub>]'</td>
+                                    <td> <input type="number" step="0.1" name="basicSigmaHAllowable" id="basicSigmaHAllowable" value="268" style="width: 70px">
+                                        <span><a href="/calculation/calculation_wormandwormwheeldrivedescription_1.html#根据蜗杆蜗轮材料的选择，计算蜗轮材料的许用强度" target="_blank"> 查询</a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>许用应力[σ<sub>H</sub>]</td>
+                                    <td> <input type="number" step="0.1" readonly name="sigmaHAllowable" id="sigmaHAllowable" value="217.98" style="width: 80px"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">最小中心距a计算</td>
+                                </tr>
+                                <tr>
+                                    <td>最小中心距a</td>
+                                    <td> <input type="number" step="0.1" readonly name="centerDisA" id="centerDisA" value="" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" id="errorInfo3" style="color: red;text-align: center"></td>
+                                    <td></td>
+                                    <td class="text-start">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_submit_wormDrive1" value="计算结果">计算结果</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">验算d<sub>1</sub>/a</td>
+                                </tr>
+                                <tr>
+                                    <td>选取中心距a</td>
+                                    <td> <input type="number" step="1" name="centerDisAFinal" id="centerDisAFinal" value="200" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                    <td>
+                                    <span><a href="/geardrive/geardrive_cylindricalwormdrive.html#蜗杆、蜗轮参数的匹配(摘自GB 10085-1988 neq DIN3976-1980)" target="_blank" title="蜗杆、蜗轮参数的匹配(摘自GB 10085-1988)"> 查询标准</a>
+                                        选取d1</span>
+                                    </td>
+                                    <td> <input type="number" step="1" name="d1" class="d1" value="80" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>验算d1/a</td>
+                                    <td> <input type="number" step="0.1" readonly name="d1A" id="d1A" value="0.4" style="width: 80px">
+                                    </td>
+                                    <td colspan="2" class="text-center">
+                                        <span id="resultOk" style="display: block;color: green">d1/a ≥ 假设值,以上计算结果可用!</span>
+                                        <span id="resultNotOk" style="display: none;color: red">d1/a < 假设值,请将此值代回重算!</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p>
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc2" aria-expanded="false" aria-controls="collapseDesc2">
+                                显示说明
+                            </button>
+                        </p>
+                    </div>
+                </div>
+                <div class="row collapse" id="collapseDesc2">
+                    <div class="col-12" style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                        <div id="desc2" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                            1,蜗轮按齿面接触疲劳强度计算最小中心距公式如下：<br/>
+                            <img style="margin: 5px 0 0 0;height: 75px" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive4.gif" alt="" crossorigin="anonymous"><br/>
+                            式中：<br/>
+                            a -- 蜗杆传动的中心距;<br/>
+                            K -- 载荷系数;<br/>
+                            T2-- 蜗轮输入转矩;<br/>
+                            Z<sub>E</sub> -- 材料的弹性影响系数;单位为MPa<sup>1/2</sup>,对于青铜或铸铁蜗轮与钢蜗轮配对时，取Z<sub>E</sub>=160MPa<sup>1/2</sup><br/>
+                            Z<sub>ρ</sub> -- 接触系数;它是蜗杆传动的接触线长度和曲率半径对接触强度的影响系数。<br/>
+                            [σ<sub>H</sub>] -- 蜗轮齿面的许用接触应力,MPa。<br/><br/>
+                            2,[σ<sub>H</sub>]计算说明：<br/>
+                            当蜗轮材料为灰铸铁或高强度青铜(σ<sub>B</sub>≥300MPa)时，蜗杆传动的承载能力主要取决于齿面胶合强度。但因目前尚无完善的胶合强度计算公式，故采用接触强度计算是一种条件性计算，
+                            在查取蜗轮齿面的许用接触应力时，要考虑相对滑动速度的大小。由于胶合不属于疲劳失效，[σ<sub>H</sub>]的值与应力循环次数N无关，因而可直接从表中查出许用接触应力值。<br/>
+                            若蜗轮材料为强度极限σ<sub>H</sub> < 300MPa的锡青铜，应蜗轮主要为接触疲劳失效，故应先从表中查出蜗轮的基本许用接触应力[σ<sub>H</sub>]'，再按[σ<sub>H</sub>]=K<sub>HN</sub>
+                            [σ<sub>H</sub>]'算出许用接触应力的值。<br/>
+                            式中K<sub>HN</sub>=(10<sup>7</sup>/N)<sup>1/8</sup>。<br/>
+                            其中，应力循环次数N=60jn<sub>2</sub>L<sub>h</sub>，<br/>
+                            此处n<sub>2</sub>为蜗轮转速，r/min;L<sub>h</sub>为工作寿命,h;j为蜗轮每转一转，每个轮齿啮合的次数，程序用默认取值为1。<br/><br/>
+                            3,验算d1/a:<br/>
+                            查询国标<a href="https://res.mechtool.cn/js/web/viewer.html?file=res/standard/GBT 10085-2018 圆柱蜗杆传动基本参数#page=10&amp;v=1.0.0" target="_blank">GB 10085-2018</a>，根据蜗杆、蜗轮参数的匹配表选择蜗杆分度圆直径d1和中心距a，算出d1/a,如d1/a ≥ 假设值,则设计计算结果可用!如d1/a < 假设值,则需要将此值替换假设值重算!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="蜗杆与蜗轮主要参数与几何尺寸">蜗杆与蜗轮主要参数与几何尺寸</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 5px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td>蜗杆实际Z1</td>
+                                    <td> <input type="number" step="1" name="z1" id="z1" value="2" style="width: 80px">
+                                    </td>
+                                    <td>蜗轮实际Z2</td>
+                                    <td> <input type="number" step="1" name="z2" id="z2" value="41" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>实际传动比μ</td>
+                                    <td> <input type="number" step="1" readonly name="miu" id="miu" value="20.5" style="width: 80px">
+                                    </td>
+                                    <td>传动比误差Δu</td>
+                                    <td> <input type="number" step="1" readonly name="deltaMiu" id="deltaMiu" value="2.5" style="width: 80px">
+                                        <span> %</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>模数m</td>
+                                    <td> <input type="number" step="1" name="m" id="m" value="8" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                    <td>蜗杆分度圆d1</td>
+                                    <td> <input type="number" step="1" readonly name="d1" class="d1" value="80" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>直径系数q</td>
+                                    <td> <input type="number" readonly step="1" name="q" id="q" value="" style="width: 80px">
+                                    </td>
+                                    <td>蜗轮分度圆d2</td>
+                                    <td> <input type="number" readonly step="1" name="d2" id="d2" value="" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>导程角γ</td>
+                                    <td> <input type="number" readonly step="1" name="gama" id="gama" value="" style="width: 80px">
+                                        <span> <sup>°</sup></span>
+                                    </td>
+                                    <td>变位系数X2</td>
+                                    <td> <input type="number" readonly step="1" name="x2" id="x2" value="" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>m<sup>2</sup>d1</td>
+                                    <td> <input type="number" readonly step="1" name="m2d1" id="m2d1" value="" style="width: 80px">
+                                        <span> mm<sup>3</sup></span>
+                                    </td>
+                                    <td></td>
+                                    <td class="text-start">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_submit_wormDrive2" value="计算结果">计算结果</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">验算效率</td>
+                                </tr>
+                                <tr>
+                                    <td>蜗杆齿面硬度</td>
+                                    <td>
+                                        <select type="text" name="wormHardness" id="wormHardness"
+                                                style="margin-top: 0;width: 100px;">
+                                            <option selected value="≥45HRC">≥45HRC</option>
+                                            <option value="<45HRC"><45HRC</option>
+                                        </select>
+                                    </td>
+                                    <td>滑动速度Vs</td>
+                                    <td> <input type="number" readonly step="1" name="vS" id="vS" value="" style="width: 80px">
+                                        <span> m/s</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>当量摩擦角φ<sub>v</sub></td>
+                                    <td> <input type="number" readonly step="1" name="phiV" id="phiV" value="" style="width: 80px">
+                                    </td>
+                                    <td>传动效率η</td>
+                                    <td> <input type="number" readonly step="1" name="efficiency" id="efficiency" value="" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" id="errorInfo4" style="color: red;text-align: center"></td>
+                                    <td class="text-end">
+                                    <td class="text-start">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_submit_wormDrive3" value="计算结果">计算结果</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p>
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc3" aria-expanded="false" aria-controls="collapseDesc3">
+                                显示说明
+                            </button>
+                        </p>
+                    </div>
+                </div>
+                <div class="row collapse" id="collapseDesc3">
+                    <div class="col-12" style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                        <div id="desc3" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                            <div style="font-size: 15px;text-align: left">
+                                1，传动比误差：<br>
+                                选取蜗杆蜗轮实际齿数，当实际传动比与要求传动比误差大于5%时，需要修改输入参数中的传动比重新计算。<br/>
+                                2，几何参数相对应的计算公式：<br/>
+                                蜗轮分度圆直径：<img style="margin:0;vertical-align:center" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrivedescription15.gif" alt="" crossorigin="anonymous"><br>
+                                蜗杆分度圆直径：d1=mq<br>
+                                蜗轮变位系数：<img style="margin:0;vertical-align:center" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrivedescription16.gif" alt="" crossorigin="anonymous"><br>
+                                蜗杆导程角：<img style="margin:0;vertical-align:center" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrivedescription30.gif" alt="" crossorigin="anonymous"><br>
+                                齿面滑动速度：<img style="margin:0;vertical-align:center" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrivedescription40.gif" alt="" crossorigin="anonymous"><br>
+                                更多公式：参见 <a href="/calculation/calculation_wormandwormwheeldrivedescription_4.html" target="_blank">几何参数计算</a><br>
+                                或者 <a href="/geardrive/geardrive_calculationofgeometricaldimensionsofcylindricalwormdrive.html" target="_blank">圆柱蜗杆传动的几何尺寸计算</a><br>
+                                3，验算效率<br>
+                                传动效率公式：η=0.95tanγ/tan(γ+φv)<br>
+                                当验算效率小于等于初算值时，蜗杆尺寸不用重算，当大于初算值时需要按验算后的效率替换初算值重新计算。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="蜗轮按齿根弯曲疲劳强度校核">蜗轮按齿根弯曲疲劳强度校核</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 5px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td>螺旋角<br/>影响系数Y<sub>β</sub></td>
+                                    <td> <input type="number" step="1" readonly name="yBeta" id="yBeta" value="" style="width: 80px">
+                                    </td>
+                                    <td>蜗轮当量齿数Z<sub>v2</sub></td>
+                                    <td> <input type="number" step="1" readonly name="zV2" id="zV2" value="" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>齿形系数Y<sub>Fa2</sub></td>
+                                    <td> <input type="number" step="0.1" name="yFa2" id="yFa2" value="2.87" style="width: 80px">
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#wormandwormwheeldrive6Modal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="wormandwormwheeldrive6Modal" tabindex="-1" aria-labelledby="wormandwormwheeldrive6ModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-md modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive6.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>寿命系数K<sub>FN</sub></td>
+                                    <td> <input type="number" step="1" readonly name="kFN" id="kFN" value="" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>基本许用<br/>弯曲应力[σ<sub>F</sub>]'</td>
+                                    <td> <input type="number" step="1" name="sigmaFAllowableBasic" id="sigmaFAllowableBasic" value="56" style="width: 80px">
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#wormandwormwheeldrive10Modal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="wormandwormwheeldrive10Modal" tabindex="-1" aria-labelledby="wormandwormwheeldrive10ModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive10.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>许用<br/>弯曲应力[σ<sub>F</sub>]</td>
+                                    <td> <input type="number" step="1" readonly name="sigmaFAllowable" id="sigmaFAllowable" value="" style="width: 80px">
+                                        <span> MPa</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>蜗轮齿根<br/>弯曲应力σ<sub>F</sub></td>
+                                    <td> <input type="number" readonly step="1" name="sigmaF" id="sigmaF" value="" style="width: 80px">
+                                        <span> MPa</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" id="errorInfo5" style="color: red;text-align: center"></td>
+                                    <td class="text-end">
+                                    <td class="text-start">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_submit_wormDrive4" value="计算结果">计算结果</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p>
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc4" aria-expanded="false" aria-controls="collapseDesc4">
+                                显示说明
+                            </button>
+                        </p>
+                    </div>
+                </div>
+                <div class="row collapse" id="collapseDesc4">
+                    <div class="col-12" style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                        <div id="desc4" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                            <div style="font-size: 15px;text-align: left">
+                                1,蜗轮按齿根弯曲疲劳强度校核公式：<br/>
+                                <img style="margin: 5px 0 0 0;height: 70px" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive5.gif" alt="" crossorigin="anonymous"><br/>
+                                式中：<br/>
+                                σ<sub>F</sub> -- 蜗轮齿根弯曲应力，MPa;<br/>
+                                Y<sub>Fa2</sub> -- 蜗轮齿形系数，可由蜗轮的当量齿数Z<sub>v2</sub>及蜗轮的变位系数x2查图得到;<br/>
+                                [σ<sub>F</sub>] -- 蜗轮许用弯曲应力，MPa;[σ<sub>F</sub>]=[σ<sub>F</sub>]‘K<sub>FN</sub>，其中[σ<sub>F</sub>]’为计入齿根应力校正系数Y<sub>Sa2</sub>后蜗轮的基本许用应力，
+                                可查表选取；K<sub>FN</sub>为寿命系数。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="校核蜗杆刚度">校核蜗杆刚度</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 5px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td>蜗杆所受圆周力F<sub>t1</sub></td>
+                                    <td> <input type="number" step="1" readonly name="forceT1" id="forceT1" value="" style="width: 80px">
+                                        <span> N</span>
+                                    </td>
+                                    <td>蜗杆支撑跨距L'</td>
+                                    <td> <input type="number" step="1" name="distanceLdistanceL" id="distanceL" value="295.2" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>蜗杆所受径向力F<sub>r1</sub></td>
+                                    <td> <input type="number" step="0.1" readonly name="forceR1" id="forceR1" value="" style="width: 80px">
+                                        <span> N</span>
+                                    </td>
+                                    <td>蜗杆齿根圆直径d<sub>f1</sub></td>
+                                    <td> <input type="number" step="1" readonly name="dF1" id="dF1" value="" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>最小截面惯性矩I</td>
+                                    <td> <input type="number" readonly step="1" name="inertia" id="inertia" value="" style="width: 90px">
+                                        <span> mm<sup>4</sup></span>
+                                    </td>
+                                    <td>弹性模量E</td>
+                                    <td> <input type="number" step="1" readonly name="elastic" id="elastic" value="206000" style="width: 80px">
+                                        <span> MPa</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>最大挠度y</td>
+                                    <td> <input type="number" readonly step="1" name="maxY" id="maxY" value="" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                    <td>最大许用挠度[y]</td>
+                                    <td> <input type="number" readonly step="1" name="yAllowable" id="yAllowable" value="" style="width: 80px">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" id="errorInfo6" style="color: red;text-align: center"></td>
+                                    <td class="text-end">
+                                    <td class="text-start">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_submit_wormDrive5" value="计算结果">计算结果</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12" style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                        <div id="desc5" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                            <div style="font-size: 15px;text-align: left">
+                                蜗杆刚度校核所用公式：
+                                <img style="margin:0;height: 60px" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive7.gif" alt="" crossorigin="anonymous"><br/>
+                                其中：<br/>
+                                F<sub>t1</sub>=2*T<sub>1</sub>/d<sub>1</sub><br/>
+                                F<sub>r1</sub>=Fr2=2*T<sub>2</sub>*tan&alpha;/d<sub>2</sub><br/>
+                                L'=0.9*d<sub>2</sub>(初算值)<br/>
+                                d<sub>f1</sub>=d<sub>1</sub>-2*m*(ha+c)<br/>
+                                E=206GPa<br/>
+                                I=&pi;*d<sub>f1</sub><sup>4</sup>/64<br/>
+                                [y]=d<sub>1</sub>/1000<br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="热平衡核算（闭式蜗轮蜗杆）">热平衡核算（闭式蜗轮蜗杆）</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 5px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td>箱体表面<br/>传热系数α<sub>d</sub></td>
+                                    <td> <input type="number" step="1" name="alphaD" id="alphaD" value="8.5" style="width: 80px">
+                                    </td>
+                                    <td>润滑油<br>工作温度t<sub>0</sub></td>
+                                    <td> <input type="number" step="1" name="t0" id="t0" value="60" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>空气温度t<sub>1</sub></td>
+                                    <td> <input type="number" step="0.1" name="t1" id="t1" value="20" style="width: 80px">
+                                        <span> °</span>
+                                    </td>
+                                    <td>所需<br>散热面积S</td>
+                                    <td> <input type="number" step="1" readonly name="coolingArea" id="coolingArea" value="" style="width: 80px">
+                                        <span> m<sup>2</sup></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>最小<br>散热面积S</td>
+                                    <td> <input type="number" step="1" readonly name="minCoolingArea" id="minCoolingArea" value="" style="width: 80px">
+                                        <span> m<sup>2</sup></span>
+                                    </td>
+                                    <td colspan="2" class="text-start"> -- 油温80℃时所需的散热面积。</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" id="errorInfo7" style="color: red;text-align: center"></td>
+                                    <td class="text-end">
+                                    <td class="text-start">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_submit_wormDrive6" value="计算结果">计算结果</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p>
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc5" aria-expanded="false" aria-controls="collapseDesc5">
+                                显示说明
+                            </button>
+                        </p>
+                    </div>
+                </div>
+                <div class="row collapse" id="collapseDesc5">
+                    <div class="col-12" style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                        <div id="desc6" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                            <div style="font-size: 15px;text-align: left">
+                                热平衡散热面积计算所用公式：
+                                <img style="margin:0;height: 55px" src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrive8.gif" alt="" crossorigin="anonymous"><br/>
+                                其中：<br/>
+                                α<sub>d</sub> -- 箱体表面传热系数，取值范围(8.15~17.45)W/(m<sup>2</sup>·℃),周围空气流通较好取偏大值;<br/>
+                                S -- 内表面能被润滑油所飞溅到，而外表面又可为周围空气所冷却的箱体表面面积,m<sup>2</sup>;<br/>
+                                t -- 油的工作温度，一般限制在60~70℃,最高不应超过80℃;<br/>
+                                t<sub>1</sub> -- 空气温度，常温可取20℃。<br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-end gap-2 my-4">
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                    <i class="bi bi-star" style="font-size: 16px;"></i>
+                </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_wormandwormwheeldrivedescription.html" title="普通圆柱蜗杆传动设计方法"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <h4>评论</h4>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <style>
+        .ad-img { max-height: 172px; max-width: 100%; object-fit: contain; }
+        @media (max-width: 575.98px) { .ad-img { width: 100%; max-height: none; } }
+    </style>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.elesa-ganter.com.cn/" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg" alt="elesa-ganter伊莉莎冈特全系列机械标准配件" crossorigin="anonymous">
+            </a>
+        </div>
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.m-haste.com" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="m-haste艾姆华世特传动设备" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="javascript:">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bd-footer py-3 mt-3 bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                       aria-label="Mechtool">
+                        <span class="fs-5">Mechtool</span>
+                    </a>
+                </div>
+                <div class="col-12 mb-2">
+                    <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+                </div>
+                <div class="col-12 mb-2">
+                    <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                        <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                        <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                        <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                        <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                        <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                        <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

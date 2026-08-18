@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/stylewap.min.css?v=1.2.3"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/common.min.js?v=1.4.7"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+    <meta name='description' content=''>
+    <script src="/dist/js/mechtool/katex-render.min.js"></script>
+
+    <title>蜗轮强度校验 | 普通圆柱蜗杆传动设计方法 | 蜗轮蜗杆强度计算与校核</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-md-center">
+        <div class="form-check form-switch ps-0 me-5 d-md-flex d-none justify-content-start">
+            <label class="form-check-label d-none d-lg-block text-secondary" for="showSidebar">侧边栏</label>
+            <input class="form-check-input ms-2" type="checkbox" role="switch" id="showSidebar" checked hidden>
+        </div>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fitPageBtn" title="图片适合页面宽度">
+            <i class="bi bi-arrows-fullscreen" style="font-size: 16px;"></i>
+        </div>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <i class="bi bi-unlock" style="font-size: 16px;"></i>
+            <i class="bi bi-lock d-none" style="font-size: 16px;"></i>
+        </div>
+        <div class="dropdown ms-3">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-md-inline">常用设计计算工具</span> <span class="d-md-none">计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+
+
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            <ul class="list-unstyled mb-0 py-3 pt-md-1">
+                <li>
+                    <a href="/calculation/calculation_wormandwormwheeldrive.html" class="d-inline-flex align-items-center rounded">
+                        普通圆柱蜗杆传动设计
+                    </a>
+                </li>
+                <li class="my-3 mx-4 border-bottom"></li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#program-query-collapse" aria-expanded="true" aria-current="true">
+                        设计
+                    </button>
+
+                    <div class="collapse show" id="program-query-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/calculation/calculation_wormandwormwheeldrive.html" class="d-inline-flex align-items-center rounded" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                            data-bs-target="#data-query-collapse" aria-expanded="true" aria-current="true">
+                        查询
+                    </button>
+
+                    <div class="collapse show" id="data-query-collapse">
+                        <ul class="list-unstyled fw-normal pb-1 small">
+                            <li><a href="/calculation/calculation_wormandwormwheeldrivedescription.html" class="d-inline-flex align-items-center rounded" title="普通圆柱蜗杆传动设计方法">普通圆柱蜗杆传动设计方法</a></li>
+                            <li><a href="/geardrive/geardrive_cylindricalwormdrive.html" class="d-inline-flex align-items-center rounded" title="圆柱蜗杆传动">圆柱蜗杆传动</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="my-3 mx-4 border-top"></li>
+                <li>
+                    <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                        关于 Mechtool
+                    </a>
+                </li>
+                <li>
+                    <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+                       title="帮助 Mechtool">
+                        帮助 Mechtool
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <div class="d-md-flex flex-md-row align-items-center justify-content-between gap-4">
+                <h1 class="bd-title" id="content">普通圆柱蜗杆传动设计方法</h1>
+                <div class="d-flex flex-row align-items-center justify-content-end gap-2">
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                        <i class="bi bi-star" style="font-size: 16px;"></i>
+                    </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/geardrive/geardrive_cylindricalwormdrive.html" title="圆柱蜗杆传动"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+                </div>
+            </div>
+            <p class="bd-lead">蜗轮强度校验</p>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">普通圆柱蜗杆传动设计方法分页导航</strong>
+            <nav id="paging-nav">
+                <ul class="list-unstyled fw-normal">
+                    <li><a href="/calculation/calculation_wormandwormwheeldrivedescription.html">计算传动比i，并确定蜗杆、蜗轮齿数</a></li>
+                    <li><a href="/calculation/calculation_wormandwormwheeldrivedescription_1.html">根据蜗杆蜗轮材料的选择，计算蜗轮材料的许用强度</a></li>
+                    <li><a href="/calculation/calculation_wormandwormwheeldrivedescription_2.html">计算蜗杆接触强度，确定模数m和蜗杆分度圆直径d1</a></li>
+                    <li><a href="/calculation/calculation_wormandwormwheeldrivedescription_3.html">蜗轮强度校验</a></li>
+                    <li><a href="/calculation/calculation_wormandwormwheeldrivedescription_4.html">几何参数计算</a></li>
+                    <li><a href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">设计程序：普通圆柱蜗杆传动设计</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="bd-toc mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">本页导航</strong>
+            <nav id="TableOfContents">
+                <ul>
+                    <li><a name="蜗轮齿面的接触应力强度计算">蜗轮齿面的接触应力强度计算</a></li>
+                    <li><a name="蜗轮齿根弯曲应力的校核计算">蜗轮齿根弯曲应力的校核计算</a></li>
+                </ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">广告链接</strong>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool右侧栏自适应 -->
+    <ins class="adsbygoogle right"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="3643304998"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <h2 id="蜗轮强度校验">蜗轮强度校验</h2>
+            <h4 id="蜗轮齿面的接触应力强度计算">蜗轮齿面的接触应力强度计算</h4>
+            <p>蜗轮齿面的接触应力强度计算是确保蜗杆传动可靠性的关键环节，其核心是验算最大接触应力是否小于材料的许用接触应力。下面为你详细解析计算公式、参数含义以及应用方法。</p>
+            <h5>接触应力校核公式</h5>
+            <p>蜗轮齿面接触疲劳强度的<strong>校核公式</strong>为：</p>
+            <p>$$\sigma_H = Z_E Z_\rho \sqrt{\frac{K A K_T T_2}{a^3}} \leq [\sigma]_H$$</p>
+            <p>其中：</p>
+            <ul>
+                <li>(\sigma_H)：蜗轮齿面的计算接触应力 (MPa)</li>
+                <li>([\sigma]_H)：蜗轮材料的许用接触应力 (MPa)</li>
+                <li>(Z_E)：<strong>材料的弹性影响系数</strong> (\sqrt{MPa})。取决于蜗杆和蜗轮的材料组合，常见配对如下：<ul>
+                    <li>钢制蜗杆 + 铸锡青铜蜗轮（ZCuSn10P1等）：(Z_E = 150 - 160 \sqrt{MPa})</li>
+                    <li>钢制蜗杆 + 铸铝铁青铜蜗轮 (ZCuAl10Fe3) 或灰铸铁蜗轮：(Z_E = 160 \sqrt{MPa})</li>
+                </ul>
+                </li>
+                <li>(Z_\rho)：<strong>接触系数</strong>。这是一个与蜗杆传动的接触线长度和齿面综合曲率半径相关的系数，通常需要根据 (d_1 / a)（蜗杆分度圆直径与中心距的比值）查阅专门的图表或手册确定。</li>
+                <li>(K)：<strong>载荷系数</strong>。用以考虑实际工况下的动载荷和载荷分布不均的影响，(K = K_A K_\beta K_v)。<ul>
+                    <li>(K_A)：使用系数，与工作机的载荷特性有关。</li>
+                    <li>(K_\beta)：齿向载荷分布系数。</li>
+                    <li>(K_v)：动载系数。</li>
+                </ul>
+                </li>
+                <li>(A)：应用系数，通常取1.1-1.4，冲击、振动大或环境温度高时取大值。</li>
+                <li>(T_2)：<strong>蜗轮轴上的工作转矩</strong> (N·m)</li>
+                <li>(a)：<strong>蜗杆传动的中心距</strong> (mm)</li>
+                <li>(K_T)：温度系数，考虑工作温度对润滑和材料性能的影响，需根据具体工况确定。</li>
+            </ul>
+            <h5>许用接触应力 ([\sigma]_H) 的确定</h5>
+            <p>许用接触应力的确定与蜗轮材料密切相关，主要分为两种情况：</p>
+            <ol>
+                <li><p><strong>蜗轮材料为铸锡青铜（如ZCuSn10P1, ZCuSn5Pb5Zn5）</strong>：这类材料强度极限通常低于300 MPa，主要失效形式是<strong>点蚀</strong>。其许用应力与应力循环次数有关，计算公式为：<br>$$[\sigma]_H = K_{HN} [\sigma]_{H&#39;}$$<br>其中，([\sigma]_{H&#39;}) 是基本许用接触应力，可查表获得；(K_{HN}) 是接触强度的寿命系数，(K_{HN} = \sqrt[8]{10^7 / N})，(N) 为应力循环次数。</p>
+                </li>
+                <li><p><strong>蜗轮材料为铸铝铁青铜（如ZCuAl10Fe3）或灰铸铁（如HT200, HT150）</strong>：这类材料强度较高，主要失效形式是<strong>胶合</strong>。由于胶合不属于疲劳失效，其许用应力 ([\sigma]_H) 与循环次数 (N) 无关，可直接根据配对蜗杆的齿面硬度和预期的滑动速度 (v_s) 查表确定。</p>
+                </li>
+            </ol>
+            <p>下表列出了一些常见材料组合在特定条件下的<a href="https://www.mechtool.cn/calculation/calculation_wormandwormwheeldrivedescription_1.html">许用接触应力参考值</a>：</p>
+            <div class="table-responsive">
+            <table class="dataintable text-nowrap">
+                <thead>
+                <tr>
+                    <th>蜗轮材料</th>
+                    <th>铸造方法</th>
+                    <th>蜗杆齿面硬度</th>
+                    <th>许用接触应力 ([\sigma]_H) (MPa) 参考值</th>
+                    <th>失效形式</th>
+                    <th>是否与循环次数N有关</th>
+                </tr>
+                </thead>
+                <tbody><tr>
+                    <td align="left">ZCuSn10P1 （铸锡磷青铜）</td>
+                    <td align="left">砂型（或金属型）</td>
+                    <td align="left">≤45HRC &gt;45HRC</td>
+                    <td align="left">砂型150-180 金属型220-268</td>
+                    <td align="left">点蚀</td>
+                    <td align="left">是 ((K_{HN} = \sqrt[8]{10^7/N}))</td>
+                </tr>
+                <tr>
+                    <td align="left">ZCuSn5Pb5Zn5 （铸锡锌铅青铜）</td>
+                    <td align="left">砂型（或金属型）</td>
+                    <td align="left">≤45HRC &gt;45HRC</td>
+                    <td align="left">砂型113-135 金属型128-140</td>
+                    <td align="left">点蚀</td>
+                    <td align="left">是 ((K_{HN} = \sqrt[8]{10^7/N}))</td>
+                </tr>
+                <tr>
+                    <td align="left">ZCuAl10Fe3 （铸铝铁青铜）</td>
+                    <td align="left">-</td>
+                    <td align="left">&gt;45HRC （滑动速度 (v_s=2m/s)）</td>
+                    <td align="left">210</td>
+                    <td align="left">胶合</td>
+                    <td align="left">否（直接查表，值与(v_s)相关）</td>
+                </tr>
+                <tr>
+                    <td align="left">HT200 （灰铸铁）</td>
+                    <td align="left">-</td>
+                    <td align="left">&gt;45HRC（滑动速度 (v_s=0.25m/s)）</td>
+                    <td align="left">202</td>
+                    <td align="left">胶合</td>
+                    <td align="left">否（直接查表，值与(v_s)相关）</td>
+                </tr>
+                </tbody></table>
+            </div>
+            <h5>设计公式</h5>
+            <p>在初步设计时，常根据所需传递的功率和转矩，由接触强度条件<strong>初步估算中心距</strong> (a)：</p>
+            <p>$$a \geq \sqrt[3]{K A K_T T_2 \left( \frac{Z_E Z_\rho}{[\sigma]_H} \right)^2 }$$</p>
+            <p>求得中心距 (a) 后，可据此初步选择模数 (m)、蜗杆分度圆直径 (d_1) 等参数，然后再进行精确的校核。</p>
+            <h5>核心要点与选材建议</h5>
+            <p>计算接触应力强度的核心是验证工作应力不超过许用应力。材料的选择直接关系到许用应力的确定方法和传动的承载能力。对于重载、要求高可靠性的闭式传动，优先选择铸锡青铜（如ZCuSn10P1）并校核点蚀强度；对于速度较高或中载且考虑成本的场合，可选用铸铝铁青铜（如ZCuAl10Fe3）并按抗胶合能力查取许用应力。</p>
+
+            <h4 id="蜗轮齿根弯曲应力的校核计算">蜗轮齿根弯曲应力的校核计算</h4>
+            <p>蜗轮齿根弯曲应力强度的计算是确保传动可靠性的关键一环，尤其在特定工况下尤为重要。下面为您梳理其核心计算公式、关键参数以及应用要点。</p>
+            <h5>核心计算公式</h5>
+            <p>蜗轮齿根弯曲疲劳强度的<strong>校核公式</strong>如下，其目的是验证计算弯曲应力是否小于材料的许用弯曲应力：</p>
+            <p>$$\sigma_F = \frac{1.53 K T_2}{d_1 d_2 m} Y_{Fa2} Y_\beta \leq [\sigma_F]$$</p>
+            <p>其中：</p>
+            <ul>
+                <li>(\sigma_F) 是蜗轮齿根的<strong>计算弯曲应力</strong> (MPa)</li>
+                <li>([\sigma_F]) 是蜗轮材料的<strong>许用弯曲应力</strong> (MPa)</li>
+            </ul>
+            <p>如果需要进行初步设计来确定模数 (m)，可以使用以下<strong>设计公式</strong>：</p>
+            <p>$$m \geq \sqrt[3]{\frac{1.53 K T_2}{z_2 [\sigma_F]} Y_{Fa2} Y_\beta}$$</p>
+            <h5>公式参数详解</h5>
+            <p>为了正确使用公式，理解每个参数的物理意义和获取方法至关重要。下表提供了各参数的详细说明。</p>
+            <div class="table-responsive">
+                <table class="dataintable">
+                    <thead>
+                    <tr>
+                        <th style="min-width: 80px">参数符号</th>
+                        <th style="min-width: 80px">参数名称</th>
+                        <th>含义与确定方法</th>
+                    </tr>
+                    </thead>
+                    <tbody><tr>
+                        <td align="left">(K)</td>
+                        <td align="left"><strong>载荷系数</strong></td>
+                        <td align="left">综合了使用情况、动载荷和齿向载荷分布的影响，(K = K_A K_V K_\beta)。其中 (K_A) 为使用系数，与工作机的载荷特性有关；(K_V) 为动载系数；(K_\beta) 为齿向载荷分布系数。</td>
+                    </tr>
+                    <tr>
+                        <td align="left">(T_2)</td>
+                        <td align="left"><strong>蜗轮上的工作转矩</strong></td>
+                        <td align="left">单位通常为牛顿·米 (N·m)，是计算的原始依据。</td>
+                    </tr>
+                    <tr>
+                        <td align="left">(d_1, d_2)</td>
+                        <td align="left"><strong>分度圆直径</strong></td>
+                        <td align="left">分别为蜗杆和蜗轮的分度圆直径 (mm)，是传动的基本几何参数。(d_2 = m z_2)。</td>
+                    </tr>
+                    <tr>
+                        <td align="left">(m)</td>
+                        <td align="left"><strong>模数</strong></td>
+                        <td align="left">蜗杆的轴向模数（也是蜗轮的端面模数），为标准值 (mm)，决定了轮齿的大小。</td>
+                    </tr>
+                    <tr>
+                        <td align="left">(Y_{Fa2})</td>
+                        <td align="left"><strong>齿形系数</strong></td>
+                        <td align="left">这是一个重要的几何系数，反映了蜗轮轮齿的独特形状对弯曲应力的影响。它需要根据蜗轮的<strong>当量齿数</strong> (z_{v2} = z_2 / \cos^3 \gamma) 来查表或专用图表确定。 <strong>切勿直接使用蜗轮的实际齿数</strong>。</td>
+                    </tr>
+                    <tr>
+                        <td align="left">(Y_\beta)</td>
+                        <td align="left"><strong>螺旋角影响系数</strong></td>
+                        <td align="left">考虑蜗杆分度圆导程角 (\gamma) 对弯曲强度的影响。常用的计算公式为 (Y_\beta = 1 - \gamma / 140^\circ)。</td>
+                    </tr>
+                    <tr>
+                        <td align="left">([\sigma_F])</td>
+                        <td align="left"><strong>许用弯曲应力</strong></td>
+                        <td align="left">并非材料常数，需通过 ([\sigma_F] = [\sigma_{0F}] \cdot Y_N) 计算。其中 ([\sigma_{0F}]) 是材料的基本许用弯曲应力（查表获得），(Y_N) 是考虑设计寿命的寿命系数，(Y_N = \sqrt[9]{10^6 / N})，(N) 为应力循环次数。</td>
+                    </tr>
+                    </tbody></table>
+            </div>
+
+            <h5>主要应用场景与重要性</h5>
+            <p>在下列情况下，进行蜗轮齿根弯曲强度计算尤为重要：</p>
+            <ul>
+                <li><strong>开式蜗杆传动</strong>：其主要失效形式是齿面磨损和轮齿弯断，因此<strong>常以弯曲强度作为主要设计准则</strong>。</li>
+                <li><strong>齿数较多的蜗轮</strong>（通常 (z_2 &gt; 90)）：细长的轮齿更易发生弯曲疲劳破坏。</li>
+                <li><strong>重载动力蜗杆副</strong>：即使是在闭式传动中，也<strong>必须进行弯曲强度校核</strong>。因为过大的弯曲变形会影响传动的运动平稳性精度，而弯曲强度计算是控制变形的关键手段。</li>
+            </ul>
+            <blockquote>
+                <p><strong>重要提示</strong>：由于蜗轮齿形复杂，要精确计算齿根弯曲应力比较困难，因此目前的计算方法是一种<strong>条件性的近似估算</strong>，通常将蜗轮近似当作斜齿圆柱齿轮来考虑。但需要特别注意，<strong>蜗轮轮齿的弯曲疲劳强度通常高于参数相近的斜齿轮</strong>，有资料指出约高40%。</p>
+            </blockquote>
+            <h5>基本计算流程建议</h5>
+            <ol>
+                <li><strong>确定载荷与工况</strong>：明确工作转矩 (T_2)、载荷性质（以选择 (K_A)）、总工作时间（以计算循环次数 (N)）。</li>
+                <li><strong>获取几何参数</strong>：根据已确定的传动方案，获取 (z_2), (\gamma) 等基本参数。</li>
+                <li><strong>确定相关系数</strong>：计算当量齿数 (z_{v2}) 并据此查取齿形系数 (Y_{Fa2})；根据导程角 (\gamma) 计算 (Y_\beta)；根据工况确定载荷系数 (K)。</li>
+                <li><strong>确定许用应力</strong>：根据蜗轮材料和寿命要求，确定 ([\sigma_{0F}]) 和 (Y_N)，计算得到 ([\sigma_F])。</li>
+                <li><strong>代入校核</strong>：将全部参数代入校核公式进行计算，并判断是否满足 (\sigma_F \leq [\sigma_F]) 的强度条件。</li>
+            </ol>
+
+                校验必须同时保证 <img src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrivedescription12.gif" alt="" crossorigin="anonymous">和
+                <img src="https://www.mechdoc.cn/images/calculation/calculation_wormandwormwheeldrivedescription13.gif" alt="" crossorigin="anonymous">，否则校验失败，须重新进行前面的参数设计。
+            </p>
+            <div class="d-flex flex-row align-items-center justify-content-end gap-2 my-4">
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                    <i class="bi bi-star" style="font-size: 16px;"></i>
+                </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/geardrive/geardrive_cylindricalwormdrive.html" title="圆柱蜗杆传动"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <h4>评论</h4>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <style>
+        .ad-img { max-height: 172px; max-width: 100%; object-fit: contain; }
+        @media (max-width: 575.98px) { .ad-img { width: 100%; max-height: none; } }
+    </style>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.elesa-ganter.com.cn/" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg" alt="elesa-ganter伊莉莎冈特全系列机械标准配件" crossorigin="anonymous">
+            </a>
+        </div>
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.m-haste.com" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="m-haste艾姆华世特传动设备" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="javascript:">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bd-footer py-3 mt-3 bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                       aria-label="Mechtool">
+                        <span class="fs-5">Mechtool</span>
+                    </a>
+                </div>
+                <div class="col-12 mb-2">
+                    <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+                </div>
+                <div class="col-12 mb-2">
+                    <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                        <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                        <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                        <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                        <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                        <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                        <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

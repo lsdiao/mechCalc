@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/stylewap.min.css?v=1.2.3"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/common.min.js?v=1.4.7"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+    <meta name='description' content='程序目前支持梯形齿周节制同步带（MXL、XXL、XL、L、H、XH和XXH），梯形齿特殊节距制同步带（T2.5、T5、T10、T20）,和圆弧齿同步带(3M、5M、8M、14M、20M)的选型计算。
+    程序中设计计算方法以及各参数选择参照最新国家标准GB/T 11616-2013，GB/T 11362-2008，JB/T 7512.1-1994，JB/T 7512.2-1994，JB/T 7512.3-1994。'>
+    <link rel="stylesheet" type="text/css" href="/css/common/jquery-editable-select.min.css"/>
+    <script src="/js/common/jquery-editable-select.min.js"></script>
+    <script src="/dist/js/mechtool/beltdrivedesign.min.js?v=1.0.4"></script>
+
+    <title>同步带设计 | 带传动设计</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+    <style>
+        .tp-highlight {
+            background-color: #fff3cd !important;
+            transition: background-color 0.3s ease;
+        }
+        .tp-highlight-fade {
+            background-color: transparent !important;
+            transition: background-color 2s ease;
+        }
+    </style>
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-md-center">
+        <div class="form-check form-switch ps-0 me-5 d-md-flex d-none justify-content-start">
+            <label class="form-check-label d-none d-lg-block text-secondary" for="showSidebar">侧边栏</label>
+            <input class="form-check-input ms-2" type="checkbox" role="switch" id="showSidebar" checked hidden>
+        </div>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fitPageBtn" title="图片适合页面宽度">
+            <i class="bi bi-arrows-fullscreen" style="font-size: 16px;"></i>
+        </div>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <i class="bi bi-unlock" style="font-size: 16px;"></i>
+            <i class="bi bi-lock d-none" style="font-size: 16px;"></i>
+        </div>
+        <div class="dropdown ms-3">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-md-inline">常用设计计算工具</span> <span class="d-md-none">计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+
+
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            
+    <ul class="list-unstyled mb-0 py-3 pt-md-1">
+        <li>
+            <a href="/calculation/calculation_beltdrive.html" class="d-inline-flex align-items-center rounded">
+                带传动设计
+            </a>
+        </li>
+        <li class="my-3 mx-4 border-bottom"></li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#program-query-collapse" aria-expanded="true" aria-current="true">
+                设计计算
+            </button>
+
+            <div class="collapse show" id="program-query-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/calculation/calculation_beltdrive.html" class="d-inline-flex align-items-center rounded" title="V型带设计">V型带设计</a></li>
+                    <li><a href="/calculation/calculation_flatbelt.html" class="d-inline-flex align-items-center rounded" title="平带设计">平带设计</a></li>
+                    <li><a href="/calculation/calculation_timingbeltdrive.html" class="d-inline-flex align-items-center rounded" title="同步带设计">同步带设计</a></li>
+                    <li><a href="/calculation/calculation_polyvbeltdesign.html" class="d-inline-flex align-items-center rounded" title="多楔带设计">多楔带设计</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#data-query-collapse" aria-expanded="true" aria-current="true">
+                查询资料
+            </button>
+
+            <div class="collapse show" id="data-query-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/beltdrive/beltdrive_designcalculationofordinaryVbelttransmission1992.html" class="d-inline-flex align-items-center rounded" title="V型带设计">V型带设计</a></li>
+                    <li><a href="/beltdrive/beltdrive_designcalculationofordinaryflatbelttransmission.html" class="d-inline-flex align-items-center rounded" title="平带设计">平带设计</a></li>
+                    <li><a href="/beltdrive/beltdrive_designcalculationoftrapezoidaltoothsynchronousbelttransmission.html" class="d-inline-flex align-items-center rounded" title="梯形齿同步带设计">梯形齿同步带设计</a></li>
+                    <li><a href="/beltdrive/beltdrive_designcalculationofcurvedtoothsynchronousbelttransmission.html" class="d-inline-flex align-items-center rounded" title="圆弧齿同步带设计">圆弧齿同步带设计</a></li>
+                    <li><a href="/beltdrive/beltdrive_designandcalculationofmulti-ribbedbelttransmission.html" class="d-inline-flex align-items-center rounded" title="多楔带设计">多楔带设计</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="my-3 mx-4 border-top"></li>
+        <li>
+            <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                关于 Mechtool
+            </a>
+        </li>
+        <li>
+            <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+               title="帮助 Mechtool">
+                帮助 Mechtool
+            </a>
+        </li>
+    </ul>
+
+        </nav>
+    </aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <div class="d-md-flex flex-md-row align-items-center justify-content-between gap-4">
+                <h1 class="bd-title" id="content">同步带设计</h1>
+                <div class="d-flex flex-row align-items-center justify-content-end gap-2">
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                        <i class="bi bi-star" style="font-size: 16px;"></i>
+                    </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_flatbelt.html" title="平带设计"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_polyvbeltdesign.html" title="多楔带设计"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+                </div>
+            </div>
+            <p class="bd-lead">程序目前支持梯形齿周节制同步带（MXL、XXL、XL、L、H、XH和XXH），梯形齿特殊节距制同步带（T2.5、T5、T10、T20）,和圆弧齿同步带(3M、5M、8M、14M、20M)的选型计算。
+                               程序中设计计算方法以及各参数选择参照最新国家标准GB/T 11616-2013，GB/T 11362-2008，JB/T 7512.1-1994，JB/T 7512.2-1994，JB/T 7512.3-1994。</p>
+        </div>
+        <div class="bd-toc mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">本页导航</strong>
+            <nav id="TableOfContents">
+                <ul>
+                    <li><a name="参考资料">参考资料</a></li>
+                    <li><a name="工具介绍及使用说明">工具介绍及使用说明</a></li>
+                    <li><a name="同步带设计">同步带设计</a>
+                        <ul>
+                            <li><a name="输入初始参数">输入初始参数</a></li>
+                            <li><a name="选定带型和带轮节圆直径">选定带型和带轮节圆直径</a></li>
+                            <li><a name="确定轴间距a和带长Lp">确定轴间距a和带长Lp</a></li>
+                            <li><a name="确定带宽bs">确定带宽bs</a></li>
+                            <li><a name="同步带轮参数计算">同步带轮参数计算(周节制)</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">广告链接</strong>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool右侧栏自适应 -->
+    <ins class="adsbygoogle right"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="3643304998"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <h2 id="参考资料">参考资料</h2>
+            <details>
+                <summary class="text-primary mb-3">参考国家标准...</summary>
+                <article>
+                    <p>GB/T 11616-2013 同步带传动 节距型号MXL、XXL、XL、L、H、XH和XXH 同步带尺寸 &nbsp; <a href="https://res.mechtool.cn/js/web/viewer.html?file=res/standard/beltdrive/GBT 11616-2013 同步带传动 节距型号MXL、XXL、XL、L、H、XH和XXH 同步带尺寸&amp;v=1.0.0" target="_blank">pdf在线浏览</a><br/>
+                        GB/T 11362-2008 同步带传动 梯形齿同步带额定功率和传动中心距的计算 &nbsp; <a href="https://res.mechtool.cn/js/web/viewer.html?file=res/standard/beltdrive/GBT 11362-2008 同步带传动 梯形齿同步带额定功率和传动中心距的计算&amp;v=1.0.0" target="_blank">pdf在线浏览</a><br/>
+                        JB/T 7512.1-1994 圆弧齿同步带传动 带 &nbsp; <a href="https://res.mechtool.cn/js/web/viewer.html?file=res/standard/beltdrive/JBT 7512.1-1994 圆弧齿同步带传动 带&amp;v=1.0.0" target="_blank">pdf在线浏览</a><br/>
+                        JB/T 7512.2-1994 圆弧齿同步带传动 带轮 &nbsp; <a href="https://res.mechtool.cn/js/web/viewer.html?file=res/standard/beltdrive/JBT 7512.2-1994 圆弧齿同步带传动 带轮&amp;v=1.0.0" target="_blank">pdf在线浏览</a><br/>
+                        JB/T 7512.3-1994 圆弧齿同步带传动 设计方法 &nbsp; <a href="https://res.mechtool.cn/js/web/viewer.html?file=res/standard/beltdrive/JBT 7512.3-1994 圆弧齿同步带传动 设计方法&amp;v=1.0.0" target="_blank">pdf在线浏览</a></p>
+                </article>
+            </details>
+            <p>查询资料：&nbsp; <a href="/beltdrive/beltdrive_designcalculationoftrapezoidaltoothsynchronousbelttransmission.html" title="梯形齿同步带设计">梯形齿同步带设计</a>&nbsp;&nbsp;
+                &nbsp; <a href="/beltdrive/beltdrive_designcalculationofcurvedtoothsynchronousbelttransmission.html" title="圆弧齿同步带设计">圆弧齿同步带设计</a>&nbsp;&nbsp;&nbsp;
+                <a href="/mechanicalbook/automataandautoline/automataandautoline_designstepsandselectionexamplesofsynchronousbelttransmission.html">同步带传动选型设计步骤与选型实例</a><br/>
+                <a href="https://res.mechtool.cn/js/web/viewer.html?file=res/article/同步带传动-自动化机构设计工程师速成宝典 实战篇&amp;v=1.0.0" title="同步带设计" target="_blank">同步带传动-自动化机构设计工程师速成宝典 实战篇</a>
+            </p>
+            <h2 id="工具介绍及使用说明">工具介绍及使用说明</h2>
+            <p class="mt-3">你可以在 <a href=" https://mp.weixin.qq.com/s?__biz=MzkxNTI4NjMyMA==&mid=2247484560&idx=1&sn=ef677854144a964915ae9fdf05b74ee5&chksm=
+            c16034cff617bdd9d94d64f10de041e7199dd866c4f3f8d2ef11d651c4090d9f15b7eaf6cd40&token=1454963459&lang=zh_CN#rd" target="_blank">工具介绍</a> 中查看此工具功能和使用方法说明。</p>
+
+            <h2 id="同步带设计">同步带设计</h2>
+            <div class="container">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="输入初始参数">输入初始参数</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-7" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 15px 10px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td>传动功率P</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="power" id="power" value="4"
+                                               style="width: 80px"><span> KW</span>
+                                    </td>
+                                    <td>主动轴转速n1</td>
+                                    <td>
+                                        <input type="number" step="1" name="n1" id="n1" value="1440"
+                                               style="width: 80px"><span> r/min</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>从动轴转速n2</td>
+                                    <td>
+                                        <input type="number" step="1" name="n2" id="n2" value="500"
+                                               style="width: 80px"><span> r/min</span>
+                                    </td>
+                                    <td>传动比i</td>
+                                    <td>
+                                        <input type="number" step="0.02" name="transmissionRatio" id="transmissionRatio" value="2.88"
+                                               style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr style="height: 45px">
+                                    <td colspan="2" id="errorInfo1" style="color: red;text-align: center"></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-5">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc1" aria-expanded="false" aria-controls="collapseDesc1">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDesc1">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="desc1" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                                    <div style="font-size: 15px;text-align: left">
+                                        1 同步带传动设计输入参数有：传动的功率P，主动轮和从动轮转速n1、n2（或传动比i）。<br/>
+                                        2 根据公式i=n1/n2，用户只需输入n2、i两个参数之一而自动得出另一参数。
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="选定带型和带轮节圆直径">选定带型和带轮节圆直径</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-7" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 5px 10px 5px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td colspan="4" class="text-center">设计功率计算P<sub>d</sub>=K<sub>A</sub>P</td>
+                                </tr>
+                                <tr>
+                                    <td>工况系数K<sub>A</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" name="kA" id="kA" value="1.5"
+                                               style="width: 70px">
+                                        <span>K<sub>A</sub>查询</span>
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#calculation_timingbeltdrive1Modal">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                        </svg>
+                                            </a>
+                                        </span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="calculation_timingbeltdrive1Modal" tabindex="-1" aria-labelledby="calculation_timingbeltdrive1ModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-md modal-lg modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" src="https://www.mechdoc.cn/images/calculation/calculation_timingbeltdrive1.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">设计功率P<sub>d</sub></td>
+                                    <td>
+                                        <input type="number" readonly step="1" name="powerD" class="powerD" value="6"
+                                               style="width:80px"><span> kW</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">选择带型</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-start" style="padding-left: 20px">
+                                        <input type="radio" checked name="beltType" id="trToothSyncBelt" style="margin:0 0 0 10px;">
+                                        <label for="trToothSyncBelt" style="margin:0 0 0 0">梯形齿同步带</label>
+                                        <input type="radio" name="beltType" id="arcToothSyncBelt" style="margin:0 0 0 10px;">
+                                        <label for="arcToothSyncBelt" style="margin:0 0 0 0">圆弧齿同步带</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>选择带型</td>
+                                    <td>
+                                        <select type="text" name="beltSize" id="beltSize" style="margin-top: 0;width: 80px;">
+                                            <option selected value="MXL">MXL</option>
+                                            <option value="XXL">XXL</option>
+                                            <option value="XL">XL</option>
+                                            <option value="L">L</option>
+                                            <option value="H">H</option>
+                                            <option value="XH">XH</option>
+                                            <option value="XXH">XXH</option>
+                                            <option value="T2.5">T2.5</option>
+                                            <option value="T5">T5</option>
+                                            <option value="T10">T10</option>
+                                            <option value="T20">T20</option>
+                                        </select>
+                                    </td>
+                                    <td colspan="2" class="text-start">
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#beltSizeSelGraghModal">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                        </svg>
+                                            </a>
+                                        </span>
+                                        <span>带型查询图表</span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="beltSizeSelGraghModal" tabindex="-1" aria-labelledby="beltSizeSelGraghModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-md modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" id="beltSizeSelGragh" src="https://www.mechdoc.cn/images/calculation/calculation_timingbeltdrive5.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        选定带节距p<sub>b</sub>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="pitchB" readonly id="pitchB" value=""
+                                               style="width: 80px"><span> mm</span>
+                                    </td>
+                                    <td>
+                                        带速v
+                                    </td>
+                                    <td>
+                                        <input type="number" readonly name="beltVelocity" id="beltVelocity" value=""
+                                               style="width: 80px"><span> m/s</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">确定带轮齿数</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        小带轮z<sub>1min</sub>
+                                    </td>
+                                    <td>
+                                        <input type="number" readonly name="z1Min" id="z1Min" value="" style="width: 80px">
+                                    </td>
+                                    <td>
+                                        取小带轮z<sub>1</sub>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="z1" id="z1" value="" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end">
+                                        计算大带轮z<sub>2</sub>
+                                    </td>
+                                    <td class="text-start">
+                                        <input type="number" readonly name="z2Cal" id="z2Cal" value="" style="width: 80px">
+                                    </td>
+                                    <td>
+                                        取大带轮z<sub>2</sub>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="z2" id="z2" value="" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">确定带轮节圆直径</td>
+                                </tr>
+                                <tr>
+                                    <td>计算小带轮d1</td>
+                                    <td>
+                                        <input type="number" readonly name="d1" id="d1" value="" style="width: 80px"><span> mm</span>
+                                    </td>
+                                    <td>计算大带轮d2</td>
+                                    <td>
+                                        <input type="number" readonly name="d2" id="d2" value="" style="width: 80px"><span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr style="height: 45px">
+                                    <td colspan="2" id="errorInfo2" style="color: red;text-align: center"></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-5">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc2" aria-expanded="false" aria-controls="collapseDesc2">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDesc2">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="desc2" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                                    1. 设计功率：根据机械特性查询得出工况系数，计算得出设计功率。<br>
+                                    2. 选择带型：根据小带轮转速和设计功率查询得出所需带型。<br>
+                                    3. 小带轮齿数：根据查询得出小带轮最小齿数z<sub>min</sub>，根据z<sub>min</sub>输入小带轮齿数，为提高带的寿命，条件允许时，其值尽量取较大值。<br>
+                                    4. 大带轮齿数：根据公式计算得出大带轮齿数并圆整。<br>
+                                    5. 小带轮节圆直径：根据公式计算得出小带轮节圆直径。<br>
+                                    6. 大带轮节圆直径：根据公式计算得出大带轮节圆直径。<br>
+                                    7. 带速：根据公式计算得出带速，应小于等于相应带型的最大带速。<br>
+                                    8. 带轮齿数与直径查表选取标准值:<br>
+                                    <a href="/beltdrive/beltdrive_trapezoidaltoothsynchronousbeltwheel.html#标准同步带轮的直径(摘自GB/T 11361-2018)" target="_blank">梯形齿标准同步带轮的直径</a><br/>
+                                    <a href="/beltdrive/beltdrive_curvedtoothsynchronousbeltwheel.html#圆弧齿同步带轮直径(摘自JB/T 7512.2-1994)" target="_blank">圆弧齿同步带轮直径</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="确定轴间距a和带长Lp">确定轴间距a和带长L<sub>p</sub></h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-7" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 15px 10px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <input type="number" disabled name="a0min" id="a0min" value="" style="width: 80px;">
+                                        ≤ <label for="a0">初定轴间距a<sub>0</sub></label> <input type="number" name="a0" id="a0" value="" style="width: 80px;">
+                                        <span> mm</span> ≤ <input type="number" disabled name="a0max" id="a0max" value="" style="width: 80px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>计算带长L<sub>p0</sub></td>
+                                    <td>
+                                        <input type="number" disabled name="calBeltLen" id="calBeltLen" value="" style="width: 90px;">
+                                        <span> mm</span>
+                                    </td>
+                                    <td>选择节线长L<sub>p</sub></td>
+                                    <td>
+                                        <input type="number" name="beltLen" id="beltLen" value="" style="width: 90px;">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        实际轴间距a
+                                    <td>
+                                        <input type="number" disabled name="a" id="a" value="" style="width: 90px;">
+                                        <span> mm</span>
+                                    </td>
+                                    <td>节线长上齿数z</td>
+                                    <td>
+                                        <input type="number" disabled name="zB" id="zB" value="" style="width: 80px;">
+                                    </td>
+                                </tr>
+                                <tr style="height: 45px">
+                                    <td colspan="2" id="errorInfo3" style="color: red;text-align: center"></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-5">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc3" aria-expanded="false" aria-controls="collapseDesc3">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDesc3">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="desc3" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                                    1.初定轴间距：有两种方法：①根据结构要求选定；②根据计算得出的提示范围。<br/>
+                                    2.带长：根据公式计算得出带长，并查询选取标准节线长或按生产厂可购买的规格选用。由节线长可得出齿数z。<br/>
+                                    3.实际轴间距：根据公式计算得出实际轴间距。<br/>
+                                    <a href="/beltdrive/beltdrive_trapezoidaltoothsynchronousbeltdrive.html#梯形齿同步带的节线长系列及极限偏差(摘自GB/T 11616-2013)" target="_blank">梯形齿同步带的节线长系列</a><br>
+                                    <a href="/beltdrive/beltdrive_curvedtoothsynchronousbeltdrive.html#圆弧齿同步带长度系列(摘自JB/T 7512.1-1994)" target="_blank">圆弧齿同步带长度系列</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="确定带宽bs">确定带宽bs</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-7" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 5px 10px 5px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td>小带轮啮合齿数Z<sub>m</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" readonly name="zM" id="zM" value="" style="width: 70px">
+                                    </td>
+                                    <td>啮合齿数系数K<sub>z</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" readonly name="kZ" id="kZ" value="" style="width: 70px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>基准额定功率P<sub>0</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" readonly name="power0" id="power0" value="" style="width: 80px">
+                                        <span> KW</span>
+                                    </td>
+                                    <td>基准宽度bs<sub>0</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" readonly name="bs0" id="bs0" value="" style="width: 70px">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>所需最小带宽bs'</td>
+                                    <td>
+                                        <input type="text" readonly name="bsMin" id="bsMin" value="" style="width: 80px"><span> mm</span>
+                                    </td>
+                                    <td>选择带宽bs</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="bs" id="bs" value="" style="width: 80px"><span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="trSyncBelt">带每米长质量m</span>
+                                        <span class="arcSyncBelt" style="display: none">修正系数K<sub>F</sub></span></td>
+                                    <td>
+                                        <input class="trSyncBelt" type="number" readonly name="beltMass" id="beltMass" value=""
+                                               style="width: 80px"><span class="trSyncBelt"> kg/m</span>
+                                        <input class="arcSyncBelt" type="number" readonly name="kF" id="kF" value=""
+                                               style="width: 70px;display: none">
+                                        <!-- Button trigger modal -->
+                                        <span style="vertical-align: 2px;display: none" class="arcSyncBelt">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#arcSyncBeltModal">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                        </svg>
+                                            </a>
+                                        </span>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="arcSyncBeltModal" tabindex="-1" aria-labelledby="arcSyncBeltModalLabel" aria-hidden="true" data-bs-dismiss="modal">
+                                            <div class="modal-dialog modal-md modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img class="w-auto" src="https://www.mechdoc.cn/images/calculation/calculation_timingbeltdrive4.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>额定功率P<sub>r</sub></td>
+                                    <td>
+                                        <input type="number" readonly name="powerR" id="powerR" value=""
+                                               style="width: 80px"><span> KW</span>
+                                    </td>
+                                </tr>
+                                <tr class="arcSyncBelt" style="display: none">
+                                    <td>紧边张力F<sub>1</sub></td>
+                                    <td>
+                                        <input type="number" readonly name="force1" id="force1" value=""
+                                               style="width: 80px"><span> N</span>
+                                    </td>
+                                    <td>松边张力F<sub>2</sub></td>
+                                    <td>
+                                        <input type="number" readonly name="force2" id="force2" value=""
+                                               style="width: 80px"><span> N</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                <tr>
+                                    <td>小带轮包角&alpha;1</td>
+                                    <td>
+                                        <input type="number" readonly name="alpha1" id="alpha1" value=""
+                                               style="width: 80px"><span> <sup>°</sup></span>
+                                    </td>
+                                    <td>压轴力F<sub>Q</sub></td>
+                                    <td>
+                                        <input type="number" readonly name="forceQ" id="forceQ" value=""
+                                               style="width: 80px"><span> N</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" id="errorInfo4" style="color: red;text-align: center"></td>
+                                    <td></td>
+                                    <td class="text-start">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_submit_timingbelt" value="计算结果">计算结果</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-5">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc4" aria-expanded="false" aria-controls="collapseDesc4">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDesc4">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="desc4" style="height: auto;width: 100%;padding:15px 10px 10px 10px;">
+                                    1.小带轮啮合齿数：根据公式计算得出小带轮啮合齿数Z<sub>m</sub>。<br/>
+                                    2.计算额定功率和带宽：根据带型、小带轮直径d<sub>d1</sub>和主动轮转速n1查询数据并选取所需数值。<br/>
+                                    1)基本额定功率：可根据公式直接计算得出或查表得到。<br/>
+                                    2)直接计算得出最小带宽，并查询得到标准值。<br/>
+                                    3.小带轮包角:根据公式计算得出小带轮包角。<br/>
+                                    4.作用于轴上的力：根据公式计算得出作用于轴上的力。<br/>
+                                    5.同步带宽度查表选取标准值：<br/>
+                                    <a href="/beltdrive/beltdrive_trapezoidaltoothsynchronousbeltdrive.html#梯形齿同步带宽度bs系列" target="_blank">梯形齿同步带宽度bs系列</a><br/>
+                                    <a href="/beltdrive/beltdrive_curvedtoothsynchronousbeltdrive.html#圆弧齿同步带带齿和带宽尺寸(摘自JB/T 7512.1-1994)" target="_blank">圆弧齿同步带带齿和带宽尺寸</a><br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="同步带轮参数计算">同步带轮参数计算(周节制)</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-7" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 15px 10px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle">
+                                <tr>
+                                    <td>带型</td>
+                                    <td>
+                                        <select name="tp_beltType" id="tp_beltType" style="width: 80px;">
+                                            <option selected value="MXL">MXL</option>
+                                            <option value="XXL">XXL</option>
+                                            <option value="XL">XL</option>
+                                            <option value="L">L</option>
+                                            <option value="H">H</option>
+                                            <option value="XH">XH</option>
+                                            <option value="XXH">XXH</option>
+                                        </select>
+                                    </td>
+                                    <td>带轮齿数z</td>
+                                    <td>
+                                        <input type="number" step="1" name="tp_z" id="tp_z" value="30" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>齿廓形式</td>
+                                    <td>
+                                        <select name="tp_toothProfile" id="tp_toothProfile" style="width: 200px;">
+                                            <option selected value="involute">渐开线齿廓---齿条刀具</option>
+                                            <option value="straight">直边齿廓</option>
+                                        </select>
+                                    </td>
+                                    <td>小数位</td>
+                                    <td>
+                                        <input type="number" step="1" name="tp_decimals" id="tp_decimals" value="3" min="0" max="6" style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_tp_calculate">计算</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center" style="padding:0">
+                                        <table class="table table-bordered table-sm mb-0" id="tp_resultTable">
+                                            <thead>
+                                                <tr class="text-center"><th style="width:40px">序号</th><th>名称</th><th>计算结果</th></tr>
+                                            </thead>
+                                            <tbody id="tp_resultBody">
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-5">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescTP" aria-expanded="false" aria-controls="collapseDescTP">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDescTP">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="descTP" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                                    <div style="font-size: 15px;text-align: left">
+                                        1 根据带型和齿廓形式，计算同步带轮的齿形参数和结构尺寸。<br/>
+                                        2 渐开线齿廓带轮尺寸参照GB/T 11616-2013；直边齿廓带轮尺寸参照GB/T 11361-2008。<br/>
+                                        3 带型选择与上方同步带设计中的带型一致。<br/>
+                                        4 带轮齿数应与上方设计中选定的带轮齿数一致。
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <img src="https://www.mechdoc.cn/images/calculation/beltdrive/calculation_beltdrive1.gif" alt="同步带轮参数示意图" class="img-fluid" crossorigin="anonymous">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-end gap-2 my-4">
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                    <i class="bi bi-star" style="font-size: 16px;"></i>
+                </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_flatbelt.html" title="平带设计"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_polyvbeltdesign.html" title="多楔带设计"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <h4>评论</h4>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <style>
+        .ad-img { max-height: 172px; max-width: 100%; object-fit: contain; }
+        @media (max-width: 575.98px) { .ad-img { width: 100%; max-height: none; } }
+    </style>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.elesa-ganter.com.cn/" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg" alt="elesa-ganter伊莉莎冈特全系列机械标准配件" crossorigin="anonymous">
+            </a>
+        </div>
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.m-haste.com" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="m-haste艾姆华世特传动设备" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="javascript:">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bd-footer py-3 mt-3 bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                       aria-label="Mechtool">
+                        <span class="fs-5">Mechtool</span>
+                    </a>
+                </div>
+                <div class="col-12 mb-2">
+                    <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+                </div>
+                <div class="col-12 mb-2">
+                    <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                        <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                        <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                        <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                        <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                        <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                        <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

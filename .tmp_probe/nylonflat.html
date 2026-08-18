@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/stylewap.min.css?v=1.2.3"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/common.min.js?v=1.4.7"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+
+    <title>尼龙片复合平带传动的设计计算 | 尼龙片复合平带 | 带传动</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-md-center">
+        <div class="form-check form-switch ps-0 me-5 d-md-flex d-none justify-content-start">
+            <label class="form-check-label d-none d-lg-block text-secondary" for="showSidebar">侧边栏</label>
+            <input class="form-check-input ms-2" type="checkbox" role="switch" id="showSidebar" checked hidden>
+        </div>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fitPageBtn" title="图片适合页面宽度">
+            <i class="bi bi-arrows-fullscreen" style="font-size: 16px;"></i>
+        </div>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <i class="bi bi-unlock" style="font-size: 16px;"></i>
+            <i class="bi bi-lock d-none" style="font-size: 16px;"></i>
+        </div>
+        <div class="dropdown ms-3">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-md-inline">常用设计计算工具</span> <span class="d-md-none">计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+
+
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            
+    <ul class="list-unstyled mb-0 py-3 pt-md-1">
+        <li>
+            <a href="/beltdrive/index.html" class="d-inline-flex align-items-center rounded">
+                带传动
+            </a>
+        </li>
+        <li class="my-3 mx-4 border-bottom"></li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#beltdrive-item1-collapse" aria-expanded="true" aria-current="true">
+                传动带的种类及其选择
+            </button>
+
+            <div class="collapse show" id="beltdrive-item1-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/beltdrive/index.html" class="d-inline-flex align-items-center rounded" title="传动带的类型、特点和应用">传动带的类型、特点和应用</a></li>
+                    <li><a href="/beltdrive/beltdrive_applicabilityofvarioustransmissionbelts.html" class="d-inline-flex align-items-center rounded" title="各种传动带的适用性">各种传动带的适用性</a></li>
+                    <li><a href="/beltdrive/beltdrive_beltdriveefficiency.html" class="d-inline-flex align-items-center rounded" title="带传动的效率">带传动的效率</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#beltdrive-item2-collapse" aria-expanded="true" aria-current="true">
+                V带传动
+            </button>
+
+            <div class="collapse show" id="beltdrive-item2-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/beltdrive/beltdrive_ordinaryVbeltdrive.html" class="d-inline-flex align-items-center rounded" title="普通V带传动">普通V带传动</a></li>
+                    <li><a href="/beltdrive/beltdrive_narrowVbeltdrive.html" class="d-inline-flex align-items-center rounded" title="窄V带传动">窄V带传动</a></li>
+                    <li><a href="/beltdrive/beltdrive_vbeltpulley.html" class="d-inline-flex align-items-center rounded" title="V带轮">V带轮</a></li>
+                    <li><a href="/beltdrive/beltdrive_nationalstandardgbt11544-2012.html" class="d-inline-flex align-items-center rounded" title="V带传动标准">V带传动标准</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#beltdrive-item3-collapse" aria-expanded="true" aria-current="true">
+                平带传动
+            </button>
+
+            <div class="collapse show" id="beltdrive-item3-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/beltdrive/beltdrive_ordinaryflatbelt.html" class="d-inline-flex align-items-center rounded" title="普通平带">普通平带</a></li>
+                    <li><a href="/beltdrive/beltdrive_nylonsheetcompositeflatbelt.html" class="d-inline-flex align-items-center rounded" title="尼龙片复合平带">尼龙片复合平带</a></li>
+                    <li><a href="/beltdrive/beltdrive_highspeedbeltdrive.html" class="d-inline-flex align-items-center rounded" title="高速带传动">高速带传动</a></li>
+                    <li><a href="/beltdrive/beltdrive_flatbeltpulley.html" class="d-inline-flex align-items-center rounded" title="平带带轮">平带带轮</a></li>
+                    <li><a href="/beltdrive/beltdrive_flatbeltdrivestandard.html" class="d-inline-flex align-items-center rounded" title="平带传动标准">平带传动标准</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#beltdrive-item4-collapse" aria-expanded="true" aria-current="true">
+                同步带传动
+            </button>
+
+            <div class="collapse show" id="beltdrive-item4-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/beltdrive/beltdrive_synchronousbeltdrive.html" class="d-inline-flex align-items-center rounded" title="同步带传动">同步带传动</a></li>
+                    <li><a href="/beltdrive/beltdrive_trapezoidaltoothsynchronousbeltdrive.html" class="d-inline-flex align-items-center rounded" title="梯形齿同步带传动">梯形齿同步带传动</a></li>
+                    <li><a href="/beltdrive/beltdrive_curvedtoothsynchronousbeltdrive.html" class="d-inline-flex align-items-center rounded" title="圆弧齿同步带传动">圆弧齿同步带传动</a></li>
+                    <li><a href="/beltdrive/beltdrive_synchronousbeltdrivestandard.html" class="d-inline-flex align-items-center rounded" title="同步带传动标准">同步带传动标准</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#beltdrive-item5-collapse" aria-expanded="true" aria-current="true">
+                多楔带传动
+            </button>
+
+            <div class="collapse show" id="beltdrive-item5-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/beltdrive/beltdrive_v-ribbedbeltsizespecifications.html" class="d-inline-flex align-items-center rounded" title="多楔带的尺寸规格">多楔带的尺寸规格</a></li>
+                    <li><a href="/beltdrive/beltdrive_designandcalculationofmulti-ribbedbelttransmission.html" class="d-inline-flex align-items-center rounded" title="多楔带传动的设计计算">多楔带传动的设计计算</a></li>
+                    <li><a href="/beltdrive/beltdrive_v-ribbedbeltpulley.html" class="d-inline-flex align-items-center rounded" title="多楔带带轮">多楔带带轮</a></li>
+                    <li><a href="/beltdrive/beltdrive_v-ribbedbeltdrivestandard.html" class="d-inline-flex align-items-center rounded" title="多楔带传动标准">多楔带传动标准</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#beltdrive-item6-collapse" aria-expanded="true" aria-current="true">
+                带传动的张紧
+            </button>
+
+            <div class="collapse show" id="beltdrive-item6-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/beltdrive/beltdrive_beltdrivetensionmethodandinstallationrequirements.html" class="d-inline-flex align-items-center rounded" title="带传动的张紧方法及安装要求">带传动的张紧方法及安装要求</a></li>
+                    <li><a href="/beltdrive/beltdrive_detectionandcontrolofinitialtension.html" class="d-inline-flex align-items-center rounded" title="初张紧力的检测与控制">初张紧力的检测与控制</a></li>
+                    <li><a href="/beltdrive/beltdrive_commonfaultsandsolutionsforbeltdrives.html" class="d-inline-flex align-items-center rounded" title="带传动的常见故障及解决方案">带传动的常见故障及解决方案</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="my-3 mx-4 border-top"></li>
+        <li>
+            <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                关于 Mechtool
+            </a>
+        </li>
+        <li>
+            <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+               title="帮助 Mechtool">
+                帮助 Mechtool
+            </a>
+        </li>
+    </ul>
+
+        </nav>
+    </aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <div class="d-md-flex flex-md-row align-items-center justify-content-between gap-4">
+                <h1 class="bd-title" id="content">尼龙片复合平带</h1>
+                <div class="d-flex flex-row align-items-center justify-content-end gap-2">
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                        <i class="bi bi-star" style="font-size: 16px;"></i>
+                    </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/beltdrive/beltdrive_ordinaryflatbelt.html" title="普通平带"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/beltdrive/beltdrive_highspeedbeltdrive.html" title="高速带传动"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+                </div>
+            </div>
+            <p class="bd-lead">尼龙片复合平带传动的设计计算</p>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">尼龙片复合平带分页导航</strong>
+            <nav id="paging-nav">
+                <ul class="list-unstyled fw-normal">
+                    <li><a href="/beltdrive/beltdrive_nylonsheetcompositeflatbelt.html">尼龙片复合平带的尺寸规格</a></li>
+                	<li><a href="/beltdrive/beltdrive_designcalculationofnylonsheetcompositeflatbelttransmission.html">尼龙片复合平带传动的设计计算</a></li>
+                </ul>
+            </nav>
+            <nav aria-label="...">
+                <ul class="pagination pagination-sm justify-content-center d-none" id="pagination"></ul>
+            </nav>
+        </div>
+        <div class="bd-toc mt-2 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">本页导航</strong>
+            <nav id="TableOfContents">
+                <ul>
+                    <li><a name="尼龙片复合平带传动的设计计算">尼龙片复合平带传动的设计计算</a></li>
+                    <li><a name="尼龙片复合平带的基本额定功率P0">尼龙片复合平带的基本额定功率P0</a></li>
+				</ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">广告链接</strong>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool右侧栏自适应 -->
+    <ins class="adsbygoogle right"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="3643304998"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <h2>尼龙片复合平带传动的设计计算</h2>
+
+            <h4 id="尼龙片复合平带传动的设计计算">尼龙片复合平带传动的设计计算</h4>
+            <p>
+                尼龙片复合平带的设计计算可参照<a href="/beltdrive/beltdrive_designcalculationofordinaryflatbelttransmission.html#普通平带传动的设计计算">表13-1-68</a>进行。但计算时应考虑下列几点：<br/>
+                1）选择带型时，先根据载荷的大小和变化情况选择类型，对于中载、重载和载荷变化大的传动，宜选用LL或者LR、 LT型。然后根据设计功率Pd和小带轮转速n1参照图13-1-10选择带型。<br/>
+                2）小带轮直径d1允许比表13-1-68的计算值小30%~35%,但必须大于<a href="/beltdrive/beltdrive_nylonsheetcompositeflatbelt.html#尼龙片复合平带规格">表13-1-73</a>规定的dmin，并应使带速v>10~15m/s。<br/>
+                3）曲挠次数y应小于ymax=15~50,小带轮直径大时取高值。<br/>
+                4）确定带的截面尺寸主要是确定带宽<br/>
+                <img style="margin:0;height: 70px" src="https://www.mechdoc.cn/images/beltdrive/beltdrive_nylonsheetcompositeflatbelt1.gif" alt="" crossorigin="anonymous"><br/>
+                式中 Pd——设计功率，Pd = K<sub>A</sub>P;<br/>
+                P——传递的功率，kW；<br/>
+                K<sub>A</sub>——工况系数，査<a href="/beltdrive/beltdrive_designcalculationofordinaryflatbelttransmission.html#工况系数KA(摘自GB/T 13575.1-1992)">表13-1-69</a>；<br/>
+                Kα——包角修正系数，査<a href="/beltdrive/beltdrive_designcalculationofordinaryflatbelttransmission.html#平带传动的包角修正系数Kα">表13-1-71</a>；<br/>
+                Kβ——传动布置系数，査<a href="/beltdrive/beltdrive_designcalculationofordinaryflatbelttransmission.html#传动布置系数Kβ">表13-1-72</a>；<br/>
+                Po——α=180°、载荷平稳时，单位宽度的基本额定功率，査<a name="#表13-1-76">表13-1-76</a>。<br/>
+                根据上式算出的带宽，按<a href="/beltdrive/beltdrive_nylonsheetcompositeflatbelt.html#尼龙片复合平带规格">表13-1-73</a>选取标准值。
+            </p>
+            <img class="mw-100" src="https://www.mechdoc.cn/images/beltdrive/beltdrive_nylonsheetcompositeflatbelt2.png" alt="" crossorigin="anonymous">
+            <hr/>
+
+            <h4 id="尼龙片复合平带的基本额定功率P0">尼龙片复合平带的基本额定功率P0</h4>
+            <p id="表13-1-76">表13-1-76（α=180°、载荷平稳、预紧应力σ0=3MPa）单位：kW•mm-1<br/>
+                注：表中各带型基本额定功率，其拉伸性能要求达到<a href="/beltdrive/beltdrive_nylonsheetcompositeflatbelt.html#尼龙(聚酰胺)片平带的拉伸性能(GB/T 11063-2003)">表13-1-75</a>各项指标。</p>
+            <div class="table-responsive mb-3">
+			<table class="dataintable">
+
+                <tr>
+                    <th rowspan="2">
+                        带型
+                    </th>
+                    <th colspan="12">
+                        带速v/m•s-1
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        10
+                    </th>
+                    <th>
+                        15
+                    </th>
+                    <th>
+                        20
+                    </th>
+                    <th>
+                        25
+                    </th>
+                    <th>
+                        30
+                    </th>
+                    <th>
+                        35
+                    </th>
+                    <th>
+                        40
+                    </th>
+                    <th>
+                        45
+                    </th>
+                    <th>
+                        50
+                    </th>
+                    <th>
+                        55~60
+                    </th>
+                    <th>
+                        65
+                    </th>
+                    <th>
+                        70
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        EL
+                    </td>
+                    <td>
+                        0.060
+                    </td>
+                    <td>
+                        0.089
+                    </td>
+                    <td>
+                        0.116
+                    </td>
+                    <td>
+                        0.143
+                    </td>
+                    <td>
+                        0.166
+                    </td>
+                    <td>
+                        0.187
+                    </td>
+                    <td>
+                        0.204
+                    </td>
+                    <td>
+                        0.219
+                    </td>
+                    <td>
+                        0.228
+                    </td>
+                    <td>
+                        0.234
+                    </td>
+                    <td>
+                        0.230
+                    </td>
+                    <td>
+                        0.218
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        L
+                    </td>
+                    <td>
+                        0.100
+                    </td>
+                    <td>
+                        0.148
+                    </td>
+                    <td>
+                        0.194
+                    </td>
+                    <td>
+                        0.238
+                    </td>
+                    <td>
+                        0.276
+                    </td>
+                    <td>
+                        0.312
+                    </td>
+                    <td>
+                        0.340
+                    </td>
+                    <td>
+                        0.365
+                    </td>
+                    <td>
+                        0.380
+                    </td>
+                    <td>
+                        0.391
+                    </td>
+                    <td>
+                        0.384
+                    </td>
+                    <td>
+                        0.364
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        M
+                    </td>
+                    <td>
+                        0.140
+                    </td>
+                    <td>
+                        0.208
+                    </td>
+                    <td>
+                        0.272
+                    </td>
+                    <td>
+                        0.333
+                    </td>
+                    <td>
+                        0.386
+                    </td>
+                    <td>
+                        0.436
+                    </td>
+                    <td>
+                        0.476
+                    </td>
+                    <td>
+                        0.510
+                    </td>
+                    <td>
+                        0.532
+                    </td>
+                    <td>
+                        0.547
+                    </td>
+                    <td>
+                        0.537
+                    </td>
+                    <td>
+                        0.510
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        H
+                    </td>
+                    <td>
+                        0.200
+                    </td>
+                    <td>
+                        0.297
+                    </td>
+                    <td>
+                        0.388
+                    </td>
+                    <td>
+                        0.475
+                    </td>
+                    <td>
+                        0.552
+                    </td>
+                    <td>
+                        0.623
+                    </td>
+                    <td>
+                        0.680
+                    </td>
+                    <td>
+                        0.729
+                    </td>
+                    <td>
+                        0.760
+                    </td>
+                    <td>
+                        0.781
+                    </td>
+                    <td>
+                        0.767
+                    </td>
+                    <td>
+                        0.728
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        EH
+                    </td>
+                    <td>
+                        0.280
+                    </td>
+                    <td>
+                        0.416
+                    </td>
+                    <td>
+                        0.543
+                    </td>
+                    <td>
+                        0.665
+                    </td>
+                    <td>
+                        0.773
+                    </td>
+                    <td>
+                        0.872
+                    </td>
+                    <td>
+                        0.952
+                    </td>
+                    <td>
+                        1.021
+                    </td>
+                    <td>
+                        1.064
+                    </td>
+                    <td>
+                        1.093
+                    </td>
+                    <td>
+                        1.074
+                    </td>
+                    <td>
+                        1.019
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        EEH
+                    </td>
+                    <td>
+                        0.400
+                    </td>
+                    <td>
+                        0.594
+                    </td>
+                    <td>
+                        0.776
+                    </td>
+                    <td>
+                        0.950
+                    </td>
+                    <td>
+                        1.104
+                    </td>
+                    <td>
+                        1.246
+                    </td>
+                    <td>
+                        1.360
+                    </td>
+                    <td>
+                        1.458
+                    </td>
+                    <td>
+                        1.520
+                    </td>
+                    <td>
+                        1.562
+                    </td>
+                    <td>
+                        1.534
+                    </td>
+                    <td>
+                        1.456
+                    </td>
+                </tr>
+
+            </table>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-end gap-2 my-4">
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                    <i class="bi bi-star" style="font-size: 16px;"></i>
+                </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/beltdrive/beltdrive_ordinaryflatbelt.html" title="普通平带"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/beltdrive/beltdrive_highspeedbeltdrive.html" title="高速带传动"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <h4>评论</h4>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <style>
+        .ad-img { max-height: 172px; max-width: 100%; object-fit: contain; }
+        @media (max-width: 575.98px) { .ad-img { width: 100%; max-height: none; } }
+    </style>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.elesa-ganter.com.cn/" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg" alt="elesa-ganter伊莉莎冈特全系列机械标准配件" crossorigin="anonymous">
+            </a>
+        </div>
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.m-haste.com" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="m-haste艾姆华世特传动设备" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="javascript:">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bd-footer py-3 mt-3 bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                       aria-label="Mechtool">
+                        <span class="fs-5">Mechtool</span>
+                    </a>
+                </div>
+                <div class="col-12 mb-2">
+                    <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+                </div>
+                <div class="col-12 mb-2">
+                    <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                        <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                        <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                        <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                        <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                        <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                        <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+### z1MinQuery :: beltSize=H&n1=899
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":14}
+### z1MinQuery :: beltSize=H&n1=900
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":16}
+### z1MinQuery :: beltSize=H&n1=901
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":16}
+### z1MinQuery :: beltSize=H&n1=1199
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":16}
+### z1MinQuery :: beltSize=H&n1=1200
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":18}
+### z1MinQuery :: beltSize=H&n1=1201
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":18}
+### z1MinQuery :: beltSize=H&n1=1799
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":18}
+### z1MinQuery :: beltSize=H&n1=1800
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":20}
+### z1MinQuery :: beltSize=H&n1=1801
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":20}
+### z1MinQuery :: beltSize=H&n1=3599
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":20}
+### z1MinQuery :: beltSize=H&n1=3600
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":22}
+### z1MinQuery :: beltSize=H&n1=3601
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":22}
+### z1MinQuery :: beltSize=H&n1=4799
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":22}
+### z1MinQuery :: beltSize=H&n1=4800
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+### z1MinQuery :: beltSize=H&n1=5000
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+### z1MinQuery :: beltSize=XL&n1=100
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":10}
+### z1MinQuery :: beltSize=XXH&n1=100
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":22}
+### z1MinQuery :: beltSize=XH&n1=100
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":22}
+### z1MinQuery :: beltSize=L&n1=100
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":12}
+### z1MinQuery :: beltSize=MXL&n1=100
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":10}
+### z1MinQuery :: beltSize=XXL&n1=100
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":10}
+### z1MinQuery :: beltSize=XL&n1=1500
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":12}
+### z1MinQuery :: beltSize=XXH&n1=1500
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":26}
+### z1MinQuery :: beltSize=XH&n1=1500
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":26}
+### z1MinQuery :: beltSize=L&n1=1500
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":14}
+### z1MinQuery :: beltSize=MXL&n1=1500
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":14}
+### z1MinQuery :: beltSize=XXL&n1=1500
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":14}
+### z1MinQuery :: beltSize=XL&n1=5000
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+### z1MinQuery :: beltSize=XXH&n1=5000
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+### z1MinQuery :: beltSize=XH&n1=5000
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+### z1MinQuery :: beltSize=L&n1=5000
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+### z1MinQuery :: beltSize=MXL&n1=5000
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+### z1MinQuery :: beltSize=XXL&n1=5000
+{"dataList":null,"errorMsg":null,"flag":false,"resultData":null}
+### timingbelt1 :: z1=18&z2=18&a0=500&beltSize=H
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":501.65,"zM":9.0,"zB":97.0,"beltLen":1231.9,"calBeltLen":1228.6,"kZ":1.0,"alpha1":180.0}}
+### timingbelt1 :: z1=18&z2=52&a0=500&beltSize=H
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":496.89,"zM":8.0,"zB":114.0,"beltLen":1447.8,"calBeltLen":1453.96,"kZ":1.0,"alpha1":164.15}}
+### timingbelt1 :: z1=18&z2=52&a0=400&beltSize=H
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":394.042,"zM":8.0,"zB":98.0,"beltLen":1244.6,"calBeltLen":1256.34,"kZ":1.0,"alpha1":160.01}}
+### timingbelt1 :: z1=10&z2=30&a0=300&beltSize=XL
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":299.283,"zM":4.0,"zB":138.0,"beltLen":701.04,"calBeltLen":702.47,"kZ":0.6,"alpha1":173.81}}
+### timingbelt1 :: z1=24&z2=48&a0=600&beltSize=L
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":589.427,"zM":11.0,"zB":160.0,"beltLen":1524.0,"calBeltLen":1545.11,"kZ":1.0,"alpha1":172.93}}
+### timingbelt1 :: z1=22&z2=44&a0=800&beltSize=XH
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":796.297,"zM":10.0,"zB":105.0,"beltLen":2333.63,"calBeltLen":2341.0,"kZ":1.0,"alpha1":168.8}}
+### timingbelt1 :: z1=22&z2=66&a0=1000&beltSize=XXH
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":1056.006,"zM":9.0,"zB":112.0,"beltLen":3556.0,"calBeltLen":3446.64,"kZ":1.0,"alpha1":155.87}}
+### timingbeltLenChange :: z1=18&z2=52&pitchB=12.7&beltLen=1524
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":535.333,"zM":8.0,"zB":120.0,"kZ":1.0,"alpha1":165.29}}
+### timingbeltLenChange :: z1=18&z2=52&pitchB=12.7&beltLen=1371.6
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":458.389,"zM":8.0,"zB":108.0,"kZ":1.0,"alpha1":162.82}}
+### timingbeltLenChange :: z1=10&z2=30&pitchB=5.08&beltLen=508
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":202.554,"zM":4.0,"zB":100.0,"kZ":0.6,"alpha1":170.85}}
+### timingbeltLenChange :: z1=24&z2=48&pitchB=9.525&beltLen=1219.2
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"a":436.633,"zM":11.0,"zB":128.0,"kZ":1.0,"alpha1":170.45}}
+### timingbelt2 :: powerD=6&beltSize=H&beltVelocity=5.475&kZ=1&n1=1440&beltLen=1447.8&z1=18&kA=1.5&alpha1=164.15&zM=8
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"bs":50.8,"power0":11.43,"forceQ":1095.89,"bsMin":43.299,"m":0.448,"bs0":76.2,"powerR":7.2}}
+### timingbelt2 :: powerD=6&beltSize=H&beltVelocity=5.475&kZ=1&n1=1440&beltLen=1447.8&z1=18&kA=1.5&alpha1=164.15&zM=5
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"bs":50.8,"power0":11.43,"forceQ":1095.89,"bsMin":43.299,"m":0.448,"bs0":76.2,"powerR":7.2}}
+### timingbelt2 :: powerD=6&beltSize=H&beltVelocity=5.475&kZ=1&n1=1440&beltLen=1447.8&z1=18&kA=1.5&alpha1=164.15&zM=4
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"bs":50.8,"power0":11.43,"forceQ":1095.89,"bsMin":43.299,"m":0.448,"bs0":76.2,"powerR":7.2}}
+### timingbelt2 :: powerD=10&beltSize=H&beltVelocity=5.475&kZ=1&n1=1440&beltLen=1447.8&z1=18&kA=1.5&alpha1=164.15&zM=8
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"bs":76.2,"power0":11.43,"forceQ":1826.48,"bsMin":67.777,"m":0.448,"bs0":76.2,"powerR":11.43}}
+### timingbelt2 :: powerD=6&beltSize=XL&beltVelocity=3.02&kZ=1&n1=1440&beltLen=508&z1=15&kA=1.5&alpha1=170&zM=8
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"bs":0.0,"power0":0.15,"forceQ":1986.75,"bsMin":240.293,"m":0.022,"bs0":9.5,"powerR":0.0}}
+### timingbelt2 :: powerD=6&beltSize=L&beltVelocity=5.8&kZ=1&n1=1440&beltLen=1219.2&z1=16&kA=1.5&alpha1=170&zM=8
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"bs":0.0,"power0":1.4,"forceQ":1034.48,"bsMin":91.08,"m":0.095,"bs0":25.4,"powerR":0.0}}
+### timingbelt2 :: powerD=20&beltSize=XH&beltVelocity=10&kZ=1&n1=800&beltLen=1778&z1=24&kA=1.5&alpha1=170&zM=8
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"bs":76.2,"power0":39.01,"forceQ":2000.0,"bsMin":56.549,"m":1.484,"bs0":101.6,"powerR":28.06}}
+### timingbelt2 :: powerD=40&beltSize=XXH&beltVelocity=10&kZ=1&n1=800&beltLen=2032&z1=24&kA=1.5&alpha1=170&zM=8
+{"dataList":null,"errorMsg":null,"flag":true,"resultData":{"bs":101.6,"power0":61.51,"forceQ":4000.0,"bsMin":87.073,"m":2.473,"bs0":127.0,"powerR":47.63}}

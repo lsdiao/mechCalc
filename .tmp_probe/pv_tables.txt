@@ -1,0 +1,12 @@
+
+===== SELECT pv_beltSize ===== PJ:PJ, PK:PK, PL:PL, PM:PM
+
+===== SELECT pv_de1 ===== 
+
+===== SELECT pv_de2 ===== 
+
+===== SELECT pv_beltLen ===== 
+
+===== SELECT pv_calcMethodSelect ===== 查表法:查表法, 公式法:公式法
+
+===== SELECT pv_z ===== 

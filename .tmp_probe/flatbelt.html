@@ -1,0 +1,2137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Language" content="zh-cn"/>
+    <meta name="robots" content="all"/>
+    <meta name="author" content="mechtool.cn"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap-icons-1.13.1/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/dist/css/stylewap.min.css?v=1.2.3"/>
+    <link rel="stylesheet" type="text/css" href="/css/common/font-awesome.min.css?v=4.7.0"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bootstrap/jquery.min.js"></script>
+    <script src="/js/common/pica.min.js"></script>
+    <script src="/dist/js/system/common.min.js?v=1.4.7"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/ajax/libs/layer/layer.min.js"></script>
+    <script src="/ajax/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/dist/js/system/mechtool-ui.min.js?v=1.0.7"></script>
+
+    <meta name='description' content='本程序可进行平带的设计计算，包括普通胶帆布平带和尼龙片复合平带。软件中设计计算方法以及各参数选择均参照最新国家标准，程序界面清晰、使用方便。'>
+    <link rel="stylesheet" type="text/css" href="/css/common/jquery-editable-select.min.css"/>
+    <script src="/js/common/jquery-editable-select.min.js"></script>
+    <script src="/dist/js/mechtool/beltdrivedesign.min.js?v=1.0.4"></script>
+
+    <title>平带设计 | 带传动设计</title>
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?c37f74502d9e2bb10a79aecf14c4cf13";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYT010VYFW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WYT010VYFW');
+    </script>
+
+</head>
+<body>
+<header class="navbar navbar-expand-md navbar-dark bd-navbar">
+    <nav class="container-xxxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand p-0 me-auto" href="/" aria-label="Mechtool">Mechtool</a>
+
+        <div data-fragment="header_auth_mobile"></div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bdNavbar"
+                aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bdNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav pt-2 py-md-0">
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/">首页</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/one.html">机械设计基础资料</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/two.html">机械零部件设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/three.html">机械传动 润滑与密封</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/four.html">液压与气压传动</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/five.html">机械书籍</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/six.html">计算机辅助设计</a>
+                </li>
+                <li class="nav-item col-6 col-md-auto">
+                    <a class="nav-link p-2" href="/r.html">机械资料</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-none d-md-flex" data-fragment="header_auth_desktop"></ul>
+        </div>
+    </nav>
+</header>
+<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
+    <div class="container-xxxl d-flex align-items-md-center">
+        <div class="form-check form-switch ps-0 me-5 d-md-flex d-none justify-content-start">
+            <label class="form-check-label d-none d-lg-block text-secondary" for="showSidebar">侧边栏</label>
+            <input class="form-check-input ms-2" type="checkbox" role="switch" id="showSidebar" checked hidden>
+        </div>
+        <form class="bd-search position-relative me-auto" id="searchformMain" method="get"
+              action="https://cn.bing.com/search">
+            <input type="hidden" name="site" value="mechtool.cn"/>
+            <input type="search" class="form-control" id="search-input" placeholder="站内搜索..." name="q" title="在此输入搜索内容."
+                   aria-label="Search docs for..." autocomplete="off">
+        </form>
+        
+        <script>
+        (function(){var f=document.getElementById('searchformMain');if(!f)return;f.addEventListener('submit',function(){var q=f.querySelector('input[name="q"]');if(q&&q.value.trim()){try{var d=new FormData();d.append('keyword',q.value.trim());d.append('sourcePage',location.pathname+location.search);navigator.sendBeacon('/api/search/record',d)}catch(e){}}})})();
+        </script>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fitPageBtn" title="图片适合页面宽度">
+            <i class="bi bi-arrows-fullscreen" style="font-size: 16px;"></i>
+        </div>
+        <div class="d-md-flex d-none align-items-md-center me-3" id="fixTopBar">
+            <i class="bi bi-unlock" style="font-size: 16px;"></i>
+            <i class="bi bi-lock d-none" style="font-size: 16px;"></i>
+        </div>
+        <div class="dropdown ms-3">
+            <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-display="static">
+                <span class="d-none d-md-inline">常用设计计算工具</span> <span class="d-md-none">计算</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
+                <li><a class="dropdown-item" href="/calculation/calculation_tolerances.html" title="公差与配合查询">公差与配合查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shapeandpositiontolerance.html" title="形状与位置公差查询">形状与位置公差查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_boltconnection.html" title="螺栓连接设计校核">螺栓连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_keyconnection.html" title="键连接设计校核">键连接设计校核</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_springs.html" title="弹簧设计">弹簧设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearbearingselection.html" title="直线轴承选型">直线轴承选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_linearguideselection.html" title="直线导轨选型">直线导轨选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_screwdrive.html" title="螺旋传动设计">螺旋传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_ballscrewdrive.html" title="滚珠丝杆副设计计算">滚珠丝杆副设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_beltdrive.html" title="带传动设计">带传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_chaindrive.html" title="链传动设计">链传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_double-speedrollerchainselection.html" title="倍速滚子链选型">倍速滚子链选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_geardrive.html" title="渐开线圆柱齿轮传动设计">渐开线圆柱齿轮传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_wormandwormwheeldrive.html" title="普通圆柱蜗杆传动设计">普通圆柱蜗杆传动设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_camindexerselection.html" title="凸轮分度(割)器选型">凸轮分度(割)器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_hydraulicdrivesystemcalculation.html" title="液压传动系统计算">液压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_pneumaticdrivesystemcalculation.html" title="气压传动系统计算">气压传动系统计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_sealingsolutions.html" title="密封系统设计">密封系统设计</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_watersystemcalculation.html" title="水系统设计计算">水系统设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_selectionofhydraulicbuffer.html" title="油压缓冲器选型">油压缓冲器选型</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_rollingbearingdesigncalculation.html" title="滚动轴承设计与查询">滚动轴承设计与查询</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_shaftdesign.html" title="轴设计计算">轴设计计算</a></li>
+                <li><a class="dropdown-item" href="/calculation/calculation_motor(gearmotor)selection.html" title="电动机(减速机)选型计算">电动机(减速机)选型计算</a></li>
+            </ul>
+        </div>
+
+
+        <button class="btn bd-sidebar-toggle d-md-none py-0 px-1 ms-3 order-3 collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#bd-docs-nav" aria-controls="bd-docs-nav"
+                aria-expanded="false" aria-label="Toggle docs navigation">
+            <i class="bi bi-arrows-expand" style="font-size: 24px;" title="Expand"></i>
+            <i class="bi bi-arrows-collapse" style="font-size: 24px;" title="Collapse"></i>
+        </button>
+    </div>
+</nav>
+<div class="container-xxxl my-md-4 bd-layout">
+    <aside class="bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
+            
+    <ul class="list-unstyled mb-0 py-3 pt-md-1">
+        <li>
+            <a href="/calculation/calculation_beltdrive.html" class="d-inline-flex align-items-center rounded">
+                带传动设计
+            </a>
+        </li>
+        <li class="my-3 mx-4 border-bottom"></li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#program-query-collapse" aria-expanded="true" aria-current="true">
+                设计计算
+            </button>
+
+            <div class="collapse show" id="program-query-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/calculation/calculation_beltdrive.html" class="d-inline-flex align-items-center rounded" title="V型带设计">V型带设计</a></li>
+                    <li><a href="/calculation/calculation_flatbelt.html" class="d-inline-flex align-items-center rounded" title="平带设计">平带设计</a></li>
+                    <li><a href="/calculation/calculation_timingbeltdrive.html" class="d-inline-flex align-items-center rounded" title="同步带设计">同步带设计</a></li>
+                    <li><a href="/calculation/calculation_polyvbeltdesign.html" class="d-inline-flex align-items-center rounded" title="多楔带设计">多楔带设计</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn d-inline-flex align-items-center rounded w-100" data-bs-toggle="collapse"
+                    data-bs-target="#data-query-collapse" aria-expanded="true" aria-current="true">
+                查询资料
+            </button>
+
+            <div class="collapse show" id="data-query-collapse">
+                <ul class="list-unstyled fw-normal pb-1 small">
+                    <li><a href="/beltdrive/beltdrive_designcalculationofordinaryVbelttransmission1992.html" class="d-inline-flex align-items-center rounded" title="V型带设计">V型带设计</a></li>
+                    <li><a href="/beltdrive/beltdrive_designcalculationofordinaryflatbelttransmission.html" class="d-inline-flex align-items-center rounded" title="平带设计">平带设计</a></li>
+                    <li><a href="/beltdrive/beltdrive_designcalculationoftrapezoidaltoothsynchronousbelttransmission.html" class="d-inline-flex align-items-center rounded" title="梯形齿同步带设计">梯形齿同步带设计</a></li>
+                    <li><a href="/beltdrive/beltdrive_designcalculationofcurvedtoothsynchronousbelttransmission.html" class="d-inline-flex align-items-center rounded" title="圆弧齿同步带设计">圆弧齿同步带设计</a></li>
+                    <li><a href="/beltdrive/beltdrive_designandcalculationofmulti-ribbedbelttransmission.html" class="d-inline-flex align-items-center rounded" title="多楔带设计">多楔带设计</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="my-3 mx-4 border-top"></li>
+        <li>
+            <a href="/about/index.html" class="d-inline-flex align-items-center rounded" title="关于 Mechtool">
+                关于 Mechtool
+            </a>
+        </li>
+        <li>
+            <a href="/about/about_helping.html" class="d-inline-flex align-items-center rounded"
+               title="帮助 Mechtool">
+                帮助 Mechtool
+            </a>
+        </li>
+    </ul>
+
+        </nav>
+    </aside>
+
+    <main class="bd-main order-1">
+        <div class="bd-intro ps-lg-4">
+            <div class="d-md-flex flex-md-row align-items-center justify-content-between gap-4">
+                <h1 class="bd-title" id="content">平带设计</h1>
+                <div class="d-flex flex-row align-items-center justify-content-end gap-2">
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                        <i class="bi bi-star" style="font-size: 16px;"></i>
+                    </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_beltdrive.html" title="V型带设计"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                    <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_timingbeltdrive.html" title="同步带设计"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+                </div>
+            </div>
+            <p class="bd-lead">本程序可进行平带的设计计算，包括普通胶帆布平带和尼龙片复合平带。
+                软件中设计计算方法以及各参数选择均参照相关国家标准，程序界面清晰、使用方便。</p>
+        </div>
+        <div class="bd-toc mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+            <strong class="d-block h6 my-2 pb-2 border-bottom">本页导航</strong>
+            <nav id="TableOfContents">
+                <ul>
+                    <li><a name="参考资料">参考资料</a></li>
+                    <li><a name="工具介绍及使用说明">工具介绍及使用说明</a></li>
+                    <li><a name="平带设计">平带设计</a>
+                        <ul>
+                            <li><a name="输入初始参数">输入初始参数</a></li>
+                            <li><a name="选定带型和带轮直径">选定带型和带轮直径</a></li>
+                            <li><a name="确定轴间距a和带长L">确定轴间距a和带长L</a></li>
+                            <li><a name="确定带宽和压轴力">确定带宽和压轴力</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <strong class="d-block h6 my-2 pb-2 border-bottom">广告链接</strong>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool右侧栏自适应 -->
+    <ins class="adsbygoogle right"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="3643304998"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+        </div>
+        <div class="bd-content ps-lg-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2 ms-auto d-flex justify-content-center"> <!-- 修改为居中布局 -->
+                        <a class="goTop d-none flex-column align-items-center text-center" title="回到顶部">
+                            <span class="d-block" style="height: 18px">
+                                <i class="bi bi-chevron-up" style="font-size: 16px;"></i>
+                            </span>
+                            <span class="text">TOP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <h2 id="参考资料">参考资料</h2>
+            <details>
+                <summary class="text-primary mb-3">参考国家标准...</summary>
+                <article>
+                    <p>GB/T 524-2007 平型传动带 &nbsp; <a href="https://res.mechtool.cn/js/web/viewer.html?file=res/standard/GBT 524-2007 平型传动带&amp;v=1.0.0" target="_blank">pdf在线浏览</a></p>
+                </article>
+            </details>
+            <p>查询资料：&nbsp; <a href="/beltdrive/beltdrive_designcalculationofordinaryflatbelttransmission.html" title="普通平带传动的设计计算">普通平带传动的设计计算</a></p>
+            <p>查询资料：&nbsp; <a href="/beltdrive/beltdrive_designcalculationofnylonsheetcompositeflatbelttransmission.html" title="尼龙片复合平带传动的设计计算">尼龙片复合平带传动的设计计算</a></p>
+            <h2 id="工具介绍及使用说明">工具介绍及使用说明</h2>
+            <p class="mt-3">本工具用于平带传动的设计计算，支持普通胶帆布平带和尼龙片复合平带两种类型。</p>
+            <h2 id="平带设计">平带设计</h2>
+            <div class="container">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="输入初始参数">输入初始参数</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-8" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 10px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle mb-0">
+                                <tr>
+                                    <td>传动功率P</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="power" id="power" value="5"
+                                               style="width: 70px"><span> KW</span>
+                                    </td>
+                                    <td>主动轴转速n1</td>
+                                    <td>
+                                        <input type="number" step="1" name="n1" id="n1" value="1460"
+                                               style="width: 80px"><span> r/min</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>从动轴转速n2</td>
+                                    <td>
+                                        <input type="number" step="1" name="n2" id="n2" value="400"
+                                               style="width: 80px"><span> r/min</span>
+                                    </td>
+                                    <td>传动比i</td>
+                                    <td>
+                                        <input type="number" step="0.05" name="transmissionRatio" id="transmissionRatio" value="3.65"
+                                               style="width: 80px">
+                                    </td>
+                                </tr>
+                                <tr style="height: 45px">
+                                    <td colspan="2" id="errorInfo1" style="color: red;text-align: center"></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-4">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc1" aria-expanded="false" aria-controls="collapseDesc1">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDesc1">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="desc1" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                                    <div style="font-size: 15px;text-align: left">
+                                        1 平带传动设计输入参数有：传动的功率P，主动轮和从动轮转速n1、n2（或传动比i），传动形式。<br/>
+                                        2 根据公式i=n1/n2，用户只需输入n2、i两个参数之一而自动得出另一参数。<br/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="选定带型和带轮直径">选定带型和带轮直径</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-8" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 10px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle mb-0">
+                                <tr>
+                                    <td>
+                                        弹性滑动率ε
+                                    </td>
+                                    <td>
+                                        <input type="number" name="elasticSlidingRate" id="elasticSlidingRate" value="0.01"
+                                               style="width: 70px">
+                                    </td>
+                                    <td>
+                                        带速v
+                                    </td>
+                                    <td>
+                                        <input type="number" disabled name="beltVelocity" id="beltVelocity" value=""
+                                               style="width: 80px"><span> m/s</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-start">小带轮直径 d<sub>1</sub> =
+                                        <span style="position:relative;display:inline-block;vertical-align:middle;">
+                                            <select id="fb_d1Coeff" style="width:85px;margin-top:0;">
+                                                <option value="1100">1100</option>
+                                                <option value="1150">1150</option>
+                                                <option value="1200">1200</option>
+                                                <option selected value="1250">1250</option>
+                                                <option value="1300">1300</option>
+                                                <option value="1350">1350</option>
+                                            </select>
+                                        </span>
+                                        × ∛(P<sub>d</sub>/n<sub>1</sub>)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>计算d<sub>1</sub></td>
+                                    <td>
+                                        <input type="number" disabled id="fb_d1Cal" value="" style="width:80px;color:blue;">
+                                        <span> mm</span>
+                                    </td>
+                                    <td>选取标准值d<sub>1</sub></td>
+                                    <td>
+                                        <input type="number" name="fb_d1" id="fb_d1" value="" style="width:80px;vertical-align:middle;">
+                                        <span style="vertical-align:middle;"> mm</span>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#fb_diameterModal" id="btn_fb_d1Query" style="vertical-align:middle;">查询</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-start">大带轮直径 d<sub>2</sub> = i × d<sub>1</sub> × (1 - ε)</td>
+                                </tr>
+                                <tr>
+                                    <td>计算d<sub>2</sub></td>
+                                    <td>
+                                        <input type="number" disabled id="fb_d2Cal" value="" style="width:80px;color:blue;">
+                                        <span> mm</span>
+                                    </td>
+                                    <td>选取标准值d<sub>2</sub></td>
+                                    <td>
+                                        <input type="number" name="fb_d2" id="fb_d2" value="" style="width:80px;vertical-align:middle;">
+                                        <span style="vertical-align:middle;"> mm</span>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#fb_diameterModal" id="btn_fb_d2Query" style="vertical-align:middle;">查询</button>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 45px">
+                                    <td colspan="2" id="errorInfo2" style="color: red;text-align: center"></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-4">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc2" aria-expanded="false" aria-controls="collapseDesc2">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDesc2">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="desc2" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                                    1. 小带轮直径d<sub>1</sub>：根据计算推荐值输入，或按表选取标准值。为提高带的寿命，条件允许时，其值尽量取较大值。<br>
+                                    2. 大带轮直径d<sub>2</sub>：输入弹性滑动率ε（取值0.01～0.02），根据公式d<sub>2</sub>=id<sub>1</sub>(1-ε)计算得出并查询输入标准值。<br>
+                                    3. 带速v：根据公式计算得出带速，推荐带速10~20m/s。胶帆布平带v<sub>max</sub>＝30m/s，尼龙片复合平带v宜>10~15m/s。<br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="确定轴间距a和带长L">确定轴间距a和带长L</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-8" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 10px 10px 10px">
+                            <table class="table text-nowrap align-middle mb-0">
+                                <tr>
+                                    <td>传动形式</td>
+                                    <td colspan="3">
+                                        <input type="radio" checked name="fb_transmissionType" id="fb_openTransmission" value="open" style="margin:0 0 0 10px;">
+                                        <label for="fb_openTransmission" style="margin:0 0 0 0">开口传动</label>
+                                        <input type="radio" name="fb_transmissionType" id="fb_crossTransmission" value="cross" style="margin:0 0 0 10px;">
+                                        <label for="fb_crossTransmission" style="margin:0 0 0 0">交叉传动</label>
+                                        <input type="radio" name="fb_transmissionType" id="fb_halfCrossTransmission" value="halfCross" style="margin:0 0 0 10px;">
+                                        <label for="fb_halfCrossTransmission" style="margin:0 0 0 0">半交叉传动</label>
+                                    </td>
+                                </tr>
+                                <tr id="fb_formulaRow">
+                                    <td colspan="4" style="text-align:left;font-size:13px;padding:6px 10px;background:#f8f9fa">
+                                        <div id="fb_formulaDisplay" style="line-height:1.8;"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <input type="number" disabled name="a0min" id="a0min" value="" style="width: 80px;">
+                                        ≤ <label for="a0">初定轴间距a<sub>0</sub></label> <input type="number" name="a0" id="a0" value="" style="width: 80px;">
+                                        <span> mm</span> ≤ <input type="number" disabled name="a0max" id="a0max" value="" style="width: 80px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">选择平带类型</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-start">
+                                        <input type="radio" checked name="fb_beltCategory" id="fb_ordinaryBelt" value="ordinary" style="margin:0 0 0 10px;">
+                                        <label for="fb_ordinaryBelt" style="margin:0 0 0 0">普通胶帆布平带</label>
+                                        <input type="radio" name="fb_beltCategory" id="fb_nylonBelt" value="nylon" style="margin:0 0 0 10px;">
+                                        <label for="fb_nylonBelt" style="margin:0 0 0 0">尼龙片复合平带</label>
+                                    </td>
+                                </tr>
+                                <tr id="fb_nylonRow" style="display:none;">
+                                    <td>带型</td>
+                                    <td>
+                                        <input type="hidden" id="fb_nylonBeltType" value="EL">
+                                        <input type="text" disabled id="fb_nylonBeltTypeDisplay" value="EL" style="width:100px;">
+                                    </td>
+                                    <td>带厚δ</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="fb_nylonDelta" id="fb_nylonDelta" value="2"
+                                               style="width: 70px;vertical-align:middle;"><span style="vertical-align:middle;"> mm</span>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#fb_deltaModal" id="btn_nylonDeltaQuery" style="vertical-align:middle;">选择规格</button>
+                                    </td>
+                                </tr>
+                                <tr id="fb_ordinaryRow">
+                                    <td>带厚δ</td>
+                                    <td>
+                                        <input type="number" step="0.1" name="fb_delta" id="fb_delta" value="3"
+                                               style="width: 70px"><span> mm</span>
+                                    </td>
+                                    <td colspan="2" class="text-start">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#fb_deltaModal" id="btn_deltaQuery">选取δ标准值</button>
+                                        <span id="fb_deltaHint" style="color:#666;font-size:12px;"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 130px">计算带长L<sub>0p</sub></td>
+                                    <td style="width: 150px">
+                                        <input type="number" disabled name="calBeltLen" id="calBeltLen" value="" style="width: 80px;">
+                                        <span> mm</span>
+                                    </td>
+                                    <td style="width: 150px">带的内周长度L<sub>i</sub></td>
+                                    <td>
+                                        <input type="number" name="li" id="li" value="" style="width: 80px;vertical-align:middle;">
+                                        <span style="vertical-align:middle;"> mm</span>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#fb_beltLenModal" id="btn_beltLenQuery" style="vertical-align:middle;">查询</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>实际轴间距a</td>
+                                    <td>
+                                        <input type="number" disabled name="a" id="a" value="" style="width: 80px;">
+                                        <span> mm</span>
+                                    </td>
+                                    <td>实际带长L</td>
+                                    <td>
+                                        <input type="number" name="beltLen" id="beltLen" value="" style="width: 80px;">
+                                        <span> mm</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>输入带轮数</td>
+                                    <td>
+                                        <select id="fb_pulleyNum" style="width:85px;vertical-align:middle;">
+                                            <option selected value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                        </select>
+                                    </td>
+                                    <td>曲绕次数 y</td>
+                                    <td>
+                                        <input type="number" name="fb_y" id="fb_y" value="" style="width: 80px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>小带轮包角α<sub>1</sub></td>
+                                    <td>
+                                        <input type="number" disabled name="alpha1" id="alpha1" value="" style="width: 80px;">
+                                        <span><sup> °</sup></span>
+                                    </td>
+                                </tr>
+                                <tr style="height: 45px">
+                                    <td colspan="4" id="errorInfo3" style="color: red;text-align: left"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-4">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc3" aria-expanded="false" aria-controls="collapseDesc3">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDesc3">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="desc3" style="height: auto;width: 100%;padding:15px 10px 15px 10px;">
+                                    1.传动形式分为开口传动、交叉传动和半交叉传动，不同传动形式影响带长和包角的计算公式。<br/>
+                                    2.初定轴间距：根据计算得出提示范围，并输入。也可根据结构要求确定。<br/>
+                                    3.选择平带类型：普通胶帆布平带或尼龙片复合平带。选择带厚δ标准值。<br>
+                                    4.带长：根据公式计算得出带长，未考虑接头长度，可根据实际情况调整。<br/>
+                                    5.实际轴间距：根据公式计算得出实际轴间距。<br/>
+                                    6.小带轮包角：根据公式计算得出小带轮包角，开口传动α<sub>1</sub>不应小于150°。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-12 text-center">
+                        <h3 id="确定带宽和压轴力">确定带宽和压轴力</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xxl-8" style="border: 0px solid salmon;padding: 0">
+                        <div class="table-responsive" style="height: auto;border: 1px solid #AAA;padding: 10px 10px 10px 10px">
+                            <table class="table text-nowrap w-auto align-middle mb-0">
+                                <tr>
+                                    <td colspan="4" class="text-center">设计功率计算P<sub>d</sub>=K<sub>A</sub>P</td>
+                                </tr>
+                                <tr>
+                                    <td>工况系数K<sub>A</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" name="kA" id="kA" value="1.5"
+                                               style="width: 70px">
+                                        <span>K<sub>A</sub>查询</span>
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#calculation_flatbelt1Modal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                        </svg>
+                                            </a>
+                                        </span>
+                                        <div class="modal fade" id="calculation_flatbelt1Modal" tabindex="-1" aria-labelledby="calculation_flatbelt1ModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-md modal-lg modal-dialog-centered">
+                                                <div class="modal-content" data-bs-dismiss="modal">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <img src="https://www.mechdoc.cn/images/calculation/calculation_beltdrive1.png" alt="" crossorigin="anonymous">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">设计功率P<sub>d</sub></td>
+                                    <td>
+                                        <input type="number" disabled step="1" name="powerD" class="powerD" value="7.5"
+                                               style="width:80px"><span> kW</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>d<sub>1</sub>/δ</td>
+                                    <td>
+                                        <input type="number" disabled name="fb_d1OverDelta" id="fb_d1OverDelta" value=""
+                                               style="width: 80px">
+                                    </td>
+                                    <td>额定功率P<sub>0</sub></td>
+                                    <td>
+                                        <input type="number" step="0.001" name="fb_P0" id="fb_P0" value=""
+                                               style="width: 80px">
+                                        <span id="fb_P0Unit">kW/cm²</span>
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#fb_P0QueryModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <div class="modal fade" id="fb_P0QueryModal" tabindex="-1" aria-labelledby="fb_P0QueryModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-md modal-dialog-centered">
+                                                <div class="modal-content" data-bs-dismiss="modal">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <table class="dataintable padding3 mt-0">
+
+                                                                <tr>
+                                                                    <th rowspan="2">
+                                                                        d1/δ
+                                                                    </th>
+                                                                    <th colspan="21">
+                                                                        带速v/(m/s)
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        5
+                                                                    </th>
+                                                                    <th>
+                                                                        6
+                                                                    </th>
+                                                                    <th>
+                                                                        7
+                                                                    </th>
+                                                                    <th>
+                                                                        8
+                                                                    </th>
+                                                                    <th>
+                                                                        9
+                                                                    </th>
+                                                                    <th>
+                                                                        10
+                                                                    </th>
+                                                                    <th>
+                                                                        11
+                                                                    </th>
+                                                                    <th>
+                                                                        12
+                                                                    </th>
+                                                                    <th>
+                                                                        13
+                                                                    </th>
+                                                                    <th>
+                                                                        14
+                                                                    </th>
+                                                                    <th>
+                                                                        15
+                                                                    </th>
+                                                                    <th>
+                                                                        16
+                                                                    </th>
+                                                                    <th>
+                                                                        17
+                                                                    </th>
+                                                                    <th>
+                                                                        18
+                                                                    </th>
+                                                                    <th>
+                                                                        19
+                                                                    </th>
+                                                                    <th>
+                                                                        20
+                                                                    </th>
+                                                                    <th>
+                                                                        22
+                                                                    </th>
+                                                                    <th>
+                                                                        24
+                                                                    </th>
+                                                                    <th>
+                                                                        26
+                                                                    </th>
+                                                                    <th>
+                                                                        28
+                                                                    </th>
+                                                                    <th>
+                                                                        30
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        30
+                                                                    </td>
+                                                                    <td>
+                                                                        1.1
+                                                                    </td>
+                                                                    <td>
+                                                                        1.3
+                                                                    </td>
+                                                                    <td>
+                                                                        1.5
+                                                                    </td>
+                                                                    <td>
+                                                                        1.7
+                                                                    </td>
+                                                                    <td>
+                                                                        1.9
+                                                                    </td>
+                                                                    <td>
+                                                                        2.1
+                                                                    </td>
+                                                                    <td>
+                                                                        2.3
+                                                                    </td>
+                                                                    <td>
+                                                                        2.5
+                                                                    </td>
+                                                                    <td>
+                                                                        2.7
+                                                                    </td>
+                                                                    <td>
+                                                                        2.9
+                                                                    </td>
+                                                                    <td>
+                                                                        3
+                                                                    </td>
+                                                                    <td>
+                                                                        3.2
+                                                                    </td>
+                                                                    <td>
+                                                                        3.3
+                                                                    </td>
+                                                                    <td>
+                                                                        3.5
+                                                                    </td>
+                                                                    <td>
+                                                                        3.6
+                                                                    </td>
+                                                                    <td>
+                                                                        3.7
+                                                                    </td>
+                                                                    <td>
+                                                                        4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.1
+                                                                    </td>
+                                                                    <td>
+                                                                        4.3
+                                                                    </td>
+                                                                    <td>
+                                                                        4.3
+                                                                    </td>
+                                                                    <td>
+                                                                        4.3
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        35
+                                                                    </td>
+                                                                    <td>
+                                                                        1.1
+                                                                    </td>
+                                                                    <td>
+                                                                        1.3
+                                                                    </td>
+                                                                    <td>
+                                                                        1.5
+                                                                    </td>
+                                                                    <td>
+                                                                        1.7
+                                                                    </td>
+                                                                    <td>
+                                                                        2
+                                                                    </td>
+                                                                    <td>
+                                                                        2.2
+                                                                    </td>
+                                                                    <td>
+                                                                        2.4
+                                                                    </td>
+                                                                    <td>
+                                                                        2.5
+                                                                    </td>
+                                                                    <td>
+                                                                        2.7
+                                                                    </td>
+                                                                    <td>
+                                                                        2.9
+                                                                    </td>
+                                                                    <td>
+                                                                        3.1
+                                                                    </td>
+                                                                    <td>
+                                                                        3.2
+                                                                    </td>
+                                                                    <td>
+                                                                        3.4
+                                                                    </td>
+                                                                    <td>
+                                                                        3.6
+                                                                    </td>
+                                                                    <td>
+                                                                        3.7
+                                                                    </td>
+                                                                    <td>
+                                                                        3.8
+                                                                    </td>
+                                                                    <td>
+                                                                        4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.1
+                                                                    </td>
+                                                                    <td>
+                                                                        4.3
+                                                                    </td>
+                                                                    <td>
+                                                                        4.4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.4
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        40
+                                                                    </td>
+                                                                    <td>
+                                                                        1.1
+                                                                    </td>
+                                                                    <td>
+                                                                        1.3
+                                                                    </td>
+                                                                    <td>
+                                                                        1.6
+                                                                    </td>
+                                                                    <td>
+                                                                        1.8
+                                                                    </td>
+                                                                    <td>
+                                                                        2
+                                                                    </td>
+                                                                    <td>
+                                                                        2.2
+                                                                    </td>
+                                                                    <td>
+                                                                        2.4
+                                                                    </td>
+                                                                    <td>
+                                                                        2.6
+                                                                    </td>
+                                                                    <td>
+                                                                        2.8
+                                                                    </td>
+                                                                    <td>
+                                                                        2.9
+                                                                    </td>
+                                                                    <td>
+                                                                        3.1
+                                                                    </td>
+                                                                    <td>
+                                                                        3.3
+                                                                    </td>
+                                                                    <td>
+                                                                        3.4
+                                                                    </td>
+                                                                    <td>
+                                                                        3.6
+                                                                    </td>
+                                                                    <td>
+                                                                        3.7
+                                                                    </td>
+                                                                    <td>
+                                                                        3.9
+                                                                    </td>
+                                                                    <td>
+                                                                        4.1
+                                                                    </td>
+                                                                    <td>
+                                                                        4.3
+                                                                    </td>
+                                                                    <td>
+                                                                        4.4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.5
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        50
+                                                                    </td>
+                                                                    <td>
+                                                                        1.2
+                                                                    </td>
+                                                                    <td>
+                                                                        1.4
+                                                                    </td>
+                                                                    <td>
+                                                                        1.6
+                                                                    </td>
+                                                                    <td>
+                                                                        1.8
+                                                                    </td>
+                                                                    <td>
+                                                                        2.1
+                                                                    </td>
+                                                                    <td>
+                                                                        2.3
+                                                                    </td>
+                                                                    <td>
+                                                                        2.5
+                                                                    </td>
+                                                                    <td>
+                                                                        2.6
+                                                                    </td>
+                                                                    <td>
+                                                                        2.8
+                                                                    </td>
+                                                                    <td>
+                                                                        3
+                                                                    </td>
+                                                                    <td>
+                                                                        3.2
+                                                                    </td>
+                                                                    <td>
+                                                                        3.4
+                                                                    </td>
+                                                                    <td>
+                                                                        3.5
+                                                                    </td>
+                                                                    <td>
+                                                                        3.7
+                                                                    </td>
+                                                                    <td>
+                                                                        3.8
+                                                                    </td>
+                                                                    <td>
+                                                                        4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.2
+                                                                    </td>
+                                                                    <td>
+                                                                        4.4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.5
+                                                                    </td>
+                                                                    <td>
+                                                                        4.5
+                                                                    </td>
+                                                                    <td>
+                                                                        4.6
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        75
+                                                                    </td>
+                                                                    <td>
+                                                                        1.2
+                                                                    </td>
+                                                                    <td>
+                                                                        1.4
+                                                                    </td>
+                                                                    <td>
+                                                                        1.7
+                                                                    </td>
+                                                                    <td>
+                                                                        1.9
+                                                                    </td>
+                                                                    <td>
+                                                                        2.1
+                                                                    </td>
+                                                                    <td>
+                                                                        2.3
+                                                                    </td>
+                                                                    <td>
+                                                                        2.5
+                                                                    </td>
+                                                                    <td>
+                                                                        2.7
+                                                                    </td>
+                                                                    <td>
+                                                                        2.9
+                                                                    </td>
+                                                                    <td>
+                                                                        3.1
+                                                                    </td>
+                                                                    <td>
+                                                                        3.3
+                                                                    </td>
+                                                                    <td>
+                                                                        3.5
+                                                                    </td>
+                                                                    <td>
+                                                                        3.6
+                                                                    </td>
+                                                                    <td>
+                                                                        3.8
+                                                                    </td>
+                                                                    <td>
+                                                                        3.9
+                                                                    </td>
+                                                                    <td>
+                                                                        4.1
+                                                                    </td>
+                                                                    <td>
+                                                                        4.3
+                                                                    </td>
+                                                                    <td>
+                                                                        4.5
+                                                                    </td>
+                                                                    <td>
+                                                                        4.6
+                                                                    </td>
+                                                                    <td>
+                                                                        4.7
+                                                                    </td>
+                                                                    <td>
+                                                                        4.7
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        100
+                                                                    </td>
+                                                                    <td>
+                                                                        1.2
+                                                                    </td>
+                                                                    <td>
+                                                                        1.4
+                                                                    </td>
+                                                                    <td>
+                                                                        1.7
+                                                                    </td>
+                                                                    <td>
+                                                                        1.9
+                                                                    </td>
+                                                                    <td>
+                                                                        2.1
+                                                                    </td>
+                                                                    <td>
+                                                                        2.4
+                                                                    </td>
+                                                                    <td>
+                                                                        2.5
+                                                                    </td>
+                                                                    <td>
+                                                                        2.8
+                                                                    </td>
+                                                                    <td>
+                                                                        2.9
+                                                                    </td>
+                                                                    <td>
+                                                                        3.2
+                                                                    </td>
+                                                                    <td>
+                                                                        3.4
+                                                                    </td>
+                                                                    <td>
+                                                                        3.6
+                                                                    </td>
+                                                                    <td>
+                                                                        3.7
+                                                                    </td>
+                                                                    <td>
+                                                                        3.9
+                                                                    </td>
+                                                                    <td>
+                                                                        4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.1
+                                                                    </td>
+                                                                    <td>
+                                                                        4.4
+                                                                    </td>
+                                                                    <td>
+                                                                        4.6
+                                                                    </td>
+                                                                    <td>
+                                                                        4.7
+                                                                    </td>
+                                                                    <td>
+                                                                        4.7
+                                                                    </td>
+                                                                    <td>
+                                                                        4.8
+                                                                    </td>
+                                                                </tr>
+
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a id="fb_P0Query" href="/beltdrive/beltdrive_designcalculationofordinaryflatbelttransmission.html#胶帆布平带单位截面积传递的基本额定功率P0(α=180°、载荷平稳、预紧应力σ0=1.8MPa)" target="_blank">查表</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center">确定带宽</td>
+                                </tr>
+                                <tr>
+                                    <td>包角修正系数K<sub>α</sub></td>
+                                    <td>
+                                        <input type="number" step="0.01" name="fb_kAlpha" id="fb_kAlpha" value=""
+                                               style="width: 70px">
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#fb_kAlphaImgModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <div class="modal fade" id="fb_kAlphaImgModal" tabindex="-1" aria-labelledby="fb_kAlphaImgModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-sm modal-dialog-centered">
+                                                <div class="modal-content" data-bs-dismiss="modal">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <table class="dataintable padding3 mt-0">
+
+                                                                <tr>
+                                                                    <th>
+                                                                        α/（°）
+                                                                    </th>
+                                                                    <th>
+                                                                        Kα
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        220
+                                                                    </td>
+                                                                    <td>
+                                                                        1.2
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        210
+                                                                    </td>
+                                                                    <td>
+                                                                        1.15
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        200
+                                                                    </td>
+                                                                    <td>
+                                                                        1.1
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        190
+                                                                    </td>
+                                                                    <td>
+                                                                        1.05
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        180
+                                                                    </td>
+                                                                    <td>
+                                                                        1
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        170
+                                                                    </td>
+                                                                    <td>
+                                                                        0.97
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        160
+                                                                    </td>
+                                                                    <td>
+                                                                        0.94
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        150
+                                                                    </td>
+                                                                    <td>
+                                                                        0.91
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        140
+                                                                    </td>
+                                                                    <td>
+                                                                        0.88
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        130
+                                                                    </td>
+                                                                    <td>
+                                                                        0.85
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        120
+                                                                    </td>
+                                                                    <td>
+                                                                        0.82
+                                                                    </td>
+                                                                </tr>
+
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>传动布置系数K<sub>β</sub></td>
+                                    <td>
+                                        <input type="number" step="0.1" name="fb_kBeta" id="fb_kBeta" value=""
+                                               style="width: 70px">
+                                        <span style="vertical-align: 2px;">
+                                            <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#fb_kBetaImgModal">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <div class="modal fade" id="fb_kBetaImgModal" tabindex="-1" aria-labelledby="fb_kBetaImgModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-md modal-dialog-centered">
+                                                <div class="modal-content" data-bs-dismiss="modal">
+                                                    <div class="modal-body p-0 text-center">
+                                                        <div class="table-responsive">
+                                                            <table class="dataintable padding3 mt-0">
+
+                                                                <tr>
+                                                                    <th rowspan="3">
+                                                                        传动形式
+                                                                    </th>
+                                                                    <th colspan="3">
+                                                                        Kβ
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th colspan="3">
+                                                                        两轮轴连心线与水平线交角β
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        0～60°
+                                                                    </th>
+                                                                    <th>
+                                                                        60°～80°
+                                                                    </th>
+                                                                    <th>
+                                                                        80°～90°
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        自动张紧传动
+                                                                    </td>
+                                                                    <td>
+                                                                        1
+                                                                    </td>
+                                                                    <td>
+                                                                        1
+                                                                    </td>
+                                                                    <td>
+                                                                        1
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        简单开口传动（定期张紧或改缝）
+                                                                    </td>
+                                                                    <td>
+                                                                        1
+                                                                    </td>
+                                                                    <td>
+                                                                        0.9
+                                                                    </td>
+                                                                    <td>
+                                                                        0.8
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        交叉传动
+                                                                    </td>
+                                                                    <td>
+                                                                        0.9
+                                                                    </td>
+                                                                    <td>
+                                                                        0.8
+                                                                    </td>
+                                                                    <td>
+                                                                        0.7
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        半交叉传动、有导轮的角度传动
+                                                                    </td>
+                                                                    <td>
+                                                                        0.8
+                                                                    </td>
+                                                                    <td>
+                                                                        0.7
+                                                                    </td>
+                                                                    <td>
+                                                                        0.6
+                                                                    </td>
+                                                                </tr>
+
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select id="fb_transmissionForm" style="width: auto;margin-top:0;font-size:12px;">
+                                            <option value="autoTension">自动张紧</option>
+                                            <option value="simpleOpen" selected>简单开口(定期张紧)</option>
+                                            <option value="cross">交叉传动</option>
+                                            <option value="halfCross">半交叉/角度传动</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select id="fb_betaAngle" style="width: auto;margin-top:0;font-size:12px;">
+                                            <option value="0_60" selected>0~60°</option>
+                                            <option value="60_80">60~80°</option>
+                                            <option value="80_90">80~90°</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr id="fb_areaRow">
+                                    <td>截面积A</td>
+                                    <td>
+                                        <input type="number" disabled name="fb_A" id="fb_A" value=""
+                                               style="width: 80px"><span> cm²</span>
+                                    </td>
+                                    <td>预紧应力σ<sub>0</sub></td>
+                                    <td>
+                                        <input type="number" name="fb_sigma0" id="fb_sigma0" value="1.8"
+                                               style="width: 70px"><span> MPa</span>
+                                    </td>
+                                </tr>
+                                <td>计算带宽b</td>
+                                <td>
+                                    <input type="text" disabled name="fb_bCal" id="fb_bCal" value=""
+                                           style="width: 80px"><span> mm</span>
+                                </td>
+                                <td>标准带宽b</td>
+                                <td>
+                                    <input type="text" disabled name="fb_bstandard" id="fb_bstandard" value=""
+                                           style="width: 80px"><span> mm</span>
+                                    <span style="vertical-align: 2px;">
+                                        <a style="text-decoration: none;" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#fb_bQueryModal">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                    <div class="modal fade" id="fb_bQueryModal" tabindex="-1" aria-labelledby="fb_bQueryModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content" data-bs-dismiss="modal">
+                                                <div class="modal-body p-0 text-center">
+                                                    <div class="table-responsive" style="height: 560px">
+                                                        <table class="dataintable padding3 mt-0">
+
+                                                            <tr>
+                                                                <th>
+                                                                    平带宽度公称值
+                                                                </th>
+                                                                <th>
+                                                                    极限偏差
+                                                                </th>
+                                                                <th>
+                                                                    推荐用对应轮宽
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    16
+                                                                </td>
+                                                                <td>
+                                                                    ±2
+                                                                </td>
+                                                                <td>
+                                                                    20
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    20
+                                                                </td>
+                                                                <td>
+                                                                    ±2
+                                                                </td>
+                                                                <td>
+                                                                    25
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    25
+                                                                </td>
+                                                                <td>
+                                                                    ±2
+                                                                </td>
+                                                                <td>
+                                                                    32
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    32
+                                                                </td>
+                                                                <td>
+                                                                    ±2
+                                                                </td>
+                                                                <td>
+                                                                    40
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    40
+                                                                </td>
+                                                                <td>
+                                                                    ±2
+                                                                </td>
+                                                                <td>
+                                                                    50
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    50
+                                                                </td>
+                                                                <td>
+                                                                    ±2
+                                                                </td>
+                                                                <td>
+                                                                    63
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    63
+                                                                </td>
+                                                                <td>
+                                                                    ±2
+                                                                </td>
+                                                                <td>
+                                                                    71
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    71
+                                                                </td>
+                                                                <td>
+                                                                    ±3
+                                                                </td>
+                                                                <td>
+                                                                    80
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    80
+                                                                </td>
+                                                                <td>
+                                                                    ±3
+                                                                </td>
+                                                                <td>
+                                                                    90
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    90
+                                                                </td>
+                                                                <td>
+                                                                    ±3
+                                                                </td>
+                                                                <td>
+                                                                    100
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    100
+                                                                </td>
+                                                                <td>
+                                                                    ±3
+                                                                </td>
+                                                                <td>
+                                                                    112
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    112
+                                                                </td>
+                                                                <td>
+                                                                    ±3
+                                                                </td>
+                                                                <td>
+                                                                    125
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    125
+                                                                </td>
+                                                                <td>
+                                                                    ±3
+                                                                </td>
+                                                                <td>
+                                                                    140
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    140
+                                                                </td>
+                                                                <td>
+                                                                    ±4
+                                                                </td>
+                                                                <td>
+                                                                    160
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    160
+                                                                </td>
+                                                                <td>
+                                                                    ±4
+                                                                </td>
+                                                                <td>
+                                                                    180
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    180
+                                                                </td>
+                                                                <td>
+                                                                    ±4
+                                                                </td>
+                                                                <td>
+                                                                    200
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    200
+                                                                </td>
+                                                                <td>
+                                                                    ±4
+                                                                </td>
+                                                                <td>
+                                                                    224
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    224
+                                                                </td>
+                                                                <td>
+                                                                    ±4
+                                                                </td>
+                                                                <td>
+                                                                    250
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    250
+                                                                </td>
+                                                                <td>
+                                                                    ±4
+                                                                </td>
+                                                                <td>
+                                                                    280
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    280
+                                                                </td>
+                                                                <td>
+                                                                    ±5
+                                                                </td>
+                                                                <td>
+                                                                    315
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    315
+                                                                </td>
+                                                                <td>
+                                                                    ±5
+                                                                </td>
+                                                                <td>
+                                                                    355
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    355
+                                                                </td>
+                                                                <td>
+                                                                    ±5
+                                                                </td>
+                                                                <td>
+                                                                    400
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    400
+                                                                </td>
+                                                                <td>
+                                                                    ±5
+                                                                </td>
+                                                                <td>
+                                                                    450
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    450
+                                                                </td>
+                                                                <td>
+                                                                    ±5
+                                                                </td>
+                                                                <td>
+                                                                    500
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    500
+                                                                </td>
+                                                                <td>
+                                                                    ±5
+                                                                </td>
+                                                                <td>
+                                                                    560
+                                                                </td>
+                                                            </tr>
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <tr>
+                                    <td colspan="4" class="text-center">确定压轴力F<sub>r</sub></td>
+                                </tr>
+                                <tr>
+                                    <td>压轴力F<sub>r</sub></td>
+                                    <td>
+                                        <input type="text" disabled name="fb_Fr" id="fb_Fr" value=""
+                                               style="width: 90px"><span> N</span>
+                                    </td>
+                                    <td>压轴力F<sub>rmax</sub></td>
+                                    <td>
+                                        <input type="text" disabled name="fb_Frmax" id="fb_Frmax" value=""
+                                               style="width: 90px"><span> N</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" id="errorInfo4" style="color: red;text-align: center"></td>
+                                    <td></td>
+                                    <td class="text-start">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" id="btn_submit_flatbelt" value="计算结果">计算结果</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-4">
+                        <p class="mt-3 mt-xxl-0 mb-2 mb-xxl-0">
+                            <button class="btn btn-outline-primary btn-sm d-xxl-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc4" aria-expanded="false" aria-controls="collapseDesc4">
+                                显示说明
+                            </button>
+                        </p>
+                        <div class="collapse d-xxl-block" id="collapseDesc4">
+                            <div style="background: white;box-shadow:1px 1px 1px 1px rgba(0,0,0,.5) inset;">
+                                <div id="desc4" style="height: auto;width: 100%;padding:15px 10px 10px 10px;">
+                                    1. 设计功率：根据机械特性查询得出工况系数，计算得出设计功率。<br>
+                                    2. 额定功率P<sub>0</sub>：根据d<sub>1</sub>/δ和v（普通平带）或带型和v（尼龙复合平带）自动查询，也可手动输入。<br/>
+                                    3.普通胶帆布平带：截面积A=P<sub>d</sub>/(P<sub>0</sub>×K<sub>α</sub>×K<sub>β</sub>)，带宽b=A/δ，P<sub>0</sub>单位为kW/cm²。<br/>
+                                    4.尼龙片复合平带：带宽b=P<sub>d</sub>/(P<sub>0</sub>×K<sub>α</sub>×K<sub>β</sub>)，P<sub>0</sub>单位为kW/mm。<br/>
+                                    5.包角修正系数K<sub>α</sub>：根据包角α<sub>1</sub>自动查询，也可手动输入。<br/>
+                                    6.传动布置系数K<sub>β</sub>：根据传动形式和两轮轴连线与水平线交角β确定。<br/>
+                                    7.压轴力F<sub>r</sub>=2σ<sub>0</sub>Asin(α<sub>1</sub>/2)，普通平带推荐σ<sub>0</sub>＝1.8MPa，尼龙片复合平带σ<sub>0</sub>＝3MPa。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Standard diameter selection modal -->
+            <div class="modal fade" id="fb_diameterModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" data-no-auto-dismiss>
+                        <div class="modal-header">
+                            <h5 class="modal-title">选取标准直径</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div style="max-height:400px;overflow-y:auto;">
+                                <table class="table table-sm table-hover mb-0 modalTable" id="fb_diameterTable" style="border-collapse:separate;border-spacing:0;cursor:pointer;">
+                                    <thead>
+                                    <tr>
+                                        <th>直径d(mm)</th>
+                                        <th>偏差</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr data-value="20"><td>20</td><td>±0.4</td></tr>
+                                    <tr data-value="25"><td>25</td><td>±0.4</td></tr>
+                                    <tr data-value="32"><td>32</td><td>±0.5</td></tr>
+                                    <tr data-value="40"><td>40</td><td>±0.5</td></tr>
+                                    <tr data-value="45"><td>45</td><td>±0.6</td></tr>
+                                    <tr data-value="50"><td>50</td><td>±0.6</td></tr>
+                                    <tr data-value="56"><td>56</td><td>±0.8</td></tr>
+                                    <tr data-value="63"><td>63</td><td>±0.8</td></tr>
+                                    <tr data-value="71"><td>71</td><td>±1.0</td></tr>
+                                    <tr data-value="80"><td>80</td><td>±1.0</td></tr>
+                                    <tr data-value="90"><td>90</td><td>±1.2</td></tr>
+                                    <tr data-value="100"><td>100</td><td>±1.2</td></tr>
+                                    <tr data-value="112"><td>112</td><td>±1.2</td></tr>
+                                    <tr data-value="125"><td>125</td><td>±1.6</td></tr>
+                                    <tr data-value="140"><td>140</td><td>±1.6</td></tr>
+                                    <tr data-value="160"><td>160</td><td>±2.0</td></tr>
+                                    <tr data-value="180"><td>180</td><td>±2.0</td></tr>
+                                    <tr data-value="200"><td>200</td><td>±2.0</td></tr>
+                                    <tr data-value="224"><td>224</td><td>±2.5</td></tr>
+                                    <tr data-value="250"><td>250</td><td>±2.5</td></tr>
+                                    <tr data-value="280"><td>280</td><td>±3.2</td></tr>
+                                    <tr data-value="315"><td>315</td><td>±3.2</td></tr>
+                                    <tr data-value="355"><td>355</td><td>±3.2</td></tr>
+                                    <tr data-value="400"><td>400</td><td>±4.0</td></tr>
+                                    <tr data-value="450"><td>450</td><td>±4.0</td></tr>
+                                    <tr data-value="500"><td>500</td><td>±4.0</td></tr>
+                                    <tr data-value="560"><td>560</td><td>±5.0</td></tr>
+                                    <tr data-value="630"><td>630</td><td>±5.0</td></tr>
+                                    <tr data-value="710"><td>710</td><td>±5.0</td></tr>
+                                    <tr data-value="800"><td>800</td><td>±6.3</td></tr>
+                                    <tr data-value="900"><td>900</td><td>±6.3</td></tr>
+                                    <tr data-value="1000"><td>1000</td><td>±6.3</td></tr>
+                                    <tr data-value="1120"><td>1120</td><td>±8.0</td></tr>
+                                    <tr data-value="1250"><td>1250</td><td>±8.0</td></tr>
+                                    <tr data-value="1400"><td>1400</td><td>±8.0</td></tr>
+                                    <tr data-value="1600"><td>1600</td><td>±10.0</td></tr>
+                                    <tr data-value="1800"><td>1800</td><td>±10.0</td></tr>
+                                    <tr data-value="2000"><td>2000</td><td>±10.0</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btn_fb_diameterConfirm">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Standard beltLen selection modal -->
+            <div class="modal fade" id="fb_beltLenModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" data-no-auto-dismiss>
+                        <div class="modal-header">
+                            <h5 class="modal-title">选取带的内周长度L<sub>i</sub></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div style="max-height:400px;overflow-y:auto;">
+                                <table class="table table-sm table-hover mb-0 modalTable" id="fb_beltLenTable" style="border-collapse:separate;border-spacing:0;cursor:pointer;">
+                                    <thead>
+                                    <tr>
+                                        <th>优选系列</th>
+                                        <th>第二系列</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>500</td>
+                                        <td>530</td>
+                                    </tr>
+                                    <tr>
+                                        <td>560</td>
+                                        <td>600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>630</td>
+                                        <td>670</td>
+                                    </tr>
+                                    <tr>
+                                        <td>710</td>
+                                        <td>750</td>
+                                    </tr>
+                                    <tr>
+                                        <td>800</td>
+                                        <td>850</td>
+                                    </tr>
+                                    <tr>
+                                        <td>900</td>
+                                        <td>950</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1000</td>
+                                        <td>1060</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1120</td>
+                                        <td>1180</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1250</td>
+                                        <td>1320</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1400</td>
+                                        <td>1500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1600</td>
+                                        <td>1700</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1800</td>
+                                        <td>1900</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2000</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2240</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2500</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2800</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3150</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3550</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4000</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4500</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>5000</td>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btn_fb_beltLenConfirm">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Standard beltThickness selection modal -->
+            <div class="modal fade" id="fb_deltaModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" data-no-auto-dismiss>
+                        <div class="modal-header">
+                            <h5 class="modal-title">选取带厚δ标准值</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="nav nav-tabs" id="deltaTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="ordinaryTab" data-bs-toggle="tab" data-bs-target="#ordinaryDeltaPanel" type="button" role="tab">胶帆布平带</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="nylonTab" data-bs-toggle="tab" data-bs-target="#nylonDeltaPanel" type="button" role="tab">尼龙片复合平带</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="deltaTabContent">
+                                <!-- Ordinary flat belt delta -->
+                                <div class="tab-pane fade show active" id="ordinaryDeltaPanel" role="tabpanel">
+                                    <div style="max-height:400px;overflow-y:auto;margin-top:10px;">
+                                        <table class="table table-sm table-hover mb-0 modalTable text-nowrap" id="fb_ordinaryDeltaTable" style="border-collapse:separate;border-spacing:0;cursor:pointer;">
+                                            <thead>
+                                            <tr>
+                                                <th>拉伸强度(kN/m)</th>
+                                                <th>层数z</th>
+                                                <th>带厚δ</th>
+                                                <th>宽度范围</th>
+                                                <th>推荐d<sub>min</sub></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-value="3.6"><td>190</td><td>3</td><td>3.6</td><td>16~20</td><td>160</td></tr>
+                                            <tr data-value="4.8"><td>240</td><td>4</td><td>4.8</td><td>20~315</td><td>224</td></tr>
+                                            <tr data-value="6.0"><td>290</td><td>5</td><td>6.0</td><td>63~315</td><td>280</td></tr>
+                                            <tr data-value="7.2"><td>340</td><td>6</td><td>7.2</td><td>63~500</td><td>315</td></tr>
+                                            <tr data-value="8.4"><td>385</td><td>7</td><td>8.4</td><td>200~500</td><td>355</td></tr>
+                                            <tr data-value="9.6"><td>425</td><td>8</td><td>9.6</td><td>200~500</td><td>400</td></tr>
+                                            <tr data-value="10.8"><td>450</td><td>9</td><td>10.8</td><td>200~500</td><td>450</td></tr>
+                                            <tr data-value="12.0"><td>500</td><td>10</td><td>12.0</td><td>200~500</td><td>500</td></tr>
+                                            <tr data-value="13.2"><td>530</td><td>11</td><td>13.2</td><td>355~500</td><td>560</td></tr>
+                                            <tr data-value="14.4"><td>560</td><td>12</td><td>14.4</td><td>355~500</td><td>630</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Nylon composite flat belt delta -->
+                                <div class="tab-pane fade" id="nylonDeltaPanel" role="tabpanel">
+                                    <div style="max-height:400px;overflow-y:auto;margin-top:10px;">
+                                        <table class="table table-sm table-hover mb-0 modalTable text-nowrap" id="fb_nylonDeltaTable" style="border-collapse:separate;border-spacing:0;cursor:pointer;">
+                                            <thead>
+                                            <tr>
+                                                <th>带型</th>
+                                                <th>尼龙片厚δ<sub>N</sub></th>
+                                                <th>总厚δ</th>
+                                                <th>宽度范围</th>
+                                                <th>带轮d<sub>min</sub></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-value="2.4"><td>LL-EL</td><td>0.25</td><td>2.4</td><td>16~300</td><td>40</td></tr>
+                                            <tr data-value="3.2"><td>LL-L</td><td>0.5</td><td>3.2</td><td>16~300</td><td>45</td></tr>
+                                            <tr data-value="4.0"><td>LL-M</td><td>0.7</td><td>4.0</td><td>16~300</td><td>71</td></tr>
+                                            <tr data-value="4.2"><td>LL-H</td><td>1.0</td><td>4.2</td><td>16~300</td><td>112</td></tr>
+                                            <tr data-value="4.8"><td>LL-EH</td><td>1.4</td><td>4.8</td><td>16~300</td><td>180</td></tr>
+                                            <tr data-value="6.0"><td>LL-EEH</td><td>2.0</td><td>6.0</td><td>16~300</td><td>250</td></tr>
+                                            <tr data-value="1.9"><td>LR(LT)-EL</td><td>0.25</td><td>1.9/1.7</td><td>16~300</td><td>35</td></tr>
+                                            <tr data-value="2.5"><td>LR(LT)-L</td><td>0.5</td><td>2.5/2.1</td><td>16~300</td><td>45</td></tr>
+                                            <tr data-value="2.9"><td>LR(LT)-M</td><td>0.7</td><td>2.9/2.5</td><td>16~300</td><td>71</td></tr>
+                                            <tr data-value="3.7"><td>LR(LT)-H</td><td>1.0</td><td>3.7/3.3</td><td>16~300</td><td>112</td></tr>
+                                            <tr data-value="4.5"><td>LR(LT)-EH</td><td>1.4</td><td>4.5/4.1</td><td>16~300</td><td>180</td></tr>
+                                            <tr data-value="5.2"><td>LR(LT)-EEH</td><td>2.0</td><td>5.2/4.8</td><td>16~300</td><td>250</td></tr>
+                                            <tr data-value="1.6"><td>RR-EL</td><td>0.25</td><td>1.6</td><td>10~280</td><td>30</td></tr>
+                                            <tr data-value="1.8"><td>RR-L</td><td>0.5</td><td>1.8</td><td>10~280</td><td>40</td></tr>
+                                            <tr data-value="2.0"><td>RR-M</td><td>0.7</td><td>2.0</td><td>10~280</td><td>63</td></tr>
+                                            <tr data-value="2.3"><td>RR-H</td><td>1.0</td><td>2.3</td><td>10~280</td><td>100</td></tr>
+                                            <tr data-value="2.8"><td>RR-EH</td><td>1.4</td><td>2.8</td><td>10~280</td><td>160</td></tr>
+                                            <tr data-value="3.4"><td>RR-EEH</td><td>2.0</td><td>3.4</td><td>10~280</td><td>224</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btn_fb_deltaConfirm">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row align-items-center justify-content-end gap-2 my-4">
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center justify-content-center" href="javascript:void(0);" title="收藏本页">
+                    <i class="bi bi-star" style="font-size: 16px;"></i>
+                </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_beltdrive.html" title="V型带设计"><i class="bi bi-arrow-left" style="font-size: 16px;"></i> 上一项 </a>
+                <a class="btn btn-sm btn-bd-light mb-2 text-nowrap d-inline-flex align-items-center" href="/calculation/calculation_timingbeltdrive.html" title="同步带设计"> 下一项 <i class="bi bi-arrow-right" style="font-size: 16px;"></i></a>
+            </div>
+            <div class="mech-image">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8606760399260364"
+            crossorigin="anonymous"></script>
+    <!-- mechtool正文底部自适应 -->
+    <ins class="adsbygoogle bottom"
+         style="display:block"
+         data-ad-client="ca-pub-8606760399260364"
+         data-ad-slot="8509646532"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+            <h4>评论</h4>
+            <div id="tcomment"></div>
+        </div>
+    </main>
+</div>
+<div class="container mt-3">
+    <style>
+        .ad-img { max-height: 172px; max-width: 100%; object-fit: contain; }
+        @media (max-width: 575.98px) { .ad-img { width: 100%; max-height: none; } }
+    </style>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.elesa-ganter.com.cn/" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg" alt="elesa-ganter伊莉莎冈特全系列机械标准配件" crossorigin="anonymous">
+            </a>
+        </div>
+        <div class="col-12 col-lg-6 text-left">
+            <a href="https://www.m-haste.com" target="_blank">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/ads/m-hasteweb.png" alt="m-haste艾姆华世特传动设备" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6 text-left">
+            <a href="javascript:">
+                <img class="ad-img" src="https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png" alt="关注'机械小哥'微信公众号" crossorigin="anonymous">
+            </a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bd-footer py-3 mt-3 bg-light">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/"
+                       aria-label="Mechtool">
+                        <span class="fs-5">Mechtool</span>
+                    </a>
+                </div>
+                <div class="col-12 mb-2">
+                    <p class="small mb-2">Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.</p>
+                </div>
+                <div class="col-12 mb-2">
+                    <ul class="list-unstyled small text-muted d-md-flex justify-content-md-start d-sm-block gap-md-4">
+                        <li class="mb-2"><a href="/about/about_use.html" title="关于使用">使用条款</a></li>
+                        <li class="mb-2"><a href="/about/about_privacy.html" title="关于隐私">隐私条款</a></li>
+                        <li class="mb-2"><a href="mailto:mechtool@126.com">问题反馈</a></li>
+                        <li class="mb-2"><a href="/about/infringement_removal.html">侵权删除</a></li>
+                        <li class="mb-2"><a href="/about/about_helping.html">帮助本站</a></li>
+                        <li class="mb-2" id="visitors-stats-container" style="display:none;">访问量：<span id="twikoo_visitors">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

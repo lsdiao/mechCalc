@@ -1,0 +1,13 @@
+--- FORM rollerChain1
+  INPUT z1 (number) value=19
+  INPUT z2 (number) value=48
+  INPUT f1 (number) value=1
+  INPUT f2 (number) value=1
+  INPUT km (number) value=1
+  INPUT powerC (number) value=
+--- FORM rollerChain3
+  SELECT chainSize : *08A,10A,12A,16A,20A,24A,28A,32A,36A,40A,48A
+  INPUT chainPitch (number) value=12.7
+  INPUT a0min (number) value=9.5
+  INPUT a0 (number) value=9.5
+  INPUT a0length (number) value=

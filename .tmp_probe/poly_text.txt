@@ -1,0 +1,137 @@
+--- IMGS ---
+IMG1 @20179: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/3.png
+IMG2 @20357: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/4.png
+IMG3 @20572: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/5.png
+IMG4 @20787: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/6.png
+IMG5 @20998: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/7.png
+IMG6 @21213: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/8.png
+IMG7 @21435: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/9.png
+IMG8 @21650: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/10.png
+IMG9 @21871: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/11.png
+IMG10 @22096: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/12.png
+IMG11 @22319: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/13.png
+IMG12 @22483: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/14.png
+IMG13 @22647: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/15.png
+IMG14 @22811: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/16.png
+IMG15 @22975: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/17.png
+IMG16 @23139: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/18.png
+IMG17 @23303: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/19.png
+IMG18 @23467: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/20.png
+IMG19 @23631: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/21.png
+IMG20 @23795: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/22.png
+IMG21 @23959: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/23.png
+IMG22 @24123: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/24.png
+IMG23 @24287: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/25.png
+IMG24 @24451: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/26.png
+IMG25 @24615: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/27.png
+IMG26 @24779: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/28.png
+IMG27 @24975: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/29.png
+IMG28 @25154: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/30.png
+IMG29 @25377: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/31.png
+IMG30 @25556: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/32.png
+IMG31 @25735: https://www.mechdoc.cn/images/beltdrive/lg-img/JBT 5983-2017/33.png
+IMG32 @27357: https://www.mechdoc.cn/images/ads/elesa-ganterweb.jpg
+IMG33 @27659: https://www.mechdoc.cn/images/ads/m-hasteweb.png
+IMG34 @27953: https://www.mechdoc.cn/images/index_adwechatmechboy560x172.png
+
+--- TEXT ---
+Mechtool
+首页
+机械设计基础资料
+机械零部件设计
+机械传动 润滑与密封
+液压与气压传动
+机械书籍
+计算机辅助设计
+机械资料
+侧边栏
+常用设计计算工具 计算
+公差与配合查询
+形状与位置公差查询
+螺栓连接设计校核
+键连接设计校核
+弹簧设计
+直线轴承选型
+直线导轨选型
+螺旋传动设计
+滚珠丝杆副设计计算
+带传动设计
+链传动设计
+倍速滚子链选型
+渐开线圆柱齿轮传动设计
+普通圆柱蜗杆传动设计
+凸轮分度(割)器选型
+液压传动系统计算
+气压传动系统计算
+密封系统设计
+水系统设计计算
+油压缓冲器选型
+滚动轴承设计与查询
+轴设计计算
+电动机(减速机)选型计算
+带传动
+传动带的种类及其选择
+传动带的类型、特点和应用
+各种传动带的适用性
+带传动的效率
+V带传动
+普通V带传动
+窄V带传动
+V带轮
+V带传动标准
+平带传动
+普通平带
+尼龙片复合平带
+高速带传动
+平带带轮
+平带传动标准
+同步带传动
+同步带传动
+梯形齿同步带传动
+圆弧齿同步带传动
+同步带传动标准
+多楔带传动
+多楔带的尺寸规格
+多楔带传动的设计计算
+多楔带带轮
+多楔带传动标准
+带传动的张紧
+带传动的张紧方法及安装要求
+初张紧力的检测与控制
+带传动的常见故障及解决方案
+关于 Mechtool
+帮助 Mechtool
+多楔带传动的设计计算
+上一项
+下一项
+多楔带传动的设计计算(摘自JB/T 5983-2017)
+多楔带传动的设计计算分页导航
+多楔带传动的设计计算(摘自JB/T 5983-2017)
+多楔带传动的设计计算(摘自JB/T 5983-1992)
+本页导航
+设计步骤
+设计功率Pd
+带型
+带轮有效直径
+带的有效长度Le和中心距a
+中心距调整量
+小带轮包角和包角修正系数
+带的有效长度和带长修正系数KL
+每楔传递的基本额定功率P1和由传动比引起的功率增量ΔP1
+每楔传递的额定功率Pr
+多楔带与带轮的楔合系数Kr
+广告链接
+TOP
+多楔带传动的设计计算(摘自JB/T 5983-2017)
+多楔带传动设计方法和步骤
+上一项
+下一项
+评论
+Mechtool
+Mechtool 简体中文版提供的内容仅用于提供参考,不保证内容的正确性.通过使用本站内容随之而来的风险与本站无关.版权所有,保留一切权利.
+使用条款
+隐私条款
+问题反馈
+侵权删除
+帮助本站
+访问量：0
