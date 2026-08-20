@@ -26,7 +26,7 @@ var ALL = [];
   var orig = App.registerTool;
   App.registerTool = function (t) { if (t && t.id) ALL.push(t); return orig.call(App, t); };
 })();
-['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
+['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/trans2_chain.js', 'js/tools/trans2_timing.js', 'js/tools/trans2_flat.js', 'js/tools/trans2_worm.js', 'js/tools/trans2_cam.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 });
 
