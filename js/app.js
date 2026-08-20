@@ -17,6 +17,39 @@ window.App = (function () {
     { id: 'common', name: '工程常用', desc: '公差配合、硬度换算、材料重量、转动惯量' }
   ];
 
+  /* 二级子菜单分组：分类 → 分组标题 → 工具id列表（按展示顺序）。
+   * 参照 mechtool.cn 菜单分布（如 工程常用 → 公差与配合查询 → 公差查询/配合查询）。 */
+  var SUBMENUS = {
+    connect: [
+      { t: '螺栓连接', tools: ['bolt-loose', 'bolt-reamed', 'bolt-transverse', 'bolt-check', 'bolt-dynamic'] },
+      { t: '键与花键连接', tools: ['key-check', 'key-half', 'key-wedge', 'key-tangent', 'key-spline-rect', 'key-spline-inv'] },
+      { t: '弹簧设计', tools: ['spring-design'] }
+    ],
+    linear: [
+      { t: '轴承与丝杆', tools: ['linear-bearing', 'ball-screw'] },
+      { t: '拖链', tools: ['cable-chain'] }
+    ],
+    trans: [
+      { t: '带传动', tools: ['v-belt', 'timing-belt-design', 'flat-belt-design', 'multi-ribbed-belt'] },
+      { t: '链传动', tools: ['chain-drive-design'] },
+      { t: '齿轮传动', tools: ['involute-gear', 'worm-drive-design'] },
+      { t: '凸轮机构', tools: ['cam-indexer-design'] }
+    ],
+    fluid: [
+      { t: '液压', tools: ['hydraulic-cylinder'] },
+      { t: '气压', tools: ['pneumatic-cylinder'] }
+    ],
+    select: [
+      { t: '电机与减速机', tools: ['motor-select'] }
+    ],
+    common: [
+      { t: '公差与配合查询', tools: ['tolerance-query', 'tolerance-fit-query'] },
+      { t: '形状与位置公差', tools: ['shape-tolerance', 'position-tolerance'] },
+      { t: '硬度与材料', tools: ['hardness-convert', 'steel-weight'] },
+      { t: '转动惯量', tools: ['moment-inertia'] }
+    ]
+  };
+
   /* ---------- 注册 ---------- */
   function registerTool(tool) {
     if (!tool || !tool.id || !tool.compute) return;
@@ -258,6 +291,14 @@ window.App = (function () {
   function toolCard(t) {
     return '<a class="tool-card" href="#/tool/' + t.id + '"><h3>' + esc(t.name) + '</h3><p>' + esc(t.brief || '') + '</p></a>';
   }
+  /* 分类下的子菜单分组 HTML：每组一个标题 + 工具卡片网格 */
+  function subGridHTML(catId) {
+    return subGroups(catId).map(function (g) {
+      return '<div class="sub-section">' +
+        '<div class="sub-header"><h3>' + esc(g.t) + '</h3><div class="cat-line"></div></div>' +
+        '<div class="tool-grid">' + g.tools.map(toolCard).join('') + '</div></div>';
+    }).join('');
+  }
   function renderHome() {
     var main = document.getElementById('main');
     var total = TOOLS.length;
@@ -268,7 +309,7 @@ window.App = (function () {
       var list = toolsOf(c.id);
       if (!list.length) return;
       html += '<div class="cat-section"><div class="cat-header"><h2>' + esc(c.name) + '</h2><span>' + esc(c.desc) + '</span><div class="cat-line"></div></div>' +
-        '<div class="tool-grid">' + list.map(toolCard).join('') + '</div></div>';
+        subGridHTML(c.id) + '</div>';
     });
     main.innerHTML = html;
   }
@@ -277,11 +318,29 @@ window.App = (function () {
     var cat = null;
     CATEGORIES.forEach(function (c) { if (c.id === catId) cat = c; });
     if (!cat) { renderHome(); return; }
-    var list = toolsOf(catId);
     main.innerHTML =
       '<div class="crumb"><a href="#/">首页</a> / ' + esc(cat.name) + '</div>' +
       '<div class="cat-section"><div class="cat-header"><h2>' + esc(cat.name) + '</h2><span>' + esc(cat.desc) + '</span><div class="cat-line"></div></div>' +
-      '<div class="tool-grid">' + list.map(toolCard).join('') + '</div></div>';
+      subGridHTML(catId) + '</div>';
+  }
+
+  /* 返回某分类下的子菜单分组（每组含 tool 对象数组；未归组工具放入"其他"） */
+  function subGroups(catId) {
+    var def = SUBMENUS[catId] || [];
+    var list = toolsOf(catId);
+    var grouped = [];
+    var used = {};
+    def.forEach(function (g) {
+      var ts = [];
+      g.tools.forEach(function (id) {
+        var t = getTool(id);
+        if (t && list.indexOf(t) >= 0) { ts.push(t); used[id] = 1; }
+      });
+      if (ts.length) grouped.push({ t: g.t, tools: ts });
+    });
+    var rest = list.filter(function (t) { return !used[t.id]; });
+    if (rest.length) grouped.push({ t: '其他', tools: rest });
+    return grouped;
   }
 
   /* ---------- 侧栏 ---------- */
@@ -292,8 +351,11 @@ window.App = (function () {
       var list = toolsOf(c.id);
       if (!list.length) return;
       html += '<div class="side-cat"><div class="side-title">' + esc(c.name) + '</div>';
-      list.forEach(function (t) {
-        html += '<a class="side-tool' + (t.id === activeToolId ? ' active' : '') + '" href="#/tool/' + t.id + '">' + esc(t.name) + '</a>';
+      subGroups(c.id).forEach(function (g) {
+        html += '<div class="side-subtitle">' + esc(g.t) + '</div>';
+        g.tools.forEach(function (t) {
+          html += '<a class="side-tool' + (t.id === activeToolId ? ' active' : '') + '" href="#/tool/' + t.id + '">' + esc(t.name) + '</a>';
+        });
       });
       html += '</div>';
     });
