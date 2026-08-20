@@ -26,7 +26,7 @@ var ALL = [];
   var orig = App.registerTool;
   App.registerTool = function (t) { if (t && t.id) ALL.push(t); return orig.call(App, t); };
 })();
-['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/trans2_chain.js', 'js/tools/trans2_timing.js', 'js/tools/trans2_flat.js', 'js/tools/trans2_worm.js', 'js/tools/trans2_cam.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
+['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/trans2_chain.js', 'js/tools/trans2_timing.js', 'js/tools/trans2_flat.js', 'js/tools/trans2_ribbed.js', 'js/tools/trans2_worm.js', 'js/tools/trans2_cam.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 });
 
@@ -328,7 +328,9 @@ var CASES = [
   ['tolerance-query', { D: 5, obj: 'shaft', shaftCode: 'm', shaftGrade: 5 }],
   ['tolerance-query', { D: 450, obj: 'hole', holeCode: 'D', holeGrade: 10 }],
   ['tolerance-fit-query', { D: 120, holeCode: 'E', holeGrade: 9, shaftCode: 'h', shaftGrade: 8 }],
-  ['tolerance-fit-query', { D: 3, holeCode: 'K', holeGrade: 7, shaftCode: 'p', shaftGrade: 6 }]
+  ['tolerance-fit-query', { D: 3, holeCode: 'K', holeGrade: 7, shaftCode: 'p', shaftGrade: 6 }],
+  ['multi-ribbed-belt', { beltType: 'PL', P: 30, n1: 1000, n2: 300, a0: 800 }],
+  ['multi-ribbed-belt', { beltType: 'PM', P: 60, n1: 2000, n2: 1000, a0: 1200 }]
 ];
 CASES.forEach(function (c) {
   var r = runTool(c[0], c[1]);
@@ -361,4 +363,62 @@ console.log('== 14) 形状与位置公差查询（GB/T 1184） ==');
   /* 位置·全跳动 D=500/9级 → >250~500段 120μm */
   var p3 = runTool('position-tolerance', { D: 500, grade: 9, item: 'fullbeat' });
   ok('φ500 全跳动 9 级 = 0.12 mm', val(p3, '全跳动9级') === '0.12 mm', String(val(p3, '全跳动9级')));
+})();
+
+console.log('== 15) 多楔带传动设计（JB/T 5983-2017，复刻 mechtool.cn） ==');
+(function () {
+  /* ---- 默认用例（PJ、P=5kW、n1=1460、n2=400）---- */
+  var r = runTool('multi-ribbed-belt', {});
+  ok('多楔带 默认计算无 error', !r.error, r.error || '');
+  ok('默认: de1=20 / de2=80', near(val(r, '小带轮有效直径 de₁'), 20) && near(val(r, '大带轮有效直径 de₂'), 80), val(r, '小带轮有效直径 de₁') + '/' + val(r, '大带轮有效直径 de₂'));
+  ok('默认: Le0=309.94 → Le=300', near(r.debug.calLe, 309.94, 1e-4) && val(r, '选用标准有效长度 Le') === 300, r.debug.calLe + '→' + val(r, '选用标准有效长度 Le'));
+  ok('默认: a=65.03, α1=127.13', near(val(r, '实际中心距'), 65.03, 1e-4) && near(val(r, '小带轮包角 α₁'), 127.13, 1e-4), val(r, '实际中心距') + '/' + val(r, '小带轮包角 α₁'));
+  ok('默认: Kα=0.83, KL=0.78', near(val(r, '包角修正系数 Kα'), 0.83, 1e-3) && near(val(r, '带长修正系数 KL'), 0.78, 1e-3), val(r, '包角修正系数 Kα') + '/' + val(r, '带长修正系数 KL'));
+  ok('默认: P1=0.0197, ΔP1=0.0085', near(r.debug.p1, 0.0197, 1e-4) && near(r.debug.deltaP1, 0.0085, 1e-4), r.debug.p1 + '/' + r.debug.deltaP1);
+  ok('默认: z=116 向上圆整', r.debug.z === 116, String(r.debug.z));
+  ok('默认: zStd=16 封顶到 PJ 最大楔数', r.debug.zStd === 16 && r.verdict.level === 'warn', 'zStd=' + r.debug.zStd + ', level=' + r.verdict.level);
+  ok('默认: Ft=3535.65, FQ=6602.88', near(r.debug.Ft, 3535.65, 1e-3) && near(r.debug.FQ, 6602.88, 1e-3), r.debug.Ft.toFixed(2) + '/' + r.debug.FQ.toFixed(2));
+
+  /* ---- PJ 手算用例（几何链/系数/楔数/力逐值验证）---- */
+  var pj = runTool('multi-ribbed-belt', { beltType: 'PJ', P: 0.3, n1: 2880, n2: 960, a0: 100 });
+  ok('PJ: v=3.348 m/s', near(val(pj, '带速'), 3.348, 1e-3), String(val(pj, '带速')));
+  ok('PJ: de2=63, a=97.5, α1=154.73', near(pj.debug.de2, 63) && near(val(pj, '实际中心距'), 97.5, 1e-4) && near(val(pj, '小带轮包角 α₁'), 154.73, 1e-3), pj.debug.de2 + '/' + val(pj, '实际中心距') + '/' + val(pj, '小带轮包角 α₁'));
+  ok('PJ: Kα=0.922, KL=0.78, Kr≈3.990', near(val(pj, '包角修正系数 Kα'), 0.922, 1e-3) && near(val(pj, '带长修正系数 KL'), 0.78, 1e-3) && near(pj.debug.kr, 3.990, 1e-2), val(pj, '包角修正系数 Kα') + '/' + val(pj, '带长修正系数 KL') + '/' + pj.debug.kr.toFixed(3));
+  ok('PJ: P1=0.027084 (2880r/min 插值)', near(pj.debug.p1, 0.027084, 1e-5), String(pj.debug.p1));
+  ok('PJ: zRaw=3.526 → z=4, zStd=4', near(pj.debug.zRaw, 3.526, 5e-3) && pj.debug.z === 4 && pj.debug.zStd === 4, pj.debug.zRaw.toFixed(3) + '→' + pj.debug.z + '/' + pj.debug.zStd);
+  ok('PJ: 力 Ft/F0z/F0/FQ 手算一致', near(pj.debug.Ft, 107.53, 1e-2) && near(pj.debug.F0z, 22.43, 1e-2) && near(pj.debug.F0, 89.73, 1e-2) && near(pj.debug.FQ, 175.11, 1e-2), pj.debug.Ft.toFixed(2) + '/' + pj.debug.F0z.toFixed(2) + '/' + pj.debug.F0.toFixed(2) + '/' + pj.debug.FQ.toFixed(2));
+  ok('PJ: verdict=ok', pj.verdict.level === 'ok', pj.verdict.level);
+
+  /* ---- 各类带型走通（PK/PL/PM）---- */
+  var pk = runTool('multi-ribbed-belt', { beltType: 'PK', P: 2.5, n1: 1460, n2: 500, a0: 200 });
+  ok('PK: de1=45, de2=140, Le=710', pk.debug.de1 === 45 && pk.debug.de2 === 140 && pk.debug.Le === 710, pk.debug.de1 + '/' + pk.debug.de2 + '/' + pk.debug.Le);
+  ok('PK: α1=153.32, Kα=0.918, KL=0.85', near(pk.debug.alpha1, 153.32, 1e-3) && near(pk.debug.kAlpha, 0.918, 1e-3) && near(pk.debug.kL, 0.85, 1e-3), pk.debug.alpha1 + '/' + pk.debug.kAlpha + '/' + pk.debug.kL);
+  ok('PK: z=5, zStd=5, verdict=ok', pk.debug.z === 5 && pk.debug.zStd === 5 && pk.verdict.level === 'ok', pk.debug.z + '/' + pk.debug.zStd + '/' + pk.verdict.level);
+  ok('PK: Ft=814.11, FQ=1331.16', near(pk.debug.Ft, 814.11, 1e-2) && near(pk.debug.FQ, 1331.16, 1e-2), pk.debug.Ft.toFixed(2) + '/' + pk.debug.FQ.toFixed(2));
+
+  var pl = runTool('multi-ribbed-belt', { beltType: 'PL', P: 12, n1: 1460, n2: 500, a0: 350 });
+  ok('PL: de2=224, Le0=1185.53→Le=1200, a=357.24', near(pl.debug.calLe, 1185.53, 1e-3) && pl.debug.Le === 1200 && near(pl.debug.a, 357.24, 1e-3), pl.debug.calLe + '/' + pl.debug.Le + '/' + pl.debug.a);
+  ok('PL: P1=0.7088, ΔP1=0.0881', near(pl.debug.p1, 0.7088, 1e-4) && near(pl.debug.deltaP1, 0.0881, 1e-4), pl.debug.p1 + '/' + pl.debug.deltaP1);
+  ok('PL: zRaw=5.677 → z=6, zStd=6', near(pl.debug.zRaw, 5.677, 5e-3) && pl.debug.z === 6 && pl.debug.zStd === 6, pl.debug.zRaw.toFixed(3) + '→' + pl.debug.z + '/' + pl.debug.zStd);
+
+  var pm = runTool('multi-ribbed-belt', { beltType: 'PM', P: 40, n1: 1460, n2: 500, a0: 800 });
+  ok('PM: de1=180, de2=500, Le=2650, P1=5.08', pm.debug.de1 === 180 && pm.debug.de2 === 500 && pm.debug.Le === 2650 && near(pm.debug.p1, 5.08, 1e-4), pm.debug.de1 + '/' + pm.debug.de2 + '/' + pm.debug.Le + '/' + pm.debug.p1);
+  ok('PM: z=3, zStd=8(标准区间下限)', pm.debug.z === 3 && pm.debug.zStd === 8, pm.debug.z + '/' + pm.debug.zStd);
+
+  /* ---- 楔数向上圆整（ceil 边界） ---- */
+  ok('楔数向上圆整 ceil(3.526)=4', pj.debug.z === Math.ceil(pj.debug.zRaw - 1e-9), pj.debug.zRaw + '→' + pj.debug.z);
+
+  /* ---- α<120° 警告 ---- */
+  var low = runTool('multi-ribbed-belt', { beltType: 'PK', P: 2.5, n1: 1460, n2: 500, de1: 45, de2: 355, a0: 250 });
+  ok('小包角 α1=105.3<120 触发警告', near(low.debug.alpha1, 105.3, 1e-3) && low.verdict.level === 'warn' && low.verdict.text.indexOf('120') >= 0, low.debug.alpha1 + '/' + low.verdict.level);
+
+  /* ---- 手动指定 de1 / 指定带长覆盖 ---- */
+  var d1 = runTool('multi-ribbed-belt', { beltType: 'PK', P: 2.5, n1: 1460, n2: 500, de1: 71, a0: 250 });
+  ok('指定 de1=71 → P1=0.4525', d1.debug.de1 === 71 && near(d1.debug.p1, 0.4525, 1e-4), d1.debug.de1 + '/' + d1.debug.p1);
+  var bl = runTool('multi-ribbed-belt', { beltType: 'PK', P: 2.5, n1: 1460, n2: 500, a0: 200, beltLen: 2000 });
+  ok('指定 Le=2000 → α1=173.59, KL=1.04', bl.debug.Le === 2000 && near(bl.debug.alpha1, 173.59, 1e-3) && near(bl.debug.kL, 1.04, 1e-3), bl.debug.Le + '/' + bl.debug.alpha1 + '/' + bl.debug.kL);
+
+  /* ---- P1 超界报错 ---- */
+  var err = runTool('multi-ribbed-belt', { beltType: 'PJ', P: 5, n1: 1460, n2: 400, de1: 280, a0: 1000 });
+  ok('de1=280(PJ) 无 P1 表值→报错', !!err.error && String(err.error).indexOf('P1') >= 0, err.error || '');
 })();
