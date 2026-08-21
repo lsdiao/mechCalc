@@ -34,7 +34,7 @@ window.App = (function () {
     trans: [
       { t: '带传动', tools: ['v-belt', 'timing-belt-design', 'flat-belt-design', 'multi-ribbed-belt'] },
       { t: '链传动', tools: ['chain-drive-design', 'double-speed-chain'] },
-      { t: '齿轮传动', tools: ['involute-gear', 'worm-drive-design', 'gear-thickness'] },
+      { t: '齿轮传动', tools: ['involute-gear', 'worm-drive-design', 'gear-thickness', 'involute-function'] },
       { t: '凸轮机构', tools: ['cam-indexer-design'] }
     ],
     fluid: [
@@ -51,7 +51,7 @@ window.App = (function () {
       { t: '形状与位置公差', tools: ['shape-tolerance', 'position-tolerance'] },
       { t: '硬度与材料', tools: ['hardness-convert', 'steel-weight', 'material-weight'] },
       { t: '转动惯量', tools: ['moment-inertia'] },
-      { t: '结构与梁板', tools: ['beam-calculator', 'plate-bending', 'shell-stress', 'mechanism-force'] },
+      { t: '结构与梁板', tools: ['beam-calculator', 'plate-bending', 'shell-stress', 'mechanism-force', 'impact-load', 'plate-critical-load'] },
       { t: '紧固件', tools: ['fastener-calculator'] }
     ]
   };

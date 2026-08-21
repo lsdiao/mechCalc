@@ -26,7 +26,7 @@ var ALL = [];
   var orig = App.registerTool;
   App.registerTool = function (t) { if (t && t.id) ALL.push(t); return orig.call(App, t); };
 })();
-['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/trans2_chain.js', 'js/tools/trans2_timing.js', 'js/tools/trans2_flat.js', 'js/tools/trans2_ribbed.js', 'js/tools/trans2_worm.js', 'js/tools/trans2_cam.js', 'js/tools/trans2_extra.js', 'js/tools/fluid.js', 'js/tools/fluid2.js', 'js/tools/fluid3.js', 'js/tools/fluid4.js', 'js/tools/bearing.js', 'js/tools/other1.js', 'js/tools/common2.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
+['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/trans2_chain.js', 'js/tools/trans2_timing.js', 'js/tools/trans2_flat.js', 'js/tools/trans2_ribbed.js', 'js/tools/trans2_worm.js', 'js/tools/trans2_cam.js', 'js/tools/trans2_extra.js', 'js/tools/math3.js', 'js/tools/fluid.js', 'js/tools/fluid2.js', 'js/tools/fluid3.js', 'js/tools/fluid4.js', 'js/tools/bearing.js', 'js/tools/other1.js', 'js/tools/common2.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 });
 
@@ -507,6 +507,26 @@ console.log('== 21) 结构/材料/密封/水泵 ==');
   var wp = runTool('water-pump', {});
   ok('水泵 轴功率≈1.7518kW', near(val(wp, '轴功率'), 1.7518, 1e-3), String(val(wp, '轴功率')));
   ok('水泵 圆整功率 2.2kW', near(valueOf(val(wp, '圆整标准电机功率')), 2.2, 1e-6), String(val(wp, '圆整标准电机功率')));
+})();
+
+console.log('== 22) 渐开线函数/冲击载荷/平板临界载荷 ==');
+(function () {
+  var invtool = runTool('involute-function', { mode: 'inv', degree: 20, minute: 0 });
+  // inv20° = tan(20°)-20°rad ≈ 0.014904
+  ok('渐开线 正算 inv20°≈0.014904', near(valueOf(val(invtool, '渐开线函数 invα = tanα − α')), 0.014904, 1e-4), String(val(invtool, '渐开线函数 invα = tanα − α')));
+  var back = runTool('involute-function', { mode: 'back', invVal: 0.014904 });
+  ok('渐开线 反解 α≈20°', near(valueOf(val(back, '反解压力角 α')), 20, 0.5), String(val(back, '反解压力角 α')));
+  // 冲击载荷 自由落体 默认：Q=1000 l=1 E=200000 A=0.25 H=0.4
+  // δs=1e3*1/(200000*0.25)=0.02 m; Kd=1+sqrt(1+2*0.4*200000*0.25/(1000*1))=1+sqrt(1+40)=1+6.403=7.403
+  var imp1 = runTool('impact-load', { scene: 'fall', Q: 1000, l: 1, E: 200000, A: 0.25, H: 0.4 });
+  ok('冲击 自由落体 Kd≈7.4031', near(valueOf(val(imp1, '动荷系数 Kd')), 7.4031, 0.01), String(val(imp1, '动荷系数 Kd')));
+  ok('冲击 自由落体 σk≈29613 Pa', near(valueOf(val(imp1, '最大冲击应力 σk = Q·Kd/A')), 29613, 50), String(val(imp1, '最大冲击应力 σk = Q·Kd/A')));
+  // 平板临界载荷 场景1 默认：a=1000 b=500 t=10 E=206000 ν=0.3 m=1 → β=2, κ=(2/1+1/2)²=6.25
+  // σc=6.25*π²*206000/(12*(1-0.09))*(10/500)² = 6.25*9.8696*206000/(10.92)*(0.02)² = 6.25*9.8696*206000/10.92*0.0004
+  //    = 6.25*186150.5*0.0004 = 6.25*74.460 = 465.4 MPa
+  var pc = runTool('plate-critical-load', { scene: '1', a: 1000, b: 500, t: 10, E: 206000, nu: 0.3, m: 1 });
+  ok('平板临界载荷 κ=(β/m+m/β)²=6.25', near(valueOf(val(pc, '屈曲系数 κ=(β/m+m/β)²')), 6.25, 1e-6), String(val(pc, '屈曲系数 κ=(β/m+m/β)²')));
+  ok('平板临界载荷 σc≈465.4 MPa', near(valueOf(val(pc, '临界应力 σc = κ·π²E/(12(1−ν²))·(t/b)²')), 465, 20), String(val(pc, '临界应力 σc = κ·π²E/(12(1−ν²))·(t/b)²')));
 })();
 
 /* 数值/单位解析辅助 */
