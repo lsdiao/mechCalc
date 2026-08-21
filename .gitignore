@@ -1,4 +1,4 @@
-# 复刻还原素材 / 临时目录（含 mechtool.cn 抓取文件），不入库
+# 复刻还原素材 / 临时目录（含原站抓取文件），不入库
 .tmp_probe/
 .tmp_camidx/
 .ref-tmp/
