@@ -23,6 +23,7 @@ public class CalcResult {
     private List<Section> sections;
     private Verdict verdict;
     private List<String> notes;
+    private Map<String, Object> debug;
 
     public static CalcResult ok(List<Section> sections) {
         CalcResult r = new CalcResult();
@@ -99,6 +100,8 @@ public class CalcResult {
     public void setVerdict(Verdict verdict) { this.verdict = verdict; }
     public List<String> getNotes() { return notes; }
     public void setNotes(List<String> notes) { this.notes = notes; }
+    public Map<String, Object> getDebug() { return debug; }
+    public void setDebug(Map<String, Object> debug) { this.debug = debug; }
 
     // 便捷工具：构造 Row / Section / Verdict
     public static Row row(String label, Object value, String unit, Integer d) {
