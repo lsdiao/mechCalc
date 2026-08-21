@@ -1,18 +1,18 @@
 /* =========================================================
- * 疲劳 / 直线运动类复刻工具（mechtool.cn 1:1 复刻）
+ * 疲劳 / 直线运动类复刻工具（原站 1:1 复刻）
  * 1. 拉伸弹簧设计计算  tension-spring     (category: connect)
  * 2. 直线导轨选型      linear-guide       (category: linear)
  * 3. 滑动螺旋传动计算  screw-transmission (category: linear)
  *
  * 公式/常量来源：
- *   - 拉伸弹簧：mechtool /calculation/calculation_springs1.html
- *     + dist/js/mechtool/springsdesign.min.js（解混淆确认）
+ *   - 拉伸弹簧：原站 /calculation/calculation_springs1.html
+ *     + dist/js/原站/springsdesign.min.js（解混淆确认）
  *       曲度系数 K=(4C-1)/(4C-4)+0.615/C（Wahl）；刚度 k=G·d⁴/(8·D³·n)；
  *       试算直径 d'≥1.6√(K·C·F/[τ])；载荷分类 <1000次=Ⅲ / ≤10⁶次=Ⅱ / >10⁶次=Ⅰ；
  *       初拉力 F0=π·d³·G/(8·D·1000)；疲劳安全 S≥1.1；稳定性 b≤5.3(两端固定)/3.7/2.6。
  *   - 直线导轨：页面为纯导航（无本地计算），按 THK 选型公式
  *       L=50·(C/P)^ε km（滚珠 ε=3），静额定 C0=fs·P。
- *   - 滑动螺旋：mechtool /calculation/calculation_screwdrive.html
+ *   - 滑动螺旋：原站 /calculation/calculation_screwdrive.html
  *     （耐磨 d2≥0.8√(F/(ψ[p]))、自锁 γ<ρv、螺杆/螺纹强度、稳定性 λ 方法）
  * ========================================================= */
 (function () {
@@ -162,7 +162,7 @@
           'τ=K·8F·D/(π·d³)（K=(4C-1)/(4C-4)+0.615/C）',
           '疲劳安全 S=τ_end/τmax，S≥1.1'
         ],
-        reference: 'mechtool.cn 拉伸弹簧设计计算；GB/T 23935《圆柱螺旋弹簧设计计算》、GB/T 4357、GB/T 1358。'
+        reference: '原站 拉伸弹簧设计计算；GB/T 23935《圆柱螺旋弹簧设计计算》、GB/T 4357、GB/T 1358。'
       };
     }
   });
@@ -258,7 +258,7 @@
   });
 
   /* =====================================================================
-   * 3. 滑动螺旋传动计算（mechtool /calculation/calculation_screwdrive.html）
+   * 3. 滑动螺旋传动计算（原站 /calculation/calculation_screwdrive.html）
    *    耐磨性→自锁/效率→螺杆强度→螺纹强度→稳定性 逐项校核
    * ===================================================================== */
   var NUT_STYLE_PSI = { '整体式': '整体式（ψ=H/d₂ 取 1.2~2.5）', '剖分式': '剖分式（ψ 可取 2.5~3.5）' };
@@ -436,7 +436,7 @@
           'γ=atan(S/(π·d₂))；η=tanγ/tan(γ+ρᵥ)',
           'σ_ca=√(σ²+3τ²)；λ=μ·l/i，S=F_cr/F≥[S]'
         ],
-        reference: 'mechtool.cn 滑动螺旋传动计算；《机械设计》螺旋传动章节；GB/T 5796 梯形螺纹。'
+        reference: '原站 滑动螺旋传动计算；《机械设计》螺旋传动章节；GB/T 5796 梯形螺纹。'
       };
     }
   });

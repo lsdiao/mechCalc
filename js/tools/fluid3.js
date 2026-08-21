@@ -1,12 +1,12 @@
 /* =========================================================
- * 气压传动与缓冲器类工具（mechtool 复刻）
+ * 气压传动与缓冲器类工具（原站 复刻）
  * 1. 气动手指（气爪）夹紧力计算  pneumatic-finger
  * 2. 气缸耗气量计算（最大/平均） cylinder-consumption
  * 3. 气动回路计算               pneumatic-circuit
  * 4. 真空吸盘与真空发生器选型    vacuum-suction
  * 5. 油压缓冲器选型             hydraulic-buffer
  * 6. 气动供应商在线计算工具      cheli-air
- * 公式与默认值均按 mechtool.cn 对应计算页面 1:1 复刻。
+ * 公式与默认值均按 原站 对应计算页面 1:1 复刻。
  * ========================================================= */
 (function () {
   'use strict';
@@ -22,7 +22,7 @@
     category: 'fluid',
     keywords: '气动手指 气爪 夹紧力 机械锁紧 摩擦锁紧 V形 工件 安全系数',
     brief: '按工件质量、加速度与安全系数计算气动手指（气爪）所需的最小夹紧力，支持机械锁紧/摩擦锁紧/V 形气爪复合工况。',
-    doc: '取工件在极限加速度下的<b>当量负载 W=m(g+a)</b>，再按爪数 n 与工况（机械锁紧、摩擦锁紧除以摩擦系数 μ、V 形气爪乘以 tanα）放大/折减得到单个夹持点所需<b>最小夹紧力</b>。本工具依 mechtool 气动手指夹紧力计算页面复刻。',
+    doc: '取工件在极限加速度下的<b>当量负载 W=m(g+a)</b>，再按爪数 n 与工况（机械锁紧、摩擦锁紧除以摩擦系数 μ、V 形气爪乘以 tanα）放大/折减得到单个夹持点所需<b>最小夹紧力</b>。本工具依 原站 气动手指夹紧力计算页面复刻。',
     inputs: [
       { key: 'operatingCondition', label: '工况', group: '工况选择', type: 'select', options: [
         { v: '二爪机械锁紧', t: '二爪机械锁紧' },
@@ -84,7 +84,7 @@
         notes: [
           '机械锁紧：F = m(g+a)·S；摩擦锁紧：F = m(g+a)·S/(n·μ)；V 形气爪：F = m(g+a)·S·tanα/n。',
           '摩擦锁紧对工件表面状态敏感，μ 取 0.1~0.2；加装 V 形气爪夹具可显著降低所需夹紧力。',
-          '本工具公式与默认值依 mechtool 气动手指夹紧力计算页（airclawClampingForce）。'
+          '本工具公式与默认值依 原站 气动手指夹紧力计算页（airclawClampingForce）。'
         ]
       };
     },
@@ -93,7 +93,7 @@
       '机械锁紧 F = W·S（不除爪数）；摩擦锁紧 F = W·S/(n·μ)',
       'V 形气爪：机械 F=W·S·tanα/n；摩擦 F=W·S·tanα/(n·μ)'
     ],
-    reference: 'mechtool 气动手指夹紧力计算；SMC《气动手指选型》'
+    reference: '原站 气动手指夹紧力计算；SMC《气动手指选型》'
   });
 
   /* ============ 2. 气缸耗气量计算（最大/平均） ============ */
@@ -103,7 +103,7 @@
     category: 'fluid',
     keywords: '气缸 耗气量 最大耗气量 平均耗气量 空压机 阀 配管',
     brief: '计算气缸最大耗气量、Cv 值、阀有效截面积，以及计入活塞杆与配管的平均耗气量，用于空压机与阀件选型。',
-    doc: '<b>最大耗气量</b>用于选定控制阀、空气处理元件及配管尺寸；<b>平均耗气量</b>用于选用空压机与核算运行成本，两者之差用于选定气罐容积。本工具依 mechtool 气缸耗气量计算页复刻。',
+    doc: '<b>最大耗气量</b>用于选定控制阀、空气处理元件及配管尺寸；<b>平均耗气量</b>用于选用空压机与核算运行成本，两者之差用于选定气罐容积。本工具依 原站 气缸耗气量计算页复刻。',
     inputs: [
       { key: 'cylBore', label: '缸径 D', group: '气缸参数', type: 'number', unit: 'mm', default: 100, step: 1 },
       { key: 'cylRod', label: '活塞杆径 d', group: '气缸参数', type: 'number', unit: 'mm', default: 30, step: 1 },
@@ -152,7 +152,7 @@
         },
         notes: [
           '最大耗气量 Qmax ∝ D²·S·(p+0.102)/t；平均耗气量计入活塞杆面积与两端配管容积。',
-          '本工具公式与默认值依 mechtool 气缸耗气量计算页（maxGasConsumption / avgGasConsumption）。'
+          '本工具公式与默认值依 原站 气缸耗气量计算页（maxGasConsumption / avgGasConsumption）。'
         ]
       };
     },
@@ -161,7 +161,7 @@
       'Qca = (A₁+A₂)·S·(p+0.1013)/0.1013 + 2·A_pipe·Lp 折标态×N',
       'Cv ≈ 0.0589·S；S 为阀有效截面积'
     ],
-    reference: 'mechtool 气缸耗气量计算；SMC《空压气与阀选型》'
+    reference: '原站 气缸耗气量计算；SMC《空压气与阀选型》'
   });
 
   /* ============ 3. 气动回路计算 ============ */
@@ -171,7 +171,7 @@
     category: 'fluid',
     keywords: '气动回路 气缸推力 耗气量 管路压降 压缩机功率 空压机',
     brief: '气动回路压力：气缸前进/后退推力、标准状态耗气量、管路压降与压缩机功率估算。',
-    doc: '对压缩空气驱动系统进行定量分析：<b>气缸推力</b>、<b>标准状态空气消耗量</b>、<b>管路压降（Darcy-Weisbach 可压缩流近似）</b>与<b>压缩机功率估算</b>，覆盖空压机产气→管路输送→气缸做功全过程。本工具依 mechtool 气动回路计算页复刻。',
+    doc: '对压缩空气驱动系统进行定量分析：<b>气缸推力</b>、<b>标准状态空气消耗量</b>、<b>管路压降（Darcy-Weisbach 可压缩流近似）</b>与<b>压缩机功率估算</b>，覆盖空压机产气→管路输送→气缸做功全过程。本工具依 原站 气动回路计算页复刻。',
     inputs: [
       { key: 'stdBore', label: '标准缸径', group: '气缸参数', type: 'select', options: [
         { v: '32', t: 'φ32mm' }, { v: '40', t: 'φ40mm' }, { v: '50', t: 'φ50mm' },
@@ -241,7 +241,7 @@
         notes: [
           '推力 F=πD²/4·P·η（前进），F=π(D²-d²)/4·P·η（后退），P 为表压。',
           '标准耗气量 Q=(P_abs/P_atm)·V，折算到 101.3 kPa 标准大气压。',
-          '本工具公式与默认值依 mechtool 气动回路计算页（pneumaticCircuit / pipeFlowAndPressureCal）。'
+          '本工具公式与默认值依 原站 气动回路计算页（pneumaticCircuit / pipeFlowAndPressureCal）。'
         ]
       };
     },
@@ -251,7 +251,7 @@
       'ΔP=f·(L/d)·(ρ·v²/2)，f=0.02，ρ_act=ρ_std·P_abs/P_atm',
       'P_comp(kW)=Q_total(NL/min)×P(MPa)/100'
     ],
-    reference: 'mechtool 气动回路计算；Darcy-Weisbach 压降模型'
+    reference: '原站 气动回路计算；Darcy-Weisbach 压降模型'
   });
 
   /* ============ 4. 真空吸盘与真空发生器选型 ============ */
@@ -261,7 +261,7 @@
     category: 'fluid',
     keywords: '真空吸盘 真空发生器 吸附力 吸盘直径 真空度 缓冲罐 反应时间',
     brief: '按运动方式（顶吸/侧吸/平移）计算真空吸盘吸附力、所需吸盘直径与标准规格面积，并由吸盘体积与反应时间反算真空发生器所需流量。',
-    doc: '根据<b>运动方式</b>（顶吸提升/顶吸平移/侧吸提升）计算吸附力与<b>吸盘直径</b>，再由吸盘/配管总容积与要求的<b>反应时间</b>反算<b>真空发生器流量 Q1</b> 与真空泵<b>最大流量 Qmax</b>。本工具依 mechtool 真空吸盘与真空发生器页复刻。',
+    doc: '根据<b>运动方式</b>（顶吸提升/顶吸平移/侧吸提升）计算吸附力与<b>吸盘直径</b>，再由吸盘/配管总容积与要求的<b>反应时间</b>反算<b>真空发生器流量 Q1</b> 与真空泵<b>最大流量 Qmax</b>。本工具依 原站 真空吸盘与真空发生器页复刻。',
     inputs: [
       { key: 'motionStyle', label: '运动方式', group: '工况选择', type: 'select', options: [
         { v: '顶吸提升', t: '顶吸提升' }, { v: '顶吸平移', t: '顶吸平移' }, { v: '侧吸提升', t: '侧吸提升' }
@@ -333,7 +333,7 @@
         notes: [
           '顶吸提升 F=m(g+a)·S；侧吸提升 F=m(g+a)·S/μ；顶吸平移 F=m·(g+a/μ)·S；g=9.81 m/s²。',
           '吸盘直径 D=√(4F/(π·p))，F 单盘吸附力(N)，p 真空度(Pa)。',
-          '本工具公式与默认值依 mechtool 真空吸盘与真空发生器页（vacuumSuctionCupCal / vacuumGeneratorCal）。'
+          '本工具公式与默认值依 原站 真空吸盘与真空发生器页（vacuumSuctionCupCal / vacuumGeneratorCal）。'
         ]
       };
     },
@@ -342,7 +342,7 @@
       '单盘 F=F_total/n；D=√(4F/(π·p))',
       'Q1=60·V·tT1/T；Qmax=2·Q1；tT1=-ln(1-p_work/pV)'
     ],
-    reference: 'mechtool 真空吸盘与真空发生器；SMC/SCHMALZ 真空工学'
+    reference: '原站 真空吸盘与真空发生器；SMC/SCHMALZ 真空工学'
   });
 
   /* ============ 5. 油压缓冲器选型 ============ */
@@ -352,7 +352,7 @@
     category: 'select',
     keywords: '油压缓冲器 缓冲器 动能 驱动能 等效质量 冲击速度 选型',
     brief: '计算运动体动能、驱动能、总吸收能量与每小时吸收能量、等效质量，作为油压缓冲器选型依据，支持直线与旋转运动。',
-    doc: '按<b>运动情况</b>（直线运动 / 旋转或摇摆运动）计算运动体的<b>动能 E1</b>、<b>驱动/重力做功 E2</b> 与<b>每小时吸收能量 ETC</b>、<b>等效质量 me</b>，据此校核所选油压缓冲器的最大吸收能量与等效质量。本工具依 mechtool 油压缓冲器选型页复刻。',
+    doc: '按<b>运动情况</b>（直线运动 / 旋转或摇摆运动）计算运动体的<b>动能 E1</b>、<b>驱动/重力做功 E2</b> 与<b>每小时吸收能量 ETC</b>、<b>等效质量 me</b>，据此校核所选油压缓冲器的最大吸收能量与等效质量。本工具依 原站 油压缓冲器选型页复刻。',
     inputs: [
       { key: 'motionSituation', label: '运动情况', group: '运动情况', type: 'select', options: [
         { v: '直线运动时', t: '直线运动时' }, { v: '旋转或摇摆运动时', t: '旋转或摇摆运动时' }
@@ -416,7 +416,7 @@
         notes: [
           '直线：E1=½mv²，E2=mg·S·sinθ+F·S；旋转：E1=½Jω²，E2=M·(S/R)。',
           '等效质量 直线 me=m·E/E1；旋转 me=(J/R²)·(E/E1)。',
-          '本工具公式与默认值依 mechtool 油压缓冲器选型页（hydraulicBufferCal）。'
+          '本工具公式与默认值依 原站 油压缓冲器选型页（hydraulicBufferCal）。'
         ]
       };
     },
@@ -426,7 +426,7 @@
       '旋转：E1=½Jω²，E2=M·θ（θ=S/R），v=R·ω',
       'me（直线）=m·E/E1；me(旋转)=(J/R²)·E/E1；ETC=N·E'
     ],
-    reference: 'mechtool 油压缓冲器选型；ACE/SMC 缓冲器选型手册'
+    reference: '原站 油压缓冲器选型；ACE/SMC 缓冲器选型手册'
   });
 
   /* ============ 6. 气动供应商在线计算工具（信息页） ============ */
@@ -459,12 +459,12 @@
         },
         notes: [
           'SMC 压降/流量类工具还包括：气罐选型、气罐充放气、液/蒸汽/气体流量特性合成等。',
-          '本页依 mechtool 气动供应商在线计算工具页（cheli-online-calculation）整理。'
+          '本页依 原站 气动供应商在线计算工具页（cheli-online-calculation）整理。'
         ]
       };
     },
     formulas: [],
-    reference: 'mechtool 气动供应商在线计算工具；SMC / Festo / 台湾气立官方'
+    reference: '原站 气动供应商在线计算工具；SMC / Festo / 台湾气立官方'
   });
 
 })();

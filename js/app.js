@@ -1,5 +1,5 @@
 /* =========================================================
- * MechCalc 核心框架
+ * ErinsonCalc 核心框架
  * - 工具注册表（每工具一个自包含对象，便于后续扩展新工具）
  * - Hash 路由：#/ 首页  #/cat/<分类>  #/tool/<工具id>
  * - 声明式表单渲染 + 实时计算引擎
@@ -18,7 +18,7 @@ window.App = (function () {
   ];
 
   /* 二级子菜单分组：分类 → 分组标题 → 工具id列表（按展示顺序）。
-   * 参照 mechtool.cn 菜单分布（如 工程常用 → 公差与配合查询 → 公差查询/配合查询）。 */
+   * 参照 原站 菜单分布（如 工程常用 → 公差与配合查询 → 公差查询/配合查询）。 */
   var SUBMENUS = {
     connect: [
       { t: '螺栓连接', tools: ['bolt-loose', 'bolt-reamed', 'bolt-transverse', 'bolt-check', 'bolt-dynamic'] },

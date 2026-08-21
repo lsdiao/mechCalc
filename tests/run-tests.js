@@ -1,4 +1,4 @@
-/* MechCalc 全工具回归测试（Node 直接驱动 compute）
+/* ErinsonCalc 全工具回归测试（Node 直接驱动 compute）
  * 运行：node tests/run-tests.js
  */
 'use strict';
@@ -74,7 +74,7 @@ ALL.forEach(function (t) {
   ok(t.id + ' 默认计算', !r.error, r.error || ('verdict=' + (r.verdict && r.verdict.level)));
 });
 
-console.log('== 2) 螺栓连接（M10 6.8级 F=2kN，与 mechtool.cn 默认一致） ==');
+console.log('== 2) 螺栓连接（M10 6.8级 F=2kN，与 原站 默认一致） ==');
 (function () {
   var r = runTool('bolt-check', {});
   // F0 = F" + F = 3200 + 2000 = 5200 N；σca = 1.3F0/(πd1²/4)，M10 小径 d1=8.376
@@ -83,7 +83,7 @@ console.log('== 2) 螺栓连接（M10 6.8级 F=2kN，与 mechtool.cn 默认一�
   ok('计算应力 σca ≈ ' + sig.toFixed(1), near(val(r, '计算应力'), sig, 1e-3), String(val(r, '计算应力')));
 })();
 
-console.log('== 2b) 动载荷紧螺栓（与 mechtool.cn boltconnection4 API 实测一致） ==');
+console.log('== 2b) 动载荷紧螺栓（与 原站 boltconnection4 API 实测一致） ==');
 (function () {
   // 用例 A：默认 4.8级 M10 F=1kN λ=0.25 S=2 切制/受压（原网站 σa=2.27，[σa]=23.33）
   var rA = runTool('bolt-dynamic', {});
@@ -110,7 +110,7 @@ console.log('== 2b) 动载荷紧螺栓（与 mechtool.cn boltconnection4 API 实
   ok('E: σa = 0.3×20000/(2A) ≈ 8.86', near(val(rE, '计算应力幅'), 0.3 * 20000 / (2 * A24), 1e-4), String(val(rE, '计算应力幅')));
 })();
 
-console.log('== 3) 键连接系列（与 mechtool.cn 1:1：公式/许用应力/推荐表均实测对齐） ==');
+console.log('== 3) 键连接系列（与 原站 1:1：公式/许用应力/推荐表均实测对齐） ==');
 // 3a 平键：默认 T=840 d=60 18×11 A型 L=90 单键 钢/静载荷 → l=72, k=0.4h=4.4, σp=2T/(dkl)
 (function () {
   var r = runTool('key-check', {});
@@ -365,7 +365,7 @@ console.log('== 14) 形状与位置公差查询（GB/T 1184） ==');
   ok('φ500 全跳动 9 级 = 0.12 mm', val(p3, '全跳动9级') === '0.12 mm', String(val(p3, '全跳动9级')));
 })();
 
-console.log('== 15) 多楔带传动设计（JB/T 5983-2017，复刻 mechtool.cn） ==');
+console.log('== 15) 多楔带传动设计（JB/T 5983-2017，复刻 原站） ==');
 (function () {
   /* ---- 默认用例（PJ、P=5kW、n1=1460、n2=400）---- */
   var r = runTool('multi-ribbed-belt', {});

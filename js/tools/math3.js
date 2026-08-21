@@ -1,12 +1,12 @@
 /* =========================================================
- * 渐开线函数 / 冲击载荷 / 平板临界载荷（1:1 复刻 mechtool.cn）
+ * 渐开线函数 / 冲击载荷 / 平板临界载荷（1:1 复刻 原站）
  * 表源/公式：
  *  - 渐开线与反渐开线函数：invαk=tan(αk)-αk（αk 弧度），反解牛顿迭代
- *    https://www.mechtool.cn/geardrive/geardrive_involutefunction.html
+ *    
  *  - 冲击载荷（纵向冲击两场景）：上端固定等截面直杆自由落体 / 滑轮骤停
- *    https://www.mechtool.cn/formular/dynamics_longitudinalimpact.html
+ *    
  *  - 平板临界载荷（7 场景）：σc=κ·π²E/(12(1-ν²))·(t/b)²
- *    https://www.mechtool.cn/formular/levercal_criticalloadofplate.html
+ *    
  * ========================================================= */
 (function () {
   'use strict';
@@ -72,7 +72,7 @@
       }
       return { sections: [{ title: v.mode === 'inv' ? '渐开线函数正算' : '反渐开线函数反解', rows: rows }], verdict: null, notes: notes };
     },
-    reference: 'JB/T 5983 / GB/T 齿轮几何，公式源自 www.mechtool.cn 渐开线函数页',
+    reference: 'JB/T 5983 / GB/T 齿轮几何，公式源自 www.原站 渐开线函数页',
     internals: { '公式': 'invα=tanα-α; 反解为牛顿迭代' }
   });
 
@@ -127,7 +127,7 @@
       rows.push({ label: '最大冲击应力 σk = Q·Kd/A', value: sigk, unit: 'Pa', d: 2, hl: true });
       return { sections: [{ title: '纵向冲击计算结果', rows: rows }], verdict: null, notes: notes };
     },
-    reference: '材料力学冲击动荷计算；公式源自 www.mechtool.cn 冲击载荷计算页',
+    reference: '材料力学冲击动荷计算；公式源自 www.原站 冲击载荷计算页',
     internals: { '公式1': 'Kd=1+√(1+2HEA/(Ql))', '公式2': 'Kd=1+√(v²EA/(gQl))' }
   });
 
@@ -184,7 +184,7 @@
       rows.push({ label: '临界应力 σc = κ·π²E/(12(1−ν²))·(t/b)²', value: sigma, unit: 'MPa', d: 3, hl: true });
       return { sections: [{ title: '平板屈曲临界应力（场景 ' + sc.id + '）', rows: rows }], verdict: null, notes: notes };
     },
-    reference: '板壳屈曲理论 / 机械设计手册；公式源自 www.mechtool.cn 平板临界载荷页',
+    reference: '板壳屈曲理论 / 机械设计手册；公式源自 www.原站 平板临界载荷页',
     internals: { '公式': 'σc=κ·π²E/(12(1-ν²))·(t/b)²' }
   });
 })();

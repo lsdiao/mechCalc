@@ -1,4 +1,4 @@
-# MechCalc 计算公式与数据依据
+# ErinsonCalc 计算公式与数据依据
 
 本站全部计算公式与数据表的出处、修正记录。回归测试：`node tests/run-tests.js`。
 

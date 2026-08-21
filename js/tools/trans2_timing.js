@@ -1,5 +1,5 @@
 /* =========================================================
- * 梯形齿同步带传动设计（1:1 复刻 mechtool.cn 梯形齿同步带设计工具）
+ * 梯形齿同步带传动设计（1:1 复刻 原站 梯形齿同步带设计工具）
  * 数据依据：GB/T 11362-2008 / GB/T 11362-1989 / GB/T 11616-2013
  * 计算链与原站 API（z1MinQuery / timingbelt1 / timingbeltLenChange / timingbelt2）逐字段一致
  * ========================================================= */
@@ -138,7 +138,7 @@
     category: 'trans',
     keywords: '同步带 梯形齿同步带 带传动 MXL XXL XL L H XH XXH 节距 带宽 节线长 啮合齿数 压轴力',
     brief: '梯形齿同步带（周节制 MXL~XXH）传动设计：带型与带轮齿数、节圆直径、节线长与轴间距、带宽与额定功率全流程计算。',
-    doc: '按 mechtool.cn 梯形齿同步带设计工具 1:1 复刻：Pd=KA·P → 查表定带型与节距 pb → zmin 查表校验 z₁ → d₁=z₁pb/π、z₂ 圆整 → 带速 v → 初定轴间距 0.7(d₁+d₂)≤a₀≤2(d₁+d₂) → 精确带长公式算 L<sub>p0</sub> 并按系列就近选节线长 L<sub>p</sub> → 数值反解实际轴间距 a、啮合齿数 z<sub>m</sub> 与 K<sub>z</sub> → <b>P0=(Ta−mv²)v/1000，b′<sub>s</sub>=b<sub>s0</sub>·(Pd/(K<sub>z</sub>P0))^(1/1.14) 按带宽系列圆整，Pr=(K<sub>z</sub>Ta·(b<sub>s</sub>/b<sub>s0</sub>)^1.14−m·(b<sub>s</sub>/b<sub>s0</sub>)v²)·v/1000</b>，压轴力 FQ=1000Pd/v。中间量不舍入，与原站 API 逐字段一致。',
+    doc: '按 原站 梯形齿同步带设计工具 1:1 复刻：Pd=KA·P → 查表定带型与节距 pb → zmin 查表校验 z₁ → d₁=z₁pb/π、z₂ 圆整 → 带速 v → 初定轴间距 0.7(d₁+d₂)≤a₀≤2(d₁+d₂) → 精确带长公式算 L<sub>p0</sub> 并按系列就近选节线长 L<sub>p</sub> → 数值反解实际轴间距 a、啮合齿数 z<sub>m</sub> 与 K<sub>z</sub> → <b>P0=(Ta−mv²)v/1000，b′<sub>s</sub>=b<sub>s0</sub>·(Pd/(K<sub>z</sub>P0))^(1/1.14) 按带宽系列圆整，Pr=(K<sub>z</sub>Ta·(b<sub>s</sub>/b<sub>s0</sub>)^1.14−m·(b<sub>s</sub>/b<sub>s0</sub>)v²)·v/1000</b>，压轴力 FQ=1000Pd/v。中间量不舍入，与原站 API 逐字段一致。',
     inputs: [
       { key: 'P', label: '传动功率 P', group: '输入初始参数', type: 'number', unit: 'kW', default: 4, step: 'any' },
       { key: 'n1', label: '主动轴转速 n₁', group: '输入初始参数', type: 'number', unit: 'r/min', default: 1440, step: 'any' },
@@ -259,7 +259,7 @@
         verdict: {
           level: warns.length ? (bsOver ? 'bad' : 'warn') : 'ok',
           text: warns.length ? warns[0] + (warns.length > 1 ? '（共' + warns.length + '项提示）' : '') : okText,
-          note: 'KA 按载荷性质查表选取；计算链与 mechtool.cn 原站一致：zmin 查表→z₁ 校验→d₁/d₂→v→P0→b′s→bs 系列圆整→Pr。'
+          note: 'KA 按载荷性质查表选取；计算链与 原站 原站一致：zmin 查表→z₁ 校验→d₁/d₂→v→P0→b′s→bs 系列圆整→Pr。'
         },
         notes: [
           '设计功率 Pd=KA·P；工况系数 KA 按 GB/T 11362-2008 载荷修正系数表选取（原站为手输参数），增速传动或频繁正反转时应视情况增大。',
@@ -289,7 +289,7 @@
       'P0 = (Ta − m·v²)·v/1000；b′s = bs0·(Pd/(Kz·P0))^(1/1.14)；bs 按带宽系列圆整',
       'Pr = (Kz·Ta·(bs/bs0)^1.14 − m·(bs/bs0)·v²)·v/1000；FQ = 1000·Pd/v'
     ],
-    reference: 'GB/T 11362-2008《同步带传动 梯形齿同步带传动 额定功率和传动中心距的计算》、GB/T 11362-1989（zmin、Kz、P0 表）、GB/T 11616-2013《同步带传动 节距制梯形齿同步带和带轮 尺寸》、GB/T 15531-2008（中心距调整范围）；原站工具 <a href="https://www.mechtool.cn/calculation/calculation_timingbeltdrive.html" target="_blank">mechtool.cn 梯形齿同步带传动设计</a>',
+    reference: 'GB/T 11362-2008《同步带传动 梯形齿同步带传动 额定功率和传动中心距的计算》、GB/T 11362-1989（zmin、Kz、P0 表）、GB/T 11616-2013《同步带传动 节距制梯形齿同步带和带轮 尺寸》、GB/T 15531-2008（中心距调整范围）；原站工具 原站 梯形齿同步带传动设计',
     /* 分步中间量（与原站 API 端点 z1MinQuery / timingbelt1 / timingbeltLenChange / timingbelt2 一一对应，供自测比对） */
     internals: {
       PB: PB, TA: TA, MM: MM, BS0: BS0, WIDTHS: WIDTHS, SERIES: SERIES,

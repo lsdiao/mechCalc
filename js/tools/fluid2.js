@@ -1,5 +1,5 @@
 /* =========================================================
- * 液压传动系统类工具（第 2 批，复刻 mechtool.cn）
+ * 液压传动系统类工具（第 2 批，复刻 原站）
  * 1. 液压传动系统计算（阻力/压降）      id=hydraulic-pipe-loss
  * 2. 液压泵计算                         id=hydraulic-pump
  * 3. 液压马达计算                       id=hydraulic-motor
@@ -7,11 +7,11 @@
  * 5. 油箱热平衡计算                     id=oil-tank-balance
  *
  * 来源页（category=fluid）：
- *   https://www.mechtool.cn/calculation/calculation_hydraulicdrivesystemcalculation.html
- *   https://www.mechtool.cn/calculation/calculation_hydraulicpumpcalculation.html
- *   https://www.mechtool.cn/calculation/calculation_hydraulicmotorcalculation.html
- *   https://www.mechtool.cn/calculation/calculation_hydraulicjackcalculation.html
- *   https://www.mechtool.cn/calculation/calculation_oiltankthermalbalancecalculation.html
+ *   
+ *   
+ *   
+ *   
+ *   
  * 原站公式位于混淆前端 JS（hydraulicdrive.min.js / hydraulicpneumatic.min.js），
  * 经服务端接口(计算在服务端)逐点打桩对齐得到。本文件按 App.registerTool 模式实现。
  * ========================================================= */
@@ -128,7 +128,7 @@
       '层流 λ=64/Re；光滑（ε/d·Re<40）λ=0.3164Re^-0.25；粗糙 λ=0.25/[log10(ε/3.7d+5.74/Re^0.9)]²',
       'Δp(bar)=λ(l/d)ρv²/2 /1e5；局部 Δp(bar)=ζρv²/2 /1e5'
     ],
-    reference: '来源 https://www.mechtool.cn/calculation/calculation_hydraulicdrivesystemcalculation.html；公式见《机械设计手册》流体力学篇。'
+    reference: '来源 '
   });
 
   /* ============ 2. 液压泵计算 ============ */
@@ -212,7 +212,7 @@
       '电机功率 P(W) = p(MPa)·Q(L/min)·1000/(60·ηv·ηm)',
       '总效率 η(%) = ηv·ηm'
     ],
-    reference: '来源 https://www.mechtool.cn/calculation/calculation_hydraulicpumpcalculation.html；公式见《机械设计手册》液压泵篇。'
+    reference: '来源 '
   });
 
   /* ============ 3. 液压马达计算 ============ */
@@ -306,7 +306,7 @@
       '输出功率 P = T·n/9550（kW）= p·Q·ηv·ηm/60（kW）',
       '压力差 p = 2π·T/(V·ηm)'
     ],
-    reference: '来源 https://www.mechtool.cn/calculation/calculation_hydraulicmotorcalculation.html；公式见《机械设计手册》液压马达篇。'
+    reference: '来源 '
   });
 
   /* ============ 4. 液压千斤顶计算 ============ */
@@ -384,7 +384,7 @@
       'P=F₁/A₁（Pa→MPa 除 1e6）',
       'Q(L/min)=A₁(m²)·s₁(mm)·60/t；P泵(W)=F₁·s₁/(1000·t)'
     ],
-    reference: '来源 https://www.mechtool.cn/calculation/calculation_hydraulicjackcalculation.html（hydraulicpneumatic.min.js）。'
+    reference: '来源 '
   });
 
   /* ============ 5. 油箱热平衡计算 ============ */
@@ -465,6 +465,6 @@
       'Pct = k·A·(T-TA)/1000（kW）',
       't = mc/(kA)·ln((Tb-TA)/(Tb-T))/60（s）'
     ],
-    reference: '来源 https://www.mechtool.cn/calculation/calculation_oiltankthermalbalancecalculation.html；公式见《机械设计手册》油箱设计篇。'
+    reference: '来源 '
   });
 })();

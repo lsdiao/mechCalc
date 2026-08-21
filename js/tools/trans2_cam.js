@@ -1,5 +1,5 @@
 /* =========================================================
- * 凸轮分度(割)器选型计算（1:1 复刻 mechtool.cn camindexerselection）
+ * 凸轮分度(割)器选型计算（1:1 复刻 原站 camindexerselection）
  * 公式与字段名与原站 calculation_camindexer1 逐值一致
  * 依据：《机械设计手册》凸轮分度机构；潭子精密凸轮分度器样本
  * ========================================================= */
@@ -145,6 +145,6 @@
       'Tf = μ·W·g·R；Tt = Ti+Tf+Tw；Te = fc·Tt',
       'Tc = Qm·Te·(θh/360)·(1+1/S)+Tca；P = 2πn/(60η)·Tc'
     ],
-    reference: '潭子精密凸轮分度器样本；《机械设计手册》凸轮分度机构篇。复刻自 mechtool.cn 凸轮分度(割)器选型（calculation_camindexer1）。'
+    reference: '潭子精密凸轮分度器样本；《机械设计手册》凸轮分度机构篇。复刻自 原站 凸轮分度(割)器选型（calculation_camindexer1）。'
   });
 })();

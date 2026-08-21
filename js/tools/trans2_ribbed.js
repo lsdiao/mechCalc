@@ -1,5 +1,5 @@
 /* =========================================================
- * 多楔带传动设计计算（1:1 复刻 mechtool.cn 多楔带设计工具）
+ * 多楔带传动设计计算（1:1 复刻 原站 多楔带设计工具）
  * 数据依据：JB/T 5983-2017 / JB/T 5983-1992（Kα、KL、Kr、每楔基本额定功率 P1）
  * 表源：P1/ΔP1 取自原站 polyv1 API 实测网格（2017 标准）；
  *       Kα/KL/Kr 取原站 polyv1 实测（1992 表值）并线性插值；
@@ -276,7 +276,7 @@
     category: 'trans',
     keywords: '多楔带 多楔带传动 楔数 P1 PJ PK PL PM 有效直径 有效长度 楔合系数 初拉力 压轴力',
     brief: '多楔带传动设计（JB/T 5983-2017）：带型与有效直径、带长、包角、每楔额定功率、楔数与初拉力/压轴力全流程计算。',
-    doc: '按 JB/T 5983-2017 流程复刻 mechtool.cn 多楔带设计工具：Pd=KA·P → v=π(dp)·n₁/60000（dp=de+2Δe）→ de₂=i·(de₁+2Δe)(1−ε)−2Δe 选标准值 → Le0=2a₀+π/2(de₁+de₂)+(de₂−de₁)²/4a₀ 选标准有效长度 → a=a₀+(Le−Le0)/2 → α₁=180−(de₂−de₁)/a×57.3 → 查 Kα/KL/Kr → z=Pd/[(P1+ΔP1)KαKLKr] → Ft=1000Pd/v、F0=(Ft/2)(1+2/(kr−1))、FQ=2F0·sin(α₁/2)。所有中间量与原站 polyv1/polyv2 API 逐字段一致。',
+    doc: '按 JB/T 5983-2017 流程复刻 原站 多楔带设计工具：Pd=KA·P → v=π(dp)·n₁/60000（dp=de+2Δe）→ de₂=i·(de₁+2Δe)(1−ε)−2Δe 选标准值 → Le0=2a₀+π/2(de₁+de₂)+(de₂−de₁)²/4a₀ 选标准有效长度 → a=a₀+(Le−Le0)/2 → α₁=180−(de₂−de₁)/a×57.3 → 查 Kα/KL/Kr → z=Pd/[(P1+ΔP1)KαKLKr] → Ft=1000Pd/v、F0=(Ft/2)(1+2/(kr−1))、FQ=2F0·sin(α₁/2)。所有中间量与原站 polyv1/polyv2 API 逐字段一致。',
     inputs: [
       { key: 'P', label: '传动功率 P', group: '输入初始参数', type: 'number', unit: 'kW', default: 5, step: 'any' },
       { key: 'n1', label: '主动轮转速 n₁', group: '输入初始参数', type: 'number', unit: 'r/min', default: 1460, step: 'any' },
@@ -429,7 +429,7 @@
       'z = Pd / [(P1+ΔP1)·Kα·KL·Kr]，向上圆整到标准楔数系列',
       'Ft = 1000·Pd/v；F0 = (Ft/2)(1 + 2/(kr−1))；F1 = Ft/2 + F0；F2 = F1 − Ft；FQ = 2·F0·sin(α₁/2)'
     ],
-    reference: 'JB/T 5983-2017《多楔带传动设计方法》；JB/T 5983-1992（Kα/KL/Kr、每楔基本额定功率 P1 表）；原站工具 <a href="https://www.mechtool.cn/beltdrive/beltdrive_designandcalculationofmulti-ribbedbelttransmission.html" target="_blank">mechtool.cn 多楔带设计</a>',
+    reference: 'JB/T 5983-2017《多楔带传动设计方法》；JB/T 5983-1992（Kα/KL/Kr、每楔基本额定功率 P1 表）；原站工具 原站 多楔带设计',
     internals: { kAlphaQuery: kAlphaQuery, kLQuery: kLQuery, krQuery: krQuery, p1Query: p1Query, deltaP1: deltaP1, calBeltLen: calBeltLen, alpha1Cal: alpha1Cal, geoCalc: geoCalc, wedgeStd: wedgeStd, forces: forces, nearestD: nearest, nearestLe: nearest }
   });
 })();

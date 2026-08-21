@@ -1,12 +1,12 @@
 /* =========================================================
- * 滚动轴承 / 轴设计计算工具（复刻 mechtool.cn）
+ * 滚动轴承 / 轴设计计算工具（复刻 原站）
  * - rolling-bearing      滚动轴承设计计算（综合）
  * - deep-groove-bearing  深沟球轴承设计与查询
  * - angular-contact-bearing 角接触球轴承设计与查询
  * - thrust-ball-bearing  推力球轴承设计与查询
  * - tapered-roller-bearing 圆锥滚子轴承设计与查询
  * - shaft-design         轴设计计算
- * 公式来源（与 mechtool.cn 一致）：
+ * 公式来源（与 原站 一致）：
  *   当量动载荷  P = fp·(X·Fr + Y·Fa)
  *   基本额定寿命 L10 = (C/P)^ε，L10h = 10^6/(60n)·L10
  *   寿命指数 ε：球轴承 = 3，滚子轴承 = 10/3
@@ -17,7 +17,7 @@
   'use strict';
   if (typeof window.App === 'undefined' || !window.App.registerTool) return;
 
-  /* ---------- 轴承数据集（节选自 mechtool.cn 原始数据） ---------- */
+  /* ---------- 轴承数据集（节选自 原站 原始数据） ---------- */
   var BEARING_DATA = {
     deepGroove: [
       { bcode: '619/3', d: 3, dd: 8, b: 3, cr: 0.45, c0r: 0.15 }, { bcode: '619/5', d: 5, dd: 13, b: 4, cr: 1.08, c0r: 0.42 },
@@ -349,7 +349,7 @@
     category: 'connect',
     keywords: '深沟球 滚动轴承 当量动载荷 额定寿命 选型 6205 6211 L10 L10h',
     brief: '深沟球轴承当量动载荷 P、基本额定动载荷 C、静载荷校核与寿命 L10h 计算（GB/T 276）。',
-    doc: '按 mechtool.cn《深沟球轴承设计与查询》复刻。输入径向力 F_r、轴向力 F_a、转速 n 与要求寿命 Lh′，输出判断系数 e、当量动载荷 P=f_p(X·F_r+Y·F_a)、基本额定动载荷计算值 C 及寿命 L_10h=(C/P)^3·10^6/(60n)。寿命指数 ε=3。',
+    doc: '按 原站《深沟球轴承设计与查询》复刻。输入径向力 F_r、轴向力 F_a、转速 n 与要求寿命 Lh′，输出判断系数 e、当量动载荷 P=f_p(X·F_r+Y·F_a)、基本额定动载荷计算值 C 及寿命 L_10h=(C/P)^3·10^6/(60n)。寿命指数 ε=3。',
     inputs: (function () {
       var ins = bearingInputs(BEARING_DATA.deepGroove, '6211');
       ins[1].default = 5500; ins[2].default = 2700; ins[3].default = 55;
@@ -379,7 +379,7 @@
     category: 'connect',
     keywords: '角接触球轴承 7000 7200 接触角 C AC B 当量动载荷 寿命',
     brief: '角接触球轴承（C/AC/B 接触角 15°/25°/40°）当量动载荷、额定动载荷与寿命 L10h 计算。',
-    doc: '按 mechtool.cn《角接触球轴承设计与查询》复刻。按轴承代号后缀（C=15°、AC=25°、B=40°）选用判断系数 e、径向系数 X、轴向系数 Y，计算当量动载荷 P=f_p(X·F_r+Y·F_a) 与寿命 L_10h，寿命指数 ε=3。',
+    doc: '按 原站《角接触球轴承设计与查询》复刻。按轴承代号后缀（C=15°、AC=25°、B=40°）选用判断系数 e、径向系数 X、轴向系数 Y，计算当量动载荷 P=f_p(X·F_r+Y·F_a) 与寿命 L_10h，寿命指数 ε=3。',
     inputs: (function () {
       var ins = bearingInputs(BEARING_DATA.angularContact, '7207C');
       ins[1].default = 900; ins[2].default = 400; ins[3].default = 35;
@@ -407,7 +407,7 @@
     category: 'connect',
     keywords: '推力球轴承 单向 双向 轴向载荷 当量动载荷 寿命 51000 52000',
     brief: '推力球轴承（单向/双向）轴向当量动载荷、额定动载荷与寿命 L10h 计算。',
-    doc: '按 mechtool.cn《推力球轴承设计与查询》复刻。推力球轴承仅承受轴向载荷，取 X=0、Y=1，当量动载荷 P=F_a，寿命指数 ε=3。',
+    doc: '按 原站《推力球轴承设计与查询》复刻。推力球轴承仅承受轴向载荷，取 X=0、Y=1，当量动载荷 P=F_a，寿命指数 ε=3。',
     inputs: (function () {
       var ins = bearingInputs(BEARING_DATA.thrust, '51409');
       ins[1].default = 1; ins[1].hint = '推力轴承忽略径向力，仅用轴向力'; ins[2].default = 1891;
@@ -435,7 +435,7 @@
     category: 'connect',
     keywords: '圆锥滚子轴承 30000 32000 33000 当量动载荷 寿命 10/3',
     brief: '圆锥滚子轴承当量动载荷、额定动载荷与寿命 L10h 计算（滚子轴承 ε=10/3）。',
-    doc: '按 mechtool.cn《圆锥滚子轴承设计与查询》复刻。圆锥滚子轴承既能承受径向又能承受轴向载荷，寿命指数 ε=10/3（滚子轴承）。',
+    doc: '按 原站《圆锥滚子轴承设计与查询》复刻。圆锥滚子轴承既能承受径向又能承受轴向载荷，寿命指数 ε=10/3（滚子轴承）。',
     inputs: (function () {
       var ins = bearingInputs(BEARING_DATA.tapered, '32006');
       ins[1].default = 3000; ins[2].default = 1000; ins[3].default = 30;
@@ -482,7 +482,7 @@
     category: 'connect',
     keywords: '滚动轴承 综合 试选 寿命 当量动载荷 深沟球 圆锥滚子 推力球',
     brief: '滚动轴承综合设计入口：试选所需额定动载荷 C 或核算寿命 L10h，支持 9 种轴承大类型。',
-    doc: '按 mechtool.cn《滚动轴承设计计算》复刻。两种模式：试选轴承（求所需 C，校核静载荷）与计算寿命（校核 Lh）。引入力矩载荷因数 f_m，当量动载荷 P=X·F_r+Y·F_a，基本额定动载荷 C=P·f_d·f_h/(f_n·f_t·f_m)。',
+    doc: '按 原站《滚动轴承设计计算》复刻。两种模式：试选轴承（求所需 C，校核静载荷）与计算寿命（校核 Lh）。引入力矩载荷因数 f_m，当量动载荷 P=X·F_r+Y·F_a，基本额定动载荷 C=P·f_d·f_h/(f_n·f_t·f_m)。',
     inputs: [
       { key: 'calcMode', label: '计算模式', group: '模式', type: 'select', options: CALC_MODE_OPTIONS, dflt: 'trial' },
       { key: 'majorType', label: '轴承大类型', group: '模式', type: 'select', options: MAJOR_OPTIONS, dflt: 'deepGroove' },
@@ -572,7 +572,7 @@
         sections: sections,
         verdict: { level: level, text: verdictText },
         notes: [
-          '支持 9 种轴承大类型；综合入口按 mechtool.cn《滚动轴承设计计算》公式一致。',
+          '支持 9 种轴承大类型；综合入口按 原站《滚动轴承设计计算》公式一致。',
           '基本额定动载荷 C ≤ C_r、静载荷 C_0 ≤ C_0r、寿命 L_10h ≥ Lh′ 时选型合格。'
         ]
       };
@@ -604,7 +604,7 @@
     category: 'connect',
     keywords: '轴 传动轴 最小直径 扭转强度 扭转刚度 键槽 弯曲 疲劳安全',
     brief: '轴设计：按扭转强度/刚度计算最小直径，校核弯曲强度与疲劳安全系数。',
-    doc: '按 mechtool.cn《轴设计计算》复刻。实心轴 d ≥ A·∛(P/n)，空心轴 d ≥ A·∛(P/n)/∛(1-α⁴)，并按键槽情况放大（单键槽 5%、双键槽 10%）。式中 A 按材料查表。',
+    doc: '按 原站《轴设计计算》复刻。实心轴 d ≥ A·∛(P/n)，空心轴 d ≥ A·∛(P/n)/∛(1-α⁴)，并按键槽情况放大（单键槽 5%、双键槽 10%）。式中 A 按材料查表。',
     inputs: [
       { key: 'material', label: '轴选用材料', group: '扭转强度', type: 'select', options: Object.keys(MATERIALS).map(function (m) { return { v: m, t: m }; }), dflt: 'Q235-A,20' },
       { key: 'power', label: '传递功率 P', group: '扭转强度', type: 'number', default: 10, step: '0.1', unit: 'KW' },

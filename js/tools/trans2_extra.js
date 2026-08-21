@@ -1,12 +1,12 @@
 /* =========================================================
- * 机械传动类工具 —— 1:1 复刻 mechtool.cn 两个工具
+ * 机械传动类工具 —— 1:1 复刻 原站 两个工具
  * 1. 倍速滚子链选型（id=double-speed-chain）
  *    源码页：/calculation/calculation_double-speedrollerchainselection.html
  * 2. 渐开线圆柱齿轮齿厚/公法线长度计算（id=gear-thickness）
  *    源码页：/geardrive/geardrive_commonnormallengthcalculation.html
  * 依据：JB/T 7364-2004《倍速输送链和链轮》；MiSUMi《倍速链条的选型方法》
  *       《机械设计手册》渐开线圆柱齿轮公法线长度公式
- * 说明：倍速链 fMax/G 与 链轮 n/d/T/P 均经 mechtool.cn 服务端接口逐值校验。
+ * 说明：倍速链 fMax/G 与 链轮 n/d/T/P 均经 原站 服务端接口逐值校验。
  * ========================================================= */
 (function () {
   'use strict';
@@ -133,7 +133,7 @@
       'G = M1·g/1000 (kN/m)；单根链 F_单 = 0.6·F',
       'n = 60·v/(p·z)；d = p/sin(180°/z)；T = F·d/2 (N·m)；P = F·v (kW)'
     ],
-    reference: '1:1 复刻任 mechtool.cn 倍速滚子链选型：https://www.mechtool.cn/calculation/calculation_double-speedrollerchainselection.html；公式依据 MiSUMi《倍速链条的选型方法》、JB/T 7364-2004《倍速输送链和链轮》。'
+    reference: '1:1 复刻任 原站 倍速滚子链选型： MiSUMi《倍速链条的选型方法》、JB/T 7364-2004《倍速输送链和链轮》。'
   });
 
   /* ============ 2. 渐开线圆柱齿轮齿厚 / 公法线长度计算 ============ */
@@ -229,6 +229,6 @@
       '直齿：invα = tanα−α；斜齿：αt=atan(tanαn/cosβ)，invαt=tanαt−αt，z′ = z·invαt/invαn',
       's = m·(π/2 + 2x·tanα)；pb = π·m·cosα'
     ],
-    reference: '1:1 复刻任 mechtool.cn 公法线长度计算：https://www.mechtool.cn/geardrive/geardrive_commonnormallengthcalculation.html；公式依据《机械设计手册》渐开线圆柱齿轮齿厚测量与计算、《机械设计》第九版。'
+    reference: '1:1 复刻任 原站 公法线长度计算：'
   });
 })();

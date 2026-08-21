@@ -5,7 +5,7 @@
  * 2. 水泵选型（water-pump）—— fluid
  *    由流量 Q、扬程 H 求轴功率 P=ρgQH/η 并圆整电机功率（选型）
  *
- * 说明：mechtool.cn 对应页面（calculation_sealingsolutions.html、
+ * 说明：原站 对应页面（calculation_sealingsolutions.html、
  *       calculation_watersystemcalculation.html）为"在线工具导航页"，
  *       页面仅外链第三方工具（特瑞堡/Parker/O 圈重量计算器、CNP/凯泉/格兰富选型），
  *       无内嵌计算表单与专属计算 JS。本文件按任务给定公式与常用工程方法实现，
