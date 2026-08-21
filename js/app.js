@@ -23,30 +23,36 @@ window.App = (function () {
     connect: [
       { t: '螺栓连接', tools: ['bolt-loose', 'bolt-reamed', 'bolt-transverse', 'bolt-check', 'bolt-dynamic'] },
       { t: '键与花键连接', tools: ['key-check', 'key-half', 'key-wedge', 'key-tangent', 'key-spline-rect', 'key-spline-inv'] },
-      { t: '弹簧设计', tools: ['spring-design'] }
+      { t: '弹簧设计', tools: ['spring-design', 'tension-spring'] },
+      { t: '轴承设计', tools: ['rolling-bearing', 'deep-groove-bearing', 'angular-contact-bearing', 'thrust-ball-bearing', 'tapered-roller-bearing'] },
+      { t: '轴与密封', tools: ['shaft-design', 'sealing-o-ring'] }
     ],
     linear: [
-      { t: '轴承与丝杆', tools: ['linear-bearing', 'ball-screw'] },
+      { t: '轴承与丝杆', tools: ['linear-bearing', 'ball-screw', 'linear-guide', 'screw-transmission'] },
       { t: '拖链', tools: ['cable-chain'] }
     ],
     trans: [
       { t: '带传动', tools: ['v-belt', 'timing-belt-design', 'flat-belt-design', 'multi-ribbed-belt'] },
-      { t: '链传动', tools: ['chain-drive-design'] },
-      { t: '齿轮传动', tools: ['involute-gear', 'worm-drive-design'] },
+      { t: '链传动', tools: ['chain-drive-design', 'double-speed-chain'] },
+      { t: '齿轮传动', tools: ['involute-gear', 'worm-drive-design', 'gear-thickness'] },
       { t: '凸轮机构', tools: ['cam-indexer-design'] }
     ],
     fluid: [
-      { t: '液压', tools: ['hydraulic-cylinder'] },
-      { t: '气压', tools: ['pneumatic-cylinder'] }
+      { t: '液压', tools: ['hydraulic-cylinder', 'hydraulic-pipe-loss', 'hydraulic-pump', 'hydraulic-motor', 'hydraulic-jack', 'oil-tank-balance'] },
+      { t: '气压', tools: ['pneumatic-cylinder', 'pneumatic-finger', 'cylinder-consumption', 'pneumatic-circuit', 'vacuum-suction'] },
+      { t: '水系统', tools: ['water-pump'] }
     ],
     select: [
-      { t: '电机与减速机', tools: ['motor-select'] }
+      { t: '电机与减速机', tools: ['motor-select'] },
+      { t: '缓冲器选型', tools: ['hydraulic-buffer'] }
     ],
     common: [
       { t: '公差与配合查询', tools: ['tolerance-query', 'tolerance-fit-query'] },
       { t: '形状与位置公差', tools: ['shape-tolerance', 'position-tolerance'] },
-      { t: '硬度与材料', tools: ['hardness-convert', 'steel-weight'] },
-      { t: '转动惯量', tools: ['moment-inertia'] }
+      { t: '硬度与材料', tools: ['hardness-convert', 'steel-weight', 'material-weight'] },
+      { t: '转动惯量', tools: ['moment-inertia'] },
+      { t: '结构与梁板', tools: ['beam-calculator', 'plate-bending', 'shell-stress', 'mechanism-force'] },
+      { t: '紧固件', tools: ['fastener-calculator'] }
     ]
   };
 

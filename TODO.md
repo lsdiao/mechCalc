@@ -1,6 +1,6 @@
 # MechCalc 复刻进度与后续任务
 
-> 截至 2026-08-18。复刻流程见技能 `.trae/skills/mechtool-replicate/SKILL.md`。
+> 截至 2026-08-21。复刻流程见技能 `.trae/skills/mechtool-replicate/SKILL.md`。
 
 ## 一、已完成（已推送 main）
 
@@ -19,6 +19,23 @@
 
 - 全部注册进 `index.html`；回归测试 `node tests/run-tests.js` 共 169 项断言全部通过。
 - 原站逆向素材（混淆 JS 解密脚本、表单 dump、文档页 HTML）保留在 `.tmp_probe/`，复刻时逐值比对过 API 端点返回。
+
+### 第三轮：补齐剩余 31 个缺口计算工具（1:1/标准实现，已推送）
+针对线上 mechtool.cn "常用设计计算工具"清单做差异盘点，补齐本地缺失的 30 个计算工具 + 1 个信息页工具。由并发子代理批量开发，逐项自测后由主会话集成注册。
+
+| 新文件 | 工具（id） |
+|--------|-----------|
+| `js/tools/fluid2.js` | hydraulic-pipe-loss、hydraulic-pump、hydraulic-motor、hydraulic-jack、oil-tank-balance |
+| `js/tools/fluid3.js` | pneumatic-finger、cylinder-consumption、pneumatic-circuit、vacuum-suction、hydraulic-buffer（select）、cheli-air（信息页） |
+| `js/tools/fluid4.js` | sealing-o-ring（connect）、water-pump |
+| `js/tools/bearing.js` | rolling-bearing、deep-groove-bearing、angular-contact-bearing、thrust-ball-bearing、tapered-roller-bearing、shaft-design |
+| `js/tools/other1.js` | tension-spring、linear-guide、screw-transmission |
+| `js/tools/trans2_extra.js` | double-speed-chain、gear-thickness |
+| `js/tools/common2.js` | beam-calculator、fastener-calculator、material-weight、plate-bending、shell-stress、mechanism-force |
+
+- 注册进 `index.html`；`js/app.js` SUBMENUS 新增"轴承设计/轴与密封/缓冲器选型/结构与梁板/紧固件"等分组。
+- 回归测试 `node tests/run-tests.js` 现共 **231 项断言全部通过、0 失败**（63 个工具默认可算 + 各模块公式/表格/变工况断言）。
+- 注：sealingsolutions / watersystemcalculation / deflectioapp / fastener 等原站页面为第三方外链聚合（无本地上公式）或已 404，按《机械设计手册》/ISO 3601 标准方法实现并注释来源，非逐值 1:1。
 
 ## 二、多楔带传动设计：实现备忘（已完成，见上表）
 

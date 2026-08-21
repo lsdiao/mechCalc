@@ -26,7 +26,7 @@ var ALL = [];
   var orig = App.registerTool;
   App.registerTool = function (t) { if (t && t.id) ALL.push(t); return orig.call(App, t); };
 })();
-['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/trans2_chain.js', 'js/tools/trans2_timing.js', 'js/tools/trans2_flat.js', 'js/tools/trans2_ribbed.js', 'js/tools/trans2_worm.js', 'js/tools/trans2_cam.js', 'js/tools/fluid.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
+['js/tools/connection.js', 'js/tools/linear.js', 'js/tools/transmission.js', 'js/tools/trans2_chain.js', 'js/tools/trans2_timing.js', 'js/tools/trans2_flat.js', 'js/tools/trans2_ribbed.js', 'js/tools/trans2_worm.js', 'js/tools/trans2_cam.js', 'js/tools/trans2_extra.js', 'js/tools/fluid.js', 'js/tools/fluid2.js', 'js/tools/fluid3.js', 'js/tools/fluid4.js', 'js/tools/bearing.js', 'js/tools/other1.js', 'js/tools/common2.js', 'js/tools/selection.js', 'js/tools/common.js', 'js/tools/toldata.js', 'js/tools/tolerance.js', 'js/tools/gtdata.js', 'js/tools/gdttol.js'].forEach(function (f) {
   vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f });
 });
 
@@ -422,3 +422,93 @@ console.log('== 15) 多楔带传动设计（JB/T 5983-2017，复刻 mechtool.cn�
   var err = runTool('multi-ribbed-belt', { beltType: 'PJ', P: 5, n1: 1460, n2: 400, de1: 280, a0: 1000 });
   ok('de1=280(PJ) 无 P1 表值→报错', !!err.error && String(err.error).indexOf('P1') >= 0, err.error || '');
 })();
+
+console.log('== 16) 液压泵/马达/千斤顶/油箱/压降 ==');
+(function () {
+  var pump = runTool('hydraulic-pump', {});
+  ok('液压泵 流量 Q=750', near(val(pump, '实际流量'), 750, 1e-6), String(val(pump, '实际流量')));
+  var pipe = runTool('hydraulic-pipe-loss', {});
+  ok('压降 默认计算无 error', !pipe.error, pipe.error || '');
+  var motor = runTool('hydraulic-motor', {});
+  ok('液压马达 默认计算无 error', !motor.error, motor.error || '');
+  var jack = runTool('hydraulic-jack', {});
+  ok('千斤顶 默认计算无 error', !jack.error, jack.error || '');
+  var tank = runTool('oil-tank-balance', {});
+  ok('油箱热平衡 默认计算无 error', !tank.error, tank.error || '');
+})();
+
+console.log('== 17) 气压工具 ==');
+(function () {
+  var f = runTool('pneumatic-finger', {});
+  ok('气动手指 夹紧力 F=56N', near(val(f, '所需最小夹紧力'), 56, 1e-6), String(val(f, '所需最小夹紧力')));
+  var cc = runTool('cylinder-consumption', {});
+  ok('气缸耗气量 默认计算无 error', !cc.error, cc.error || '');
+  var ckt = runTool('pneumatic-circuit', {});
+  ok('气动回路 默认计算无 error', !ckt.error, ckt.error || '');
+  var vac = runTool('vacuum-suction', {});
+  ok('真空吸盘 吸附力≈88.86N', near(val(vac, '总吸附力') ? val(vac, '总吸附力') : parseFloat(String(val(vac, '总吸附力')).replace(/[^\d.]/g, '')), 88.86, 0.5), String(val(vac, '总吸附力')));
+  var buf = runTool('hydraulic-buffer', {});
+  ok('油压缓冲器 默认计算无 error', !buf.error, buf.error || '');
+  var air = runTool('cheli-air', {});
+  ok('气动供应商 信息页工具', !air.error, air.error || '');
+})();
+
+console.log('== 18) 轴承设计与轴 ==');
+(function () {
+  var rb = runTool('rolling-bearing', {});
+  ok('滚动轴承 有寿命判定', rb.verdict && (rb.verdict.level === 'ok' || rb.verdict.level === 'bad'), String(rb.verdict && rb.verdict.level));
+  var dg = runTool('deep-groove-bearing', {});
+  ok('深沟球 寿命校核存在', val(dg, '寿命校核') !== null, String(val(dg, '寿命校核')));
+  var ac = runTool('angular-contact-bearing', {});
+  ok('角接触 默认计算无 error', !ac.error, ac.error || '');
+  var tb = runTool('thrust-ball-bearing', {});
+  ok('推力球 默认计算无 error', !tb.error, tb.error || '');
+  var tr = runTool('tapered-roller-bearing', {});
+  ok('圆锥滚子 默认计算无 error', !tr.error, tr.error || '');
+  var sd = runTool('shaft-design', {});
+  ok('轴设计 实心轴最小直径≈68.7mm', near(val(sd, '实心轴最小直径'), 68.70, 0.05), String(val(sd, '实心轴最小直径')));
+})();
+
+console.log('== 19) 拉伸弹簧/直线导轨/螺旋传动 ==');
+(function () {
+  var ts = runTool('tension-spring', {});
+  ok('拉伸弹簧 强度判定存在', String(ts.verdict.text).indexOf('强度') >= 0 || String(val(ts, '强度判定')).indexOf('不满足') >= 0, String(val(ts, '强度判定')));
+  var lg = runTool('linear-guide', {});
+  ok('直线导轨 实际寿命 Lh≈361690h', near(val(lg, '实际寿命 Lh'), 361690, 2000), String(val(lg, '实际寿命 Lh')));
+  var st = runTool('screw-transmission', {});
+  ok('螺旋传动 默认计算无 error', !st.error, st.error || '');
+})();
+
+console.log('== 20) 倍速链/齿轮齿厚 ==');
+(function () {
+  var dsc = runTool('double-speed-chain', {});
+  ok('倍速链 最大拉力 F≈0.148kN', near(valueOf(val(dsc, '最大拉力')), 0.148, 5e-3), String(val(dsc, '最大拉力')));
+  var gt = runTool('gear-thickness', {});
+  ok('齿轮齿厚 直齿 W=15.3209 mm', near(val(gt, '公法线长度'), 15.3209, 1e-3), String(val(gt, '公法线长度')));
+  ok('齿轮齿厚 跨测齿数 k=3', val(gt, '跨测齿数') === 3 || String(val(gt, '跨测齿数')).indexOf('3') === 0, String(val(gt, '跨测齿数')));
+})();
+
+console.log('== 21) 结构/材料/密封/水泵 ==');
+(function () {
+  var bc = runTool('beam-calculator', {});
+  ok('结构梁 最大弯矩 M=5.625', near(val(bc, '最大弯矩'), 5.625, 1e-3), String(val(bc, '最大弯矩')));
+  var fc = runTool('fastener-calculator', {});
+  ok('紧固件 默认计算无 error', !fc.error, fc.error || '');
+  var mw = runTool('material-weight', {});
+  ok('材料重量 单件≈1.9625kg', near(val(mw, '单件理论重量'), 1.9625, 1e-3), String(val(mw, '单件理论重量')));
+  var pb = runTool('plate-bending', {});
+  ok('平板弯曲 默认计算无 error', !pb.error, pb.error || '');
+  var sh = runTool('shell-stress', {});
+  ok('薄壳应力 默认计算无 error', !sh.error, sh.error || '');
+  var mf = runTool('mechanism-force', {});
+  ok('机构受力 惯性力 Pg=-200N', near(valueOf(val(mf, '惯性力')), -200, 1e-6) || String(val(mf, '惯性力')).indexOf('-200') >= 0, String(val(mf, '惯性力')));
+  var or = runTool('sealing-o-ring', {});
+  ok('O形圈 压缩率≈17.85%', near(percentOf(val(or, '压缩率')), 17.85, 0.5), String(val(or, '压缩率')));
+  var wp = runTool('water-pump', {});
+  ok('水泵 轴功率≈1.7518kW', near(val(wp, '轴功率'), 1.7518, 1e-3), String(val(wp, '轴功率')));
+  ok('水泵 圆整功率 2.2kW', near(valueOf(val(wp, '圆整标准电机功率')), 2.2, 1e-6), String(val(wp, '圆整标准电机功率')));
+})();
+
+/* 数值/单位解析辅助 */
+function valueOf(x) { if (x === null || x === undefined) return NaN; if (typeof x === 'number') return x; var m = String(x).match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; }
+function percentOf(x) { if (typeof x === 'number') return x; var m = String(x).match(/[\d.]+/); return m ? parseFloat(m[0]) : NaN; }
