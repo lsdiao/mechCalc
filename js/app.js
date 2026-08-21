@@ -7,6 +7,41 @@
 window.App = (function () {
   'use strict';
 
+  /* =========================================================
+   * 计算后端配置（JeecgBoot 单例模式）
+   * - CALC_MODE: 'local'（浏览器本地计算，默认，离线可用）
+   *              'remote'（调用后端 /erinson/calc/{toolId}）
+   * - API_BASE:   后端地址前缀，如 http://localhost:8090
+   * 通过 App.setCalcBackend({ baseUrl, mode }) 切换。
+   * ========================================================= */
+  var CALC_MODE = 'local';
+  var API_BASE = '';
+
+  function setCalcBackend(opts) {
+    opts = opts || {};
+    if (opts.mode === 'remote' || opts.mode === 'local') CALC_MODE = opts.mode;
+    if (opts.baseUrl) API_BASE = String(opts.baseUrl).replace(/\/+$/, '');
+  }
+
+  /* 异步计算封装：local → 本地 compute；remote → POST 后端。
+   * 返回 Promise<CalcResult>，结构与前端 renderResult 一致。 */
+  function calc(tool, values) {
+    if (CALC_MODE === 'remote' && API_BASE) {
+      return fetch(API_BASE + '/erinson/calc/' + encodeURIComponent(tool.id), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values || {})
+      }).then(function (res) {
+        if (!res.ok) throw new Error('后端接口错误 HTTP ' + res.status);
+        return res.json();
+      }).catch(function (err) {
+        return { error: '后端计算失败：' + err.message + '（可切回本地模式）' };
+      });
+    }
+    var result = tool.compute(values || {});
+    return Promise.resolve(result);
+  }
+
   var TOOLS = [];
   var CATEGORIES = [
     { id: 'connect', name: '连接与校核', desc: '螺栓、键、花键连接强度校核与弹簧设计' },
@@ -254,7 +289,9 @@ window.App = (function () {
 
     var runCalc = function () {
       applyVisibility(tool, main);
-      renderResult(tool, tool.compute(collectValues(main)));
+      calc(tool, collectValues(main)).then(function (result) {
+        renderResult(tool, result);
+      });
     };
     main.addEventListener('input', runCalc);
     main.addEventListener('change', runCalc);
@@ -423,6 +460,8 @@ window.App = (function () {
     getTool: getTool,
     categories: CATEGORIES,
     fmt: fmt,
-    esc: esc
+    esc: esc,
+    calc: calc,
+    setCalcBackend: setCalcBackend
   };
 })();

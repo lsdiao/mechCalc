@@ -60,3 +60,14 @@
 ## 三、后续可选（非本次范围）
 - trans2 六工具的逐值回归断言目前以默认参数+若干典型工况为主；建议后续从原站再采 2~3 组工况做数值快照断言（原站 API 可达时）。
 - 机械传动其余原站工具（如 V 带已有简化版 `transmission.js`，可对照原站 upgrade 成 1:1 版）。
+
+## 四、后端计算化改造（feature/jeecgboot-backend-calc，骨架已提交）
+目标：把 66 个工具的计算从浏览器迁移到 JeecgBoot 后端（单例模式），前端保留静态 UI + 异步调接口。
+
+- 后端工程：`backend/`（JeecgBoot v3.9.x last，Spring Boot 3.2 + Java 17，可 `mvn compile/test`）。
+  - 统一接口：`POST /erinson/calc/{toolId}`，返回 `CalcResult{sections,verdict,notes,error}` 与前端 renderResult 契约一致。
+  - 核心：`CalcController` + `CalcTool` 接口 + `CalcToolRegistry`（@Component 自动注册）。
+  - 参考实现：`BoltCheckTool`（bolt-check）+ `BoltCheckToolTest` 逐值对齐前端断言，全绿。
+- 前端：`js/app.js` 新增 `App.calc()` / `App.setCalcBackend()`，支持 local/remote 双模式（默认 local，离线可用），`runCalc` 改为异步。本地回归测试仍 231 全绿。
+- 迁移清单：`docs/backend-calc-migration.md`（66 个工具全量清单，当前仅 bolt-check 完成）。
+- 沙箱构建：`cd backend && mvn -s .mvn-settings.xml test`（settings 走代理，已 gitignore）。

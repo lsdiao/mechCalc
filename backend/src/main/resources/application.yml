@@ -1,0 +1,14 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: erinson-calc-backend
+  profiles:
+    active: local
+
+# ErinsonCalc 计算后端配置
+erinson:
+  calc:
+    # 允许跨域的前端来源（单例前端静态站点地址）
+    cors-allowed-origins: http://localhost:8000

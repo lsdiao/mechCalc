@@ -3,3 +3,7 @@
 .tmp_camidx/
 .ref-tmp/
 .tmp_*/
+
+# 后端构建产物与沙箱专用 Maven 代理配置（不入库）
+backend/target/
+backend/.mvn-settings.xml

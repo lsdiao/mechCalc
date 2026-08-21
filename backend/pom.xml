@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ErinsonCalc 计算后端（JeecgBoot 单例模式单体应用）
+  - 框架：JeecgBoot v3.9.x last（Spring Boot 3.x 父工程 + Jeecg 核心 starter）
+  - 模式：单例（单体）部署，计算接口走 HTTP/REST，前端异步调用
+  - 目的：把原前端 66 个工具的计算逻辑从浏览器 JS 迁移到后端 Java，
+          统一由 POST /erinson/calc/{toolId} 暴露，前端仅负责表单与展示。
+  说明：完整 JeecgBoot 依赖（jeecg-boot-base、Sa-Token、LowApp 等）较大，
+        本骨架聚焦「通用计算引擎 + 工具注册 + REST 契约」这一层，
+        Jeecg 业务基础能力（用户/权限/代码生成）后续按需引入即可。
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.2.5</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.erinson</groupId>
+  <artifactId>erinson-calc-backend</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>ErinsonCalc Backend</name>
+  <description>机械设计计算后端（JeecgBoot 单例模式），承载全部计算工具公式</description>
+
+  <properties>
+    <java.version>17</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <!-- Web/REST -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- 校验 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <!-- 单元测试 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- JeecgBoot 核心 starter（按需引入，支撑单例常规能力）
+         注释说明：真实接入 jeecgboot 时取消以下依赖并引入
+         org.jeecgframework.boot:jeecg-boot-base-core 及其 starter 包。
+         当前骨架保持轻量，避免引入重依赖导致构建/网络成本。 -->
+    <!--
+    <dependency>
+      <groupId>org.jeecgframework.boot</groupId>
+      <artifactId>jeecg-boot-base-core</artifactId>
+      <version>3.9.2</version>
+    </dependency>
+    -->
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
