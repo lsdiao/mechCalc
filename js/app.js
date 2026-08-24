@@ -390,23 +390,34 @@ window.App = (function () {
     });
   }
 
+  /* 路由时更新页面标题（工具页显示功能名） */
+  function updateTitle(text) {
+    document.title = text;
+  }
+
   /* ---------- 路由 ---------- */
   function route() {
     var h = location.hash.replace(/^#\/?/, '');
     var parts = h.split('/').filter(Boolean);
     var sb = document.getElementById('sidebar');
     if (parts[0] === 'tool' && getTool(parts[1])) {
+      var tool = getTool(parts[1]);
       sb.style.display = '';
       renderSidebar(parts[1]);
-      renderToolPage(getTool(parts[1]));
+      renderToolPage(tool);
+      updateTitle(tool.name + ' - 机械设计计算工具箱');
     } else if (parts[0] === 'cat') {
+      var cat = null;
+      CATEGORIES.forEach(function (c) { if (c.id === parts[1]) cat = c; });
       sb.style.display = '';
       renderSidebar(null);
       renderCategory(parts[1]);
+      updateTitle((cat ? cat.name + ' - ' : '') + '机械设计计算工具箱');
     } else {
       sb.style.display = '';
       renderSidebar(null);
       renderHome();
+      updateTitle('机械设计计算工具箱 - ErinsonCalc');
     }
     window.scrollTo(0, 0);
   }

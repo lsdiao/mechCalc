@@ -42,6 +42,7 @@ a:hover { color: var(--orange-dark); }
 }
 .logo { display: flex; align-items: center; gap: 10px; color: #fff; }
 .logo:hover { color: #fff; }
+.logo-img { height: 30px; width: auto; display: block; }
 .logo-mark {
   width: 36px; height: 36px; border-radius: 8px;
   background: var(--orange); color: #fff; font-weight: 800; font-size: 20px;
