@@ -422,10 +422,47 @@ window.App = (function () {
     window.scrollTo(0, 0);
   }
 
+  /* ---------- 广告加载 ---------- */
+  function loadAds() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'api/ads.php', true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        try { renderAds(JSON.parse(xhr.responseText)); } catch (e) { /* noop */ }
+      }
+    };
+    xhr.send();
+  }
+
+  function renderAds(ads) {
+    var leftBox = document.getElementById('adLeft');
+    var rightBox = document.getElementById('adRight');
+    if (!leftBox || !rightBox) return;
+    renderAdSide(leftBox, ads.left || []);
+    renderAdSide(rightBox, ads.right || []);
+  }
+
+  function renderAdSide(box, list) {
+    if (!list.length) { box.style.display = 'none'; return; }
+    box.style.display = '';
+    box.innerHTML = list.map(function (ad) {
+      if (ad.type === 'image') {
+        var img = '<img src="' + esc(ad.content) + '" alt="' + esc(ad.title) + '">';
+        if (ad.link_url) {
+          return '<div class="ad-item"><a href="' + esc(ad.link_url) + '" target="_blank" rel="noopener">' + img + '</a></div>';
+        }
+        return '<div class="ad-item">' + img + '</div>';
+      } else {
+        return '<div class="ad-item">' + ad.content + '</div>';
+      }
+    }).join('');
+  }
+
   function boot() {
     window.addEventListener('hashchange', route);
     initSearch();
     route();
+    loadAds();
   }
 
   return {

@@ -1,0 +1,4 @@
+# 保护数据库文件不被直接访问
+<FilesMatch "\.(db|db-journal|db-wal|db-shm)$">
+    Require all denied
+</FilesMatch>

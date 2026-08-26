@@ -301,10 +301,27 @@ sub, sup { font-size: .68em; }
   font-size: 12.5px; color: #94a3b0; margin-top: 30px;
 }
 
+/* ============ 广告侧栏 ============ */
+.ad-side {
+  width: 120px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px;
+  position: sticky; top: 76px; align-self: flex-start;
+  max-height: calc(100vh - 92px); overflow-y: auto;
+}
+.ad-item {
+  border-radius: 8px; overflow: hidden; background: #fff; border: 1px solid var(--line);
+  transition: box-shadow .15s;
+}
+.ad-item:hover { box-shadow: 0 4px 12px rgba(13,36,56,.10); }
+.ad-item img { display: block; width: 100%; height: auto; }
+.ad-item a { display: block; }
+.ad-empty { font-size: 11px; color: #b8c4ce; text-align: center; padding: 20px 8px; }
+.ad-label { font-size: 10px; color: #94a3b0; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+
 /* ============ 响应式 ============ */
 @media (max-width: 1020px) {
   .header-nav { display: none; }
   .sidebar { display: none; }
+  .ad-side { display: none; }
   .layout { padding: 14px; }
   .tool-body { padding: 18px 16px 24px; }
   .tool-head { padding: 18px 20px; }

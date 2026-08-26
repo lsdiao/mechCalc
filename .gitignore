@@ -3,3 +3,11 @@
 .tmp_camidx/
 .ref-tmp/
 .tmp_*/
+
+# PHP 后台运行时数据
+admin/data.db
+admin/data.db-journal
+admin/data.db-wal
+admin/data.db-shm
+admin/uploads/*
+!admin/uploads/.gitkeep
