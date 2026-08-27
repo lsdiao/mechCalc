@@ -51,9 +51,19 @@
         if (my !== xhrSeq) return; /* 已有更新的请求，丢弃本次结果 */
         try { render(JSON.parse(xhr.responseText)); } catch (e) { box.innerHTML = '<div class="bk-err">数据加载失败</div>'; }
       } else {
-        /* 偶发网络抖动/服务器瞬时过载：最多重试 5 次，间隔递增 */
-        if (retries < 5) { setTimeout(function () { load(retries + 1); }, 300 * (retries + 1)); }
-        else { box.innerHTML = '<div class="bk-err">数据加载失败，请稍后刷新页面重试</div>'; }
+        /* 偶发网络抖动/服务器瞬时过载：最多重试 6 次，间隔递增；仍失败则给出可点击重试 */
+        if (retries < 6) { setTimeout(function () { load(retries + 1); }, 300 * (retries + 1)); }
+        else {
+          box.innerHTML =
+            '<div class="bk-err">数据加载失败（网络或服务瞬时异常）<br><button id="bkRetry" class="bk-retry">重新加载</button></div>';
+          var btn = box.querySelector('#bkRetry');
+          if (btn) {
+            btn.addEventListener('click', function () {
+              state.page = 1;
+              load(0);
+            });
+          }
+        }
       }
     };
     xhr.send();

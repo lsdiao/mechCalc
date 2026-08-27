@@ -374,7 +374,12 @@ sub, sup { font-size: .68em; }
 }
 .bk-pager button:disabled { opacity: .45; cursor: not-allowed; }
 .bk-pager button:not(:disabled):hover { border-color: var(--orange-dark); color: var(--orange-dark); }
-.bk-err { color: #b13330; font-size: 13px; padding: 20px; background: #fdeceb; border-radius: 8px; }
+.bk-err { color: #b13330; font-size: 13px; padding: 20px; background: #fdeceb; border-radius: 8px; text-align: center; }
+.bk-retry {
+  margin-top: 12px; padding: 6px 18px; font-size: 14px;
+  background: var(--orange); color: #fff; border: none; border-radius: 6px; cursor: pointer;
+}
+.bk-retry:hover { background: var(--orange-dark); }
 
 /* ============ 响应式 ============ */
 @media (max-width: 1020px) {
