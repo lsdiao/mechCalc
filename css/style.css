@@ -308,11 +308,21 @@ sub, sup { font-size: .68em; }
   max-height: calc(100vh - 92px); overflow-y: auto;
 }
 .ad-item {
-  border-radius: 8px; overflow: hidden; background: #fff; border: 1px solid var(--line);
+  position: relative; border-radius: 8px; overflow: hidden; background: #fff; border: 1px solid var(--line);
   transition: box-shadow .15s;
 }
 .ad-item:hover { box-shadow: 0 4px 12px rgba(13,36,56,.10); }
 .ad-item img { display: block; width: 100%; height: auto; }
+.ad-close {
+  position: absolute; top: 4px; right: 4px; z-index: 5;
+  width: 20px; height: 20px; line-height: 18px; padding: 0;
+  border: none; border-radius: 50%; cursor: pointer;
+  background: rgba(13,36,56,.55); color: #fff; font-size: 14px;
+  opacity: 0; transition: opacity .15s, background .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.ad-item:hover .ad-close { opacity: 1; }
+.ad-close:hover { background: rgba(13,36,56,.85); }
 .ad-item a { display: block; }
 .ad-empty { font-size: 11px; color: #b8c4ce; text-align: center; padding: 20px 8px; }
 .ad-label { font-size: 10px; color: #94a3b0; text-align: center; text-transform: uppercase; letter-spacing: 1px; }

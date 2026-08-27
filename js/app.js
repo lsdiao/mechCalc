@@ -423,6 +423,9 @@ window.App = (function () {
   }
 
   /* ---------- 广告加载 ---------- */
+  /* 本次会话中用户已关闭的广告（id -> true），关闭后刷新页面前不再显示 */
+  var closedAds = {};
+
   function loadAds() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'api/ads.php', true);
@@ -443,17 +446,19 @@ window.App = (function () {
   }
 
   function renderAdSide(box, list) {
+    /* 过滤掉本次会话中用户已关闭的广告 */
+    list = list.filter(function (ad) { return !closedAds[ad.id]; });
     if (!list.length) { box.style.display = 'none'; return; }
     box.style.display = '';
     box.innerHTML = list.map(function (ad) {
       if (ad.type === 'image') {
         var img = '<img src="' + esc(ad.content) + '" alt="' + esc(ad.title) + '">';
         if (ad.link_url) {
-          return '<div class="ad-item"><a href="' + esc(ad.link_url) + '" target="_blank" rel="noopener">' + img + '</a></div>';
+          return '<div class="ad-item" data-ad-id="' + esc(String(ad.id)) + '"><button class="ad-close" title="关闭广告">&times;</button><a href="' + esc(ad.link_url) + '" target="_blank" rel="noopener">' + img + '</a></div>';
         }
-        return '<div class="ad-item">' + img + '</div>';
+        return '<div class="ad-item" data-ad-id="' + esc(String(ad.id)) + '"><button class="ad-close" title="关闭广告">&times;</button>' + img + '</div>';
       } else {
-        return '<div class="ad-item">' + ad.content + '</div>';
+        return '<div class="ad-item" data-ad-id="' + esc(String(ad.id)) + '"><button class="ad-close" title="关闭广告">&times;</button>' + ad.content + '</div>';
       }
     }).join('');
   }
@@ -463,6 +468,24 @@ window.App = (function () {
     initSearch();
     route();
     loadAds();
+
+    /* 广告关闭按钮：点击后隐藏对应广告，本次会话内不再显示 */
+    ['adLeft', 'adRight'].forEach(function (id) {
+      var box = document.getElementById(id);
+      if (!box) return;
+      box.addEventListener('click', function (e) {
+        var btn = e.target;
+        if (btn && btn.classList && btn.classList.contains('ad-close')) {
+          var item = btn.closest ? btn.closest('.ad-item') : btn.parentNode;
+          if (!item) return;
+          closedAds[item.getAttribute('data-ad-id')] = true;
+          item.style.display = 'none';
+          /* 该侧全部关闭后隐藏整列 */
+          var visible = box.querySelectorAll('.ad-item:not([style*="none"])');
+          if (!visible.length) box.style.display = 'none';
+        }
+      });
+    });
   }
 
   return {
