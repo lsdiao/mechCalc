@@ -31,21 +31,29 @@
 
   function fadeIn() { return ''; }
 
-  function load(retried) {
+  var xhrSeq = 0; /* 序号：仅当最新一次请求时才允许渲染，避免旧请求回写覆盖新数据 */
+  function load(retries) {
     var box = document.getElementById('bearingBox');
     if (!box) return;
+    /* 中止上一次尚未完成的请求，避免叠加（单线程开发服务器下可显著降低偶发失败） */
+    if (state._xhr) { try { state._xhr.abort(); } catch (e) { /* noop */ } }
+    if (retries === undefined) retries = 0;
     box.classList.add('loading');
     var xhr = new XMLHttpRequest();
+    state._xhr = xhr;
+    var my = ++xhrSeq;
     xhr.open('GET', API + '?' + qs(), true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
+      if (state._xhr === xhr) state._xhr = null;
       box.classList.remove('loading');
       if (xhr.status === 200) {
+        if (my !== xhrSeq) return; /* 已有更新的请求，丢弃本次结果 */
         try { render(JSON.parse(xhr.responseText)); } catch (e) { box.innerHTML = '<div class="bk-err">数据加载失败</div>'; }
       } else {
-        /* 单线程本地开发服务器偶发连接失败时自动重试一次 */
-        if (!retried) { setTimeout(function () { load(true); }, 400); }
-        else { box.innerHTML = '<div class="bk-err">轴承数据接口不可用（需 PHP 环境）</div>'; }
+        /* 单线程本地开发服务器偶发连接失败：最多重试 3 次，间隔递增 */
+        if (retries < 3) { setTimeout(function () { load(retries + 1); }, 300 * (retries + 1)); }
+        else { box.innerHTML = '<div class="bk-err">轴承数据接口不可用（需 PHP 环境，或请求过于频繁）</div>'; }
       }
     };
     xhr.send();
