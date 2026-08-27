@@ -47,8 +47,9 @@
       if (xhr.readyState !== 4) return;
       if (state._xhr === xhr) state._xhr = null;
       box.classList.remove('loading');
+      /* 过期 / 已被更新的请求取代（含被前面的 load() 主动 abort）：直接忽略，不重试也不报错 */
+      if (my !== xhrSeq) return;
       if (xhr.status === 200) {
-        if (my !== xhrSeq) return; /* 已有更新的请求，丢弃本次结果 */
         try { render(JSON.parse(xhr.responseText)); } catch (e) { box.innerHTML = '<div class="bk-err">数据加载失败</div>'; }
       } else {
         /* 偶发网络抖动/服务器瞬时过载：最多重试 6 次，间隔递增；仍失败则给出可点击重试 */
