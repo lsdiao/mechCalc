@@ -35,24 +35,22 @@
   function load(retries) {
     var box = document.getElementById('bearingBox');
     if (!box) return;
-    /* 中止上一次尚未完成的请求，避免叠加（单线程开发服务器下可显著降低偶发失败） */
-    if (state._xhr) { try { state._xhr.abort(); } catch (e) { /* noop */ } }
+    /* 不主动 abort 旧请求（abort 会触发 ERR_ABORTED 并在部分网关下放大失败），
+       过期响应统一由下方序号守卫静默忽略 */
     if (retries === undefined) retries = 0;
     box.classList.add('loading');
     var xhr = new XMLHttpRequest();
-    state._xhr = xhr;
     var my = ++xhrSeq;
     xhr.open('GET', API + '?' + qs(), true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
-      if (state._xhr === xhr) state._xhr = null;
-      box.classList.remove('loading');
-      /* 过期 / 已被更新的请求取代（含被前面的 load() 主动 abort）：直接忽略，不重试也不报错 */
+      /* 过期请求（已有更新的 load 发生）：直接忽略，不渲染、不重试、不报错 */
       if (my !== xhrSeq) return;
+      box.classList.remove('loading');
       if (xhr.status === 200) {
         try { render(JSON.parse(xhr.responseText)); } catch (e) { box.innerHTML = '<div class="bk-err">数据加载失败</div>'; }
       } else {
-        /* 偶发网络抖动/服务器瞬时过载：最多重试 6 次，间隔递增；仍失败则给出可点击重试 */
+        /* 网络抖动/瞬时异常：退避重试，最多 6 次；仍失败则给出可点击重试 */
         if (retries < 6) { setTimeout(function () { load(retries + 1); }, 300 * (retries + 1)); }
         else {
           box.innerHTML =
