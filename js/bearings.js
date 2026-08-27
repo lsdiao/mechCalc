@@ -119,7 +119,7 @@
       main.innerHTML =
         '<div class="crumb"><a href="#/">首页</a> / <a href="#/cat/common">工程常用</a> / 轴承型号查询</div>' +
         '<div class="tool-page">' +
-        '  <div class="tool-head"><h1>轴承型号查询</h1><p>国产(GB)版 — 数据抓取自 c.zcwz.com，支持类型 / 型号 / 内径范围筛选</p></div>' +
+        '  <div class="tool-head"><h1>轴承型号查询</h1></div>' +
         '  <div class="tool-body">' +
         '    <div class="panel"><div class="panel-title">数据说明</div><div class="panel-content">覆盖 44 类轴承、数百种型号的参数（内径、外径、宽度、额定动/静载荷、脂/油润滑转速、重量）。每次重新部署时若数据库为空会自动导入内置种子数据。正式选型请以相关国家标准与厂商样本为准。</div></div>' +
         '    <div id="bearingBox" class="bk-box"></div>' +
