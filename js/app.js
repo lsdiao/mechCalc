@@ -58,7 +58,9 @@ window.App = (function () {
 
   /* ---------- 注册 ---------- */
   function registerTool(tool) {
-    if (!tool || !tool.id || !tool.compute) return;
+    if (!tool || !tool.id) return;
+    /* 普通计算工具需 compute；自定义渲染工具（如轴承型号查询表）需 render */
+    if (!tool.compute && !tool.render) return;
     TOOLS.push(tool);
   }
   function getTool(id) {
@@ -226,6 +228,12 @@ window.App = (function () {
     var cat = null;
     CATEGORIES.forEach(function (c) { if (c.id === tool.category) cat = c; });
 
+    /* 自定义渲染工具（如轴承型号查询表）：由工具自身的 render 接管页面 */
+    if (typeof tool.render === 'function') {
+      tool.render(main, cat, function (name) { updateTitle(name); });
+      return;
+    }
+
     var sections = {};
     (tool.inputs || []).forEach(function (f) {
       var g = f.group || '参数输入';
@@ -317,12 +325,7 @@ window.App = (function () {
       html += '<div class="cat-section"><div class="cat-header"><h2>' + esc(c.name) + '</h2><span>' + esc(c.desc) + '</span><div class="cat-line"></div></div>' +
         subGridHTML(c.id) + '</div>';
     });
-    /* 首页新增：轴承型号查询表区块 */
-    html += '<div class="cat-section" id="topBearings"></div>';
     main.innerHTML = html;
-    if (window.BearingsTable && document.getElementById('topBearings')) {
-      window.BearingsTable.mount(document.getElementById('topBearings'));
-    }
   }
   function renderCategory(catId) {
     var main = document.getElementById('main');

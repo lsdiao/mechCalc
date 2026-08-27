@@ -1,7 +1,7 @@
 /* =========================================================
- * 轴承型号查询表（首页区块）
+ * 轴承型号查询表（独立工具页）
  * 数据源：api/bearings.php（SQLite 抓取自 c.zcwz.com/param）
- * 支持按 类型 / 型号关键字 / 内径范围 筛选 + 分页
+ * 入口：首页卡片 -> #/tool/bearing-query；支持 类型/型号/内径 筛选 + 分页
  * ========================================================= */
 (function () {
   'use strict';
@@ -106,13 +106,26 @@
     }
   }
 
-  /* 由主框架在首页渲染后调用 */
-  window.BearingsTable = {
-    mount: function (container) {
-      container.innerHTML =
-        '<div class="bk-head"><h2>轴承型号查询</h2><span class="bk-desc">国产(GB)版 — 数据抓取自 c.zcwz.com，支持类型 / 型号 / 内径范围筛选</span><div class="cat-line"></div></div>' +
-        '<div id="bearingBox" class="bk-box"></div>';
+  /* 注册为独立计算工具：#/tool/bearing-query */
+  window.App.registerTool({
+    id: 'bearing-query',
+    name: '轴承型号查询',
+    category: 'common',
+    keywords: '轴承 型号 查询 国产 GB 深沟球 圆锥滚子 推力球 内径 外径 参数',
+    brief: '轴承型号与参数查询表（国产GB版），支持按类型、型号、内径范围筛选（数据源 c.zcwz.com）。',
+    doc: '国产(GB)版轴承型号查询表。数据抓取自 c.zcwz.com/param，覆盖 44 类、数百种轴承型号，提供类型 / 型号（含新旧型号）/ 内径范围筛选与分页。',
+    render: function (main, cat, setTitle) {
+      if (typeof setTitle === 'function') setTitle('bearing-query');
+      main.innerHTML =
+        '<div class="crumb"><a href="#/">首页</a> / <a href="#/cat/common">工程常用</a> / 轴承型号查询</div>' +
+        '<div class="tool-page">' +
+        '  <div class="tool-head"><h1>轴承型号查询</h1><p>国产(GB)版 — 数据抓取自 c.zcwz.com，支持类型 / 型号 / 内径范围筛选</p></div>' +
+        '  <div class="tool-body">' +
+        '    <div class="panel"><div class="panel-title">数据说明</div><div class="panel-content">覆盖 44 类轴承、数百种型号的参数（内径、外径、宽度、额定动/静载荷、脂/油润滑转速、重量）。每次重新部署时若数据库为空会自动导入内置种子数据。正式选型请以相关国家标准与厂商样本为准。</div></div>' +
+        '    <div id="bearingBox" class="bk-box"></div>' +
+        '  </div>' +
+        '</div>';
       load();
     }
-  };
+  });
 })();
