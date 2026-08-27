@@ -53,6 +53,8 @@ if (is_logged_in()) {
   <div class="tip">默认账号 admin / admin123，登录后请及时修改密码</div>
 </div>
 <script>
+/* API 绝对路径：无论 /admin 还是 /admin/ 都指向 /admin/api.php */
+var API_URL = location.pathname.replace(/[^\/]*$/, '') + 'api.php';
 document.getElementById('loginForm').addEventListener('submit', function(e){
   e.preventDefault();
   var msgEl = document.getElementById('msg');
@@ -61,10 +63,10 @@ document.getElementById('loginForm').addEventListener('submit', function(e){
   fd.append('action','login');
   fd.append('username', document.getElementById('username').value);
   fd.append('password', document.getElementById('password').value);
-  fetch('api.php', {method:'POST', body:fd})
+  fetch(API_URL, {method:'POST', body:fd})
     .then(function(r){return r.json()})
     .then(function(d){
-      if (d.ok) { window.location.href = 'dashboard.php'; }
+      if (d.ok) { window.location.href = location.pathname.replace(/[^\/]*$/, '') + 'dashboard.php'; }
       else { msgEl.textContent = d.msg || '登录失败'; }
     })
     .catch(function(){ msgEl.textContent = '网络错误'; });

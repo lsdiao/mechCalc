@@ -100,7 +100,7 @@ $user = current_user($pdo);
   <span class="title">广告管理后台</span>
   <div class="spacer"></div>
   <span class="user"><?= htmlspecialchars($user['username'] ?? '') ?></span>
-  <button class="btn-logout" onclick="location.href='logout.php'">退出</button>
+  <button class="btn-logout" onclick="location.href=location.pathname.replace(/[^\/]*$/,'')+'logout.php'">退出</button>
 </div>
 
 <div class="wrap">
@@ -204,6 +204,9 @@ $user = current_user($pdo);
 </div>
 
 <script>
+/* API 绝对路径：无论 /admin 还是 /admin/ 都指向 /admin/api.php */
+var API_URL = location.pathname.replace(/[^\/]*$/, '') + 'api.php';
+
 /* ============ 标签切换 ============ */
 function switchTab(t){
   document.querySelectorAll('.tabs button').forEach(function(b){b.classList.toggle('active',b.dataset.tab===t)});
@@ -214,7 +217,7 @@ function switchTab(t){
 /* ============ 广告列表 ============ */
 function loadAds(){
   var fd=new FormData();fd.append('action','list_ads');
-  fetch('api.php',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
+  fetch(API_URL,{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
     var tb=document.getElementById('adList');
     if(!d.ok||!d.ads.length){tb.innerHTML='<tr><td colspan="6" class="empty">暂无广告，点击「新增广告」添加</td></tr>';return;}
     tb.innerHTML=d.ads.map(function(a){
@@ -272,7 +275,7 @@ function uploadImage(input){
   var pathEl=document.getElementById('adPath');
   var prev=document.getElementById('adPreview');
   pathEl.textContent='上传中...';
-  fetch('api.php',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
+  fetch(API_URL,{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
     if(d.ok){
       pathEl.textContent=d.path;
       document.getElementById('adContentImg').value=d.path;
@@ -295,7 +298,7 @@ function saveAd(){
   fd.append('link_url',document.getElementById('adLink').value);
   fd.append('sort_order',document.getElementById('adSort').value);
   fd.append('is_active',document.getElementById('adActive').checked?'1':'');
-  fetch('api.php',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
+  fetch(API_URL,{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
     if(d.ok){closeModal();loadAds();}
     else{alert(d.msg||'保存失败');}
   }).catch(function(){alert('网络错误');});
@@ -308,7 +311,7 @@ function editAd(a){openModal(a);}
 function deleteAd(id){
   if(!confirm('确定删除此广告？'))return;
   var fd=new FormData();fd.append('action','delete_ad');fd.append('id',id);
-  fetch('api.php',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
+  fetch(API_URL,{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
     if(d.ok)loadAds();else alert(d.msg||'删除失败');
   }).catch(function(){alert('网络错误');});
 }
@@ -316,7 +319,7 @@ function deleteAd(id){
 /* ============ 开关广告 ============ */
 function toggleAd(id){
   var fd=new FormData();fd.append('action','toggle_ad');fd.append('id',id);
-  fetch('api.php',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
+  fetch(API_URL,{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
     if(d.ok)loadAds();else alert(d.msg||'操作失败');
   }).catch(function(){alert('网络错误');});
 }
@@ -328,7 +331,7 @@ function changePassword(){
   fd.append('old_password',document.getElementById('oldPw').value);
   fd.append('new_password',document.getElementById('newPw').value);
   var msg=document.getElementById('pwMsg');msg.className='pw-msg';msg.textContent='';
-  fetch('api.php',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
+  fetch(API_URL,{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){
     msg.className='pw-msg '+(d.ok?'ok':'err');
     msg.textContent=d.ok?'密码修改成功':(d.msg||'修改失败');
     if(d.ok){document.getElementById('oldPw').value='';document.getElementById('newPw').value='';}
