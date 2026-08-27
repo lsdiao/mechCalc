@@ -29,7 +29,6 @@ if (is_logged_in()) {
   .field input:focus { border-color:#f0821e; box-shadow:0 0 0 3px rgba(240,130,30,.15); }
   .btn-login { width:100%; height:42px; background:#f0821e; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; transition:background .15s; }
   .btn-login:hover { background:#d96f0e; }
-  .tip { margin-top:16px; padding:10px 14px; background:#fdf3e7; border:1px solid #f3d3ab; border-radius:8px; font-size:12.5px; color:#a35a0a; text-align:center; }
   .msg { color:#d64541; font-size:13px; text-align:center; margin-bottom:12px; min-height:18px; }
 </style>
 </head>
@@ -50,7 +49,6 @@ if (is_logged_in()) {
     </div>
     <button type="submit" class="btn-login">登 录</button>
   </form>
-  <div class="tip">默认账号 admin / admin123，登录后请及时修改密码</div>
 </div>
 <script>
 /* API 绝对路径：无论 /admin 还是 /admin/ 都指向 /admin/api.php */

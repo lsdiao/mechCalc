@@ -46,7 +46,7 @@ function init_schema(PDO $pdo): void {
     /* 首次运行创建默认管理员 */
     $count = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
     if ($count == 0) {
-        $hash = password_hash('admin123', PASSWORD_DEFAULT);
+        $hash = password_hash('E-51888333', PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("INSERT INTO users (username, password_hash) VALUES (?, ?)");
         $stmt->execute(['admin', $hash]);
     }
