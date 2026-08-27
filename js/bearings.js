@@ -6,7 +6,7 @@
 (function () {
   'use strict';
   var API = 'api/bearings.php';
-  var state = { page: 1, limit: 15, cat: '', q: '', bore_min: '', bore_max: '' };
+  var state = { page: 1, limit: 15, cat: '', q: '', bore_min: '', bore_max: '', wt_min: '', wt_max: '' };
 
   var KEYMAP = {
     cat_name: '类型', name: '新型号', old_name: '旧型号', bore: '内径',
@@ -26,6 +26,8 @@
     if (state.q) p.set('q', state.q);
     if (state.bore_min !== '') p.set('bore_min', state.bore_min);
     if (state.bore_max !== '') p.set('bore_max', state.bore_max);
+    if (state.wt_min !== '') p.set('wt_min', state.wt_min);
+    if (state.wt_max !== '') p.set('wt_max', state.wt_max);
     return p.toString();
   }
 
@@ -89,6 +91,8 @@
         '<input id="bkQ" type="text" placeholder="型号/旧型号搜索…" value="' + esc(state.q) + '">' +
         '<input id="bkBmin" type="number" step="1" min="0" placeholder="内径 ≥" value="' + esc(state.bore_min) + '">' +
         '<input id="bkBmax" type="number" step="1" min="0" placeholder="内径 ≤" value="' + esc(state.bore_max) + '">' +
+        '<input id="bkWmin" type="number" step="0.01" min="0" placeholder="重量 ≥" value="' + esc(state.wt_min) + '">' +
+        '<input id="bkWmax" type="number" step="0.01" min="0" placeholder="重量 ≤" value="' + esc(state.wt_max) + '">' +
         '<button id="bkSearch">查询</button>' +
         '<button id="bkReset">重置</button>' +
         '<span class="bk-count">共 <b>' + (d.total || 0) + '</b> 条</span>' +
@@ -108,7 +112,7 @@
     box.querySelector('#bkSearch').addEventListener('click', function () { applyQ(); });
     box.querySelector('#bkQ').addEventListener('keydown', function (e) { if (e.key === 'Enter') applyQ(); });
     box.querySelector('#bkReset').addEventListener('click', function () {
-      state.q = ''; state.bore_min = ''; state.bore_max = ''; state.page = 1;
+      state.q = ''; state.bore_min = ''; state.bore_max = ''; state.wt_min = ''; state.wt_max = ''; state.page = 1;
       load();
     });
     box.querySelector('#bkPrev').addEventListener('click', function () { if (state.page > 1) { state.page--; load(); } });
@@ -118,6 +122,8 @@
       state.q = box.querySelector('#bkQ').value.trim();
       state.bore_min = box.querySelector('#bkBmin').value.trim();
       state.bore_max = box.querySelector('#bkBmax').value.trim();
+      state.wt_min = box.querySelector('#bkWmin').value.trim();
+      state.wt_max = box.querySelector('#bkWmax').value.trim();
       state.page = 1;
       load();
     }

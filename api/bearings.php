@@ -14,6 +14,8 @@ $cat        = trim($_GET['cat'] ?? '');        // 轴承类型
 $q          = trim($_GET['q'] ?? '');          // 型号关键字（模糊，支持新/旧型号）
 $bore_min   = $_GET['bore_min'] ?? '';         // 内径范围
 $bore_max   = $_GET['bore_max'] ?? '';
+$wt_min     = $_GET['wt_min'] ?? '';          // 重量范围（kg）
+$wt_max     = $_GET['wt_max'] ?? '';
 $total_only = isset($_GET['total']) ? 1 : 0;   // 只返回总数
 $page       = max(1, (int)($_GET['page'] ?? 1));
 $limit      = min(100, max(1, (int)($_GET['limit'] ?? 20)));
@@ -38,6 +40,14 @@ if ($bore_min !== '' && is_numeric($bore_min)) {
 if ($bore_max !== '' && is_numeric($bore_max)) {
     $where[] = 'CAST(bore AS REAL) <= ?';
     $params[] = (float)$bore_max;
+}
+if ($wt_min !== '' && is_numeric($wt_min)) {
+    $where[] = 'CAST(weight AS REAL) >= ?';
+    $params[] = (float)$wt_min;
+}
+if ($wt_max !== '' && is_numeric($wt_max)) {
+    $where[] = 'CAST(weight AS REAL) <= ?';
+    $params[] = (float)$wt_max;
 }
 
 $where_sql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
