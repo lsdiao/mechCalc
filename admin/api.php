@@ -113,7 +113,13 @@ switch ($action) {
             break;
         }
         $name = 'ad_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-        $dest = __DIR__ . '/uploads/' . $name;
+        /* 支持通过 ERINSON_DATA_DIR 将上传保存到持久化目录 */
+        $data_dir = getenv('ERINSON_DATA_DIR');
+        $uploads_dir = $data_dir ? rtrim($data_dir, '/') . '/uploads' : __DIR__ . '/uploads';
+        if (!is_dir($uploads_dir)) {
+            mkdir($uploads_dir, 0775, true);
+        }
+        $dest = $uploads_dir . '/' . $name;
         if (!move_uploaded_file($file['tmp_name'], $dest)) {
             echo json_encode(['ok' => false, 'msg' => '保存失败']);
             break;

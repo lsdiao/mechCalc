@@ -1,0 +1,13 @@
+.git
+.trae
+.trae-html-share-packages
+.tmp_*
+.ref-tmp
+.tmp_probe
+.tmp_camidx
+admin/data.db
+admin/data.db-journal
+admin/data.db-wal
+admin/data.db-shm
+admin/uploads/*
+!admin/uploads/.gitkeep

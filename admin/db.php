@@ -6,7 +6,12 @@ declare(strict_types=1);
 function get_db(): PDO {
     static $pdo = null;
     if ($pdo === null) {
-        $db_path = __DIR__ . '/data.db';
+        /* 可通过 ERINSON_DATA_DIR 指定持久化数据目录（挂载 Volume/Disk 时使用） */
+        $data_dir = getenv('ERINSON_DATA_DIR');
+        if ($data_dir && !is_dir($data_dir)) {
+            mkdir($data_dir, 0775, true);
+        }
+        $db_path = $data_dir ? rtrim($data_dir, '/') . '/data.db' : __DIR__ . '/data.db';
         $pdo = new PDO('sqlite:' . $db_path);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
