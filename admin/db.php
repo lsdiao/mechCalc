@@ -43,6 +43,46 @@ function init_schema(PDO $pdo): void {
         updated_at TEXT DEFAULT (datetime('now','localtime'))
     )");
 
+    /* 轴承型号表（抓取自 c.zcwz.com/param，作为首页查询数据源） */
+    $pdo->exec("CREATE TABLE IF NOT EXISTS bearings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        cat_name TEXT NOT NULL DEFAULT '',
+        name TEXT NOT NULL DEFAULT '',
+        old_name TEXT NOT NULL DEFAULT '',
+        bore TEXT NOT NULL DEFAULT '',
+        u_bore TEXT NOT NULL DEFAULT '',
+        width TEXT NOT NULL DEFAULT '',
+        cr TEXT NOT NULL DEFAULT '',
+        cor TEXT NOT NULL DEFAULT '',
+        grease_speed TEXT NOT NULL DEFAULT '',
+        oil_speed TEXT NOT NULL DEFAULT '',
+        weight TEXT NOT NULL DEFAULT ''
+    )");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_bearings_name ON bearings(name)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_bearings_cat ON bearings(cat_name)");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_bearings_bore ON bearings(bore)");
+
+    /* 首次运行：若轴承表为空，从内置种子数据导入（657 条） */
+    $bear_cnt = (int)$pdo->query("SELECT COUNT(*) FROM bearings")->fetchColumn();
+    if ($bear_cnt === 0) {
+        $seed_file = __DIR__ . '/../data/bearings_seed.json';
+        if (is_file($seed_file)) {
+            $seed = json_decode((string)file_get_contents($seed_file), true);
+            if (is_array($seed) && count($seed)) {
+                $ins = $pdo->prepare("INSERT INTO bearings
+                    (cat_name, name, old_name, bore, u_bore, width, cr, cor, grease_speed, oil_speed, weight)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+                foreach ($seed as $r) {
+                    $ins->execute([
+                        $r['cat_name'] ?? '', $r['name'] ?? '', $r['old_name'] ?? '', $r['bore'] ?? '',
+                        $r['u_bore'] ?? '', $r['width'] ?? '', $r['cr'] ?? '', $r['cor'] ?? '',
+                        $r['grease_speed'] ?? '', $r['oil_speed'] ?? '', $r['weight'] ?? '',
+                    ]);
+                }
+            }
+        }
+    }
+
     /* 首次运行创建默认管理员 */
     $count = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
     if ($count == 0) {

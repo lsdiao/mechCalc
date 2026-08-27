@@ -317,7 +317,12 @@ window.App = (function () {
       html += '<div class="cat-section"><div class="cat-header"><h2>' + esc(c.name) + '</h2><span>' + esc(c.desc) + '</span><div class="cat-line"></div></div>' +
         subGridHTML(c.id) + '</div>';
     });
+    /* 首页新增：轴承型号查询表区块 */
+    html += '<div class="cat-section" id="topBearings"></div>';
     main.innerHTML = html;
+    if (window.BearingsTable && document.getElementById('topBearings')) {
+      window.BearingsTable.mount(document.getElementById('topBearings'));
+    }
   }
   function renderCategory(catId) {
     var main = document.getElementById('main');
