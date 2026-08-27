@@ -51,9 +51,9 @@
         if (my !== xhrSeq) return; /* 已有更新的请求，丢弃本次结果 */
         try { render(JSON.parse(xhr.responseText)); } catch (e) { box.innerHTML = '<div class="bk-err">数据加载失败</div>'; }
       } else {
-        /* 单线程本地开发服务器偶发连接失败：最多重试 3 次，间隔递增 */
-        if (retries < 3) { setTimeout(function () { load(retries + 1); }, 300 * (retries + 1)); }
-        else { box.innerHTML = '<div class="bk-err">轴承数据接口不可用（需 PHP 环境，或请求过于频繁）</div>'; }
+        /* 偶发网络抖动/服务器瞬时过载：最多重试 5 次，间隔递增 */
+        if (retries < 5) { setTimeout(function () { load(retries + 1); }, 300 * (retries + 1)); }
+        else { box.innerHTML = '<div class="bk-err">数据加载失败，请稍后刷新页面重试</div>'; }
       }
     };
     xhr.send();
