@@ -34,37 +34,26 @@
   function fadeIn() { return ''; }
 
   var xhrSeq = 0; /* 序号：仅当最新一次请求时才允许渲染，避免旧请求回写覆盖新数据 */
-  function load(retries) {
+  function load() {
     var box = document.getElementById('bearingBox');
     if (!box) return;
-    /* 不主动 abort 旧请求（abort 会触发 ERR_ABORTED 并在部分网关下放大失败），
-       过期响应统一由下方序号守卫静默忽略 */
-    if (retries === undefined) retries = 0;
+    /* 每次查询仅发一次请求，不自动重试；过期响应由序号守卫静默忽略 */
     box.classList.add('loading');
     var xhr = new XMLHttpRequest();
     var my = ++xhrSeq;
     xhr.open('GET', API + '?' + qs(), true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
-      /* 过期请求（已有更新的 load 发生）：直接忽略，不渲染、不重试、不报错 */
+      /* 过期请求（已有更新的 load 发生）：直接忽略，不渲染、不报错 */
       if (my !== xhrSeq) return;
       box.classList.remove('loading');
       if (xhr.status === 200) {
         try { render(JSON.parse(xhr.responseText)); } catch (e) { box.innerHTML = '<div class="bk-err">数据加载失败</div>'; }
       } else {
-        /* 网络抖动/瞬时异常：退避重试，最多 6 次；仍失败则给出可点击重试 */
-        if (retries < 6) { setTimeout(function () { load(retries + 1); }, 300 * (retries + 1)); }
-        else {
-          box.innerHTML =
-            '<div class="bk-err">数据加载失败（网络或服务瞬时异常）<br><button id="bkRetry" class="bk-retry">重新加载</button></div>';
-          var btn = box.querySelector('#bkRetry');
-          if (btn) {
-            btn.addEventListener('click', function () {
-              state.page = 1;
-              load(0);
-            });
-          }
-        }
+        box.innerHTML =
+          '<div class="bk-err">数据加载失败（网络或服务瞬时异常）<br><button id="bkRetry" class="bk-retry">重新加载</button></div>';
+        var btn = box.querySelector('#bkRetry');
+        if (btn) btn.addEventListener('click', function () { state.page = 1; load(); });
       }
     };
     xhr.send();
