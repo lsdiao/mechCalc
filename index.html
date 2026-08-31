@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* 动态 base：自有服务器为 /tools/，GitHub Pages 预览为 /mechCalc/，按当前网址自动识别 */
+(function () {
+  var p = location.pathname, m = p.match(/^(.*?)\/?(?:tool|cat)(?:\/|$)/);
+  document.write('<base href="' + (m ? (m[1] ? m[1] + '/' : '/') : (p.charAt(p.length - 1) === '/' ? p : p.replace(/[^/]*$/, ''))) + '">');
+})();
+</script>
+<title>机械设计计算工具箱 - ErinsonCalc</title>
+<meta name="description" content="常用机械设计在线计算工具：螺栓校核、键连接、弹簧设计、直线轴承选型、滚珠丝杆、V带、齿轮、液压气缸、公差查询、硬度换算等">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="http://www.erinson.com/tools/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ErinsonCalc 机械设计计算工具箱">
+<meta property="og:title" content="机械设计计算工具箱 - ErinsonCalc">
+<meta property="og:description" content="常用机械设计在线计算工具：螺栓校核、键连接、弹簧设计、直线轴承选型、滚珠丝杆、V带、齿轮、液压气缸、公差查询、硬度换算等">
+<meta property="og:url" content="http://www.erinson.com/tools/">
+<meta property="og:image" content="http://www.erinson.com/tools/assets/logo.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"ErinsonCalc 机械设计计算工具箱","url":"http://www.erinson.com/tools/","description":"常用机械设计在线计算工具：螺栓校核、键连接、弹簧设计、直线轴承选型、滚珠丝杆、V带、齿轮、液压气缸、公差查询、硬度换算等"}
+</script>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="./">
+      <img class="logo-img" src="assets/logo.png" alt="ERINSON 机械设计计算工具箱">
+    </a>
+    <div class="search-box">
+      <input type="text" id="globalSearch" placeholder="搜索工具，如：螺栓 / 公差 / 轴承…" autocomplete="off">
+      <div class="search-drops" id="searchDrops"></div>
+    </div>
+    <nav class="header-nav">
+      <a href="./">首页</a>
+      <a href="cat/connect/">连接校核</a>
+      <a href="cat/linear/">直线运动</a>
+      <a href="cat/trans/">机械传动</a>
+      <a href="cat/fluid/">液压气动</a>
+      <a href="cat/common/">工程常用</a>
+    </nav>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="ad-side ad-left" id="adLeft"></aside>
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="main" id="main"><!-- BUILD:HOME:START --><div class="home-hero"><h1>常用机械设计在线计算工具</h1><p>覆盖连接校核、直线运动、机械传动、液压气动与工程常用查询，共 67 个计算工具。所有计算在浏览器本地完成，参数即改即算。</p><div class="hero-tags"><span>实时计算</span><span>标准依据</span><span>无需安装</span><span>可离线使用</span></div></div><div class="cat-section"><div class="cat-header"><h2>连接与校核</h2><span>螺栓、键、花键连接强度校核与弹簧设计</span><div class="cat-line"></div></div><div class="tool-grid"><a class="tool-card" href="tool/bolt-loose/"><h3>松螺栓连接强度校核</h3><p>受轴向载荷的松螺栓连接强度校核与设计计算，计算拉伸应力并校核。</p></a><a class="tool-card" href="tool/bolt-reamed/"><h3>铰制孔螺栓连接强度校核</h3><p>受横向载荷的铰制孔螺栓连接强度校核与设计，校核挤压应力与剪切应力。</p></a><a class="tool-card" href="tool/bolt-transverse/"><h3>横向载荷-紧螺栓连接强度校核</h3><p>受横向载荷的紧螺栓连接强度校核与设计，由摩擦力平衡条件求预紧力后校核。</p></a><a class="tool-card" href="tool/bolt-check/"><h3>螺栓连接强度校核</h3><p>受轴向工作载荷的紧螺栓连接强度校核与设计，计算残余预紧力、总拉力与计算应力。</p></a><a class="tool-card" href="tool/bolt-dynamic/"><h3>螺栓连接动载荷校核</h3><p>受轴向载荷的紧螺栓连接动载荷疲劳强度校核与设计，校核应力幅与许用应力幅。</p></a><a class="tool-card" href="tool/key-check/"><h3>平键连接强度校核</h3><p>平键连接（静连接/动连接）强度校核，σp=2T/(dkl)，与 原站 1:1 一致。</p></a><a class="tool-card" href="tool/key-half/"><h3>半圆键连接强度校核</h3><p>半圆键连接强度校核：σp=2T/(dkl)，k、l 取自键规格表，与 原站 1:1 一致。</p></a><a class="tool-card" href="tool/key-wedge/"><h3>楔键连接强度校核</h3><p>普通楔键连接强度校核：σp=12T/(bl(b+6μd))，与 原站 1:1 一致。</p></a><a class="tool-card" href="tool/key-tangent/"><h3>切向键连接强度校核</h3><p>切向键连接强度校核：σp=2T/(d(t−c)l(0.9+μ))，与 原站 1:1 一致。</p></a><a class="tool-card" href="tool/key-spline-rect/"><h3>矩形花键连接强度校核</h3><p>矩形花键连接（静/动连接）强度校核：p=2T/(φ·N·h·dm·L)，与 原站 1:1 一致。</p></a><a class="tool-card" href="tool/key-spline-inv/"><h3>渐开线花键连接强度校核</h3><p>渐开线花键连接（静/动连接）强度校核：p=2T/(φ·z·h·d·L)，与 原站 1:1 一致。</p></a><a class="tool-card" href="tool/spring-design/"><h3>压缩弹簧设计计算</h3><p>圆柱螺旋压缩弹簧设计：由载荷与变形量计算簧丝直径、中径、有效圈数、刚度并校核稳定性。</p></a><a class="tool-card" href="tool/sealing-o-ring/"><h3>O形圈计算器</h3><p>按沟槽尺寸计算 O 形圈压缩量、压缩率与适用密封压力，校核沟槽填充率。</p></a><a class="tool-card" href="tool/deep-groove-bearing/"><h3>深沟球轴承设计与查询</h3><p>深沟球轴承当量动载荷 P、基本额定动载荷 C、静载荷校核与寿命 L10h 计算（GB/T 276）。</p></a><a class="tool-card" href="tool/angular-contact-bearing/"><h3>角接触球轴承设计与查询</h3><p>角接触球轴承（C/AC/B 接触角 15°/25°/40°）当量动载荷、额定动载荷与寿命 L10h 计算。</p></a><a class="tool-card" href="tool/thrust-ball-bearing/"><h3>推力球轴承设计与查询</h3><p>推力球轴承（单向/双向）轴向当量动载荷、额定动载荷与寿命 L10h 计算。</p></a><a class="tool-card" href="tool/tapered-roller-bearing/"><h3>圆锥滚子轴承设计与查询</h3><p>圆锥滚子轴承当量动载荷、额定动载荷与寿命 L10h 计算（滚子轴承 ε=10/3）。</p></a><a class="tool-card" href="tool/rolling-bearing/"><h3>滚动轴承设计计算</h3><p>滚动轴承综合设计入口：试选所需额定动载荷 C 或核算寿命 L10h，支持 9 种轴承大类型。</p></a><a class="tool-card" href="tool/shaft-design/"><h3>轴设计计算</h3><p>轴设计：按扭转强度/刚度计算最小直径，校核弯曲强度与疲劳安全系数。</p></a><a class="tool-card" href="tool/tension-spring/"><h3>拉伸弹簧设计计算</h3><p>圆柱螺旋拉伸弹簧设计：由载荷/行程定刚度，校核切应力、变形量、刚度误差与疲劳安全。</p></a></div></div><div class="cat-section"><div class="cat-header"><h2>直线运动</h2><span>直线轴承、直线导轨、滚珠丝杆、拖链</span><div class="cat-line"></div></div><div class="tool-grid"><a class="tool-card" href="tool/linear-bearing/"><h3>直线轴承选型计算</h3><p>按寿命与静强度要求计算直线轴承所需额定动载荷 C 与额定静载荷 C0，用于选型。</p></a><a class="tool-card" href="tool/ball-screw/"><h3>滚珠丝杆副计算</h3><p>按寿命要求计算滚珠丝杆所需基本额定动载荷 Ca、当量转速、驱动转矩与电机功率。</p></a><a class="tool-card" href="tool/cable-chain/"><h3>拖链长度计算</h3><p>按行程、弯曲半径与固定点位置计算拖链所需长度与安装高度。</p></a><a class="tool-card" href="tool/linear-guide/"><h3>直线导轨选型</h3><p>按载荷与要求寿命校核直线导轨额定动载荷 C、额定静载荷 C0，并计算实际寿命 L、Lh 与安全裕度。</p></a><a class="tool-card" href="tool/screw-transmission/"><h3>滑动螺旋传动计算</h3><p>滑动螺旋传动校核：耐磨性、自锁、螺杆强度、螺纹强度与压杆稳定性。</p></a></div></div><div class="cat-section"><div class="cat-header"><h2>机械传动</h2><span>带传动、链传动、齿轮传动设计计算</span><div class="cat-line"></div></div><div class="tool-grid"><a class="tool-card" href="tool/v-belt/"><h3>V带传动设计</h3><p>普通V带传动设计计算：按 GB/T 13575.1 查表计算带型、带根数、中心距与轴上载荷。</p></a><a class="tool-card" href="tool/involute-gear/"><h3>渐开线圆柱齿轮几何计算</h3><p>标准/变位直齿与斜齿圆柱齿轮的几何尺寸、中心距与公法线长度计算。</p></a><a class="tool-card" href="tool/chain-drive-design/"><h3>滚子链传动设计计算</h3><p>滚子链传动设计计算：设计功率、链长节数、中心距、小链轮包角、链速与压轴力，按 GB/T 18150 滚子链传动选择指导。</p></a><a class="tool-card" href="tool/timing-belt-design/"><h3>梯形齿同步带传动设计</h3><p>梯形齿同步带（周节制 MXL~XXH）传动设计：带型与带轮齿数、节圆直径、节线长与轴间距、带宽与额定功率全流程计算。</p></a><a class="tool-card" href="tool/flat-belt-design/"><h3>普通平带传动设计计算</h3><p>普通胶帆布平带 / 尼龙片复合平带传动设计：带轮直径、带长、带宽与压轴力全流程计算。</p></a><a class="tool-card" href="tool/multi-ribbed-belt/"><h3>多楔带传动设计计算</h3><p>多楔带传动设计（JB/T 5983-2017）：带型与有效直径、带长、包角、每楔额定功率、楔数与初拉力/压轴力全流程计算。</p></a><a class="tool-card" href="tool/worm-drive-design/"><h3>蜗杆传动设计计算</h3><p>普通圆柱蜗杆（ZI/ZA/ZN/ZK）传动设计：接触强度定中心距、几何参数、滑动速度与效率、弯曲强度校核、蜗杆刚度与热平衡计算。</p></a><a class="tool-card" href="tool/cam-indexer-design/"><h3>凸轮分度(割)器选型计算</h3><p>凸轮分度器选型：负载转动惯量、各转矩与电机功率计算。</p></a><a class="tool-card" href="tool/double-speed-chain/"><h3>倍速滚子链选型</h3><p>倍速（自由流动）滚子链输送机的链条最大拉力与滚子负荷计算，并给出链轮转速、分度圆直径、驱动转矩与功率。</p></a><a class="tool-card" href="tool/gear-thickness/"><h3>渐开线圆柱齿轮齿厚计算公式</h3><p>标准/变位直齿与斜齿圆柱齿轮的公法线长度 W（跨测齿数 k）、分度圆齿厚 s 与基圆齿距等尺寸计算。</p></a><a class="tool-card" href="tool/involute-function/"><h3>渐开线和反渐开线函数计算</h3><p>渐开线函数 invα=tanα-α 正算与反解，齿轮几何计算常用。</p></a></div></div><div class="cat-section"><div class="cat-header"><h2>液压与气压</h2><span>液压油缸、气缸、液压泵、耗气量计算</span><div class="cat-line"></div></div><div class="tool-grid"><a class="tool-card" href="tool/hydraulic-cylinder/"><h3>液压油缸计算</h3><p>液压油缸推/拉力、运行速度、流量与功率计算，支持背压工况与缸径圆整。</p></a><a class="tool-card" href="tool/pneumatic-cylinder/"><h3>气缸最小缸径计算</h3><p>按负载力、气压与负载率计算气缸最小缸径并圆整到标准缸径，附耗气量估算。</p></a><a class="tool-card" href="tool/hydraulic-pipe-loss/"><h3>液压传动系统计算（阻力/压降）</h3><p>液压管路沿程与局部压力损失计算（雷诺数、阻力系数、流速、压降），同样适用于水系统。</p></a><a class="tool-card" href="tool/hydraulic-pump/"><h3>液压泵计算</h3><p>液压泵流量、排量、驱动电机功率与总效率计算（支持三种求解方式）。</p></a><a class="tool-card" href="tool/hydraulic-motor/"><h3>液压马达计算</h3><p>液压马达扭矩、转速、排量、进出口压力与输出功率计算（六种求解方式）。</p></a><a class="tool-card" href="tool/hydraulic-jack/"><h3>液压千斤顶计算</h3><p>基于帕斯卡原理计算液压千斤顶的力放大倍数、输出力、工作压力、输出行程、流量与泵功率。</p></a><a class="tool-card" href="tool/oil-tank-balance/"><h3>油箱热平衡计算</h3><p>液压油箱热平衡计算：油质量、散热面积、油箱冷却功率、热平衡温度与温升时间。</p></a><a class="tool-card" href="tool/pneumatic-finger/"><h3>气动手指夹紧力计算</h3><p>按工件质量、加速度与安全系数计算气动手指（气爪）所需的最小夹紧力，支持机械锁紧/摩擦锁紧/V 形气爪复合工况。</p></a><a class="tool-card" href="tool/cylinder-consumption/"><h3>气缸耗气量计算</h3><p>计算气缸最大耗气量、Cv 值、阀有效截面积，以及计入活塞杆与配管的平均耗气量，用于空压机与阀件选型。</p></a><a class="tool-card" href="tool/pneumatic-circuit/"><h3>气动回路计算</h3><p>气动回路压力：气缸前进/后退推力、标准状态耗气量、管路压降与压缩机功率估算。</p></a><a class="tool-card" href="tool/vacuum-suction/"><h3>真空吸盘与真空发生器</h3><p>按运动方式（顶吸/侧吸/平移）计算真空吸盘吸附力、所需吸盘直径与标准规格面积，并由吸盘体积与反应时间反算真空发生器所需流量。</p></a><a class="tool-card" href="tool/cheli-air/"><h3>气动供应商在线计算工具</h3><p>汇总台湾气立、SMC、Festo 等气动厂商的在线选型与计算工具入口。</p></a><a class="tool-card" href="tool/water-pump/"><h3>水泵选型</h3><p>由流量 Q、扬程 H 计算轴功率 P=ρgQH/η 并圆整配套电机功率，输出泵型建议。</p></a></div></div><div class="cat-section"><div class="cat-header"><h2>选型计算</h2><span>电机（减速机）、缓冲器等选型计算</span><div class="cat-line"></div></div><div class="tool-grid"><a class="tool-card" href="tool/hydraulic-buffer/"><h3>油压缓冲器选型</h3><p>计算运动体动能、驱动能、总吸收能量与每小时吸收能量、等效质量，作为油压缓冲器选型依据，支持直线与旋转运动。</p></a><a class="tool-card" href="tool/motor-select/"><h3>电机（减速机）选型计算</h3><p>由负载转矩与转速计算所需电机功率与减速比，圆整到标准电机功率等级。</p></a></div></div><div class="cat-section"><div class="cat-header"><h2>工程常用</h2><span>公差配合、硬度换算、材料重量、转动惯量</span><div class="cat-line"></div></div><div class="tool-grid"><a class="tool-card" href="tool/bearing-query/"><h3>轴承型号查询</h3><p>轴承型号与参数查询表（国产GB版），支持按类型、型号、内径范围筛选（数据源 c.zcwz.com）。</p></a><a class="tool-card" href="tool/impact-load/"><h3>冲击载荷计算</h3><p>纵向冲击动荷系数 Kd、最大冲击变形 δk 与最大冲击应力 σk。</p></a><a class="tool-card" href="tool/plate-critical-load/"><h3>平板临界载荷计算</h3><p>平板屈曲临界应力计算：四边简支/自由支承受压或受剪等 7 种工况。</p></a><a class="tool-card" href="tool/beam-calculator/"><h3>结构梁计算器</h3><p>计算简支/悬臂矩形截面梁在均布或集中载荷下的支座反力、弯矩、剪力、挠度与弯曲应力。</p></a><a class="tool-card" href="tool/fastener-calculator/"><h3>紧固件计算工具</h3><p>计算螺栓拧紧力矩 T=K·F·d、预紧力与最小破坏扭矩等紧固件常用参量。</p></a><a class="tool-card" href="tool/material-weight/"><h3>材料重量计算</h3><p>计算板材、棒料（圆/方/六角）、管材与角钢等常用材料的理论重量。</p></a><a class="tool-card" href="tool/plate-bending/"><h3>平板弯曲计算</h3><p>四种支承矩形平板在均布或集中载荷下的最大挠度与弯曲应力（系数查表插值）。</p></a><a class="tool-card" href="tool/shell-stress/"><h3>薄壳中应力与位移计算</h3><p>按薄壳无矩(薄膜)理论计算球罐、圆柱壳、圆锥壳在内压或液体载荷下的环向/经向应力与位移。</p></a><a class="tool-card" href="tool/mechanism-force/"><h3>构件惯性力的计算（平面机构受力分析）</h3><p>计算平面机构构件（移动/回转/平面复合运动）的惯性力、惯性力矩与合成（撞击中心位置）。</p></a><a class="tool-card" href="tool/hardness-convert/"><h3>硬度换算工具</h3><p>HRC/HRB 洛氏、HV 维氏、HBW 布氏硬度相互近似换算（GB/T 1172）。</p></a><a class="tool-card" href="tool/steel-weight/"><h3>钢材重量计算</h3><p>按截面形状与尺寸计算圆钢、钢板、钢管、方钢、六角钢、角钢的理论重量。</p></a><a class="tool-card" href="tool/moment-inertia/"><h3>转动惯量计算</h3><p>常用几何体绕指定轴的转动惯量、飞轮矩 GD² 与回转半径计算，支持质量或尺寸输入。</p></a><a class="tool-card" href="tool/tolerance-query/"><h3>公差查询</h3><p>按 GB/T 1800 查询孔/轴极限偏差，附孔/轴公差带键盘（点击自动导入代号与等级）。</p></a><a class="tool-card" href="tool/tolerance-fit-query/"><h3>配合查询</h3><p>按 GB/T 1800 查询孔/轴配合的极限偏差与配合性质，附基孔制/基轴制优先配合键盘。</p></a><a class="tool-card" href="tool/shape-tolerance/"><h3>形状公差查询</h3><p>按 GB/T 1184 查询直线度、平面度、圆度、圆柱度公差值（输入主参数与公差等级）。</p></a><a class="tool-card" href="tool/position-tolerance/"><h3>位置公差查询</h3><p>按 GB/T 1184 查询平行度、垂直度、倾斜度、同轴度、对称度、圆跳动、全跳动公差值。</p></a></div></div><!-- BUILD:HOME:END --></main>
+  <aside class="ad-side ad-right" id="adRight"></aside>
+</div>
+
+<footer class="site-footer">
+  <p><a href="http://www.erinson.com/" target="_blank" rel="noopener">ERINSON</a> 机械设计计算工具箱 · 计算结果仅供参考，正式设计请以相关国家标准与厂商样本为准</p>
+</footer>
+
+<script src="js/app.js?v=14"></script>
+<script src="js/bearings.js?v=7"></script>
+<script src="js/tools/connection.js?v=9"></script>
+<script src="js/tools/linear.js?v=9"></script>
+<script src="js/tools/transmission.js?v=9"></script>
+<script src="js/tools/trans2_chain.js?v=9"></script>
+<script src="js/tools/trans2_timing.js?v=9"></script>
+<script src="js/tools/trans2_flat.js?v=9"></script>
+<script src="js/tools/trans2_ribbed.js?v=9"></script>
+<script src="js/tools/trans2_worm.js?v=9"></script>
+<script src="js/tools/trans2_cam.js?v=9"></script>
+<script src="js/tools/trans2_extra.js?v=1"></script>
+<script src="js/tools/math3.js?v=1"></script>
+<script src="js/tools/fluid.js?v=9"></script>
+<script src="js/tools/fluid2.js?v=1"></script>
+<script src="js/tools/fluid3.js?v=1"></script>
+<script src="js/tools/fluid4.js?v=1"></script>
+<script src="js/tools/bearing.js?v=1"></script>
+<script src="js/tools/other1.js?v=1"></script>
+<script src="js/tools/common2.js?v=1"></script>
+<script src="js/tools/selection.js?v=9"></script>
+<script src="js/tools/common.js?v=9"></script>
+<script src="js/tools/toldata.js?v=9"></script>
+<script src="js/tools/tolerance.js?v=9"></script>
+<script src="js/tools/gtdata.js?v=9"></script>
+<script src="js/tools/gdttol.js?v=9"></script>
+<script>App.boot();</script>
+</body>
+</html>
